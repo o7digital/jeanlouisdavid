@@ -110,6 +110,22 @@ function normalizeInternalLinks(markup: string): string {
   normalized = normalized.replace(/<meta[^>]+property=(["'])og:[^"']+\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(/<meta[^>]+name=(["'])twitter:[^"']+\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(
+    /<script[^>]+id=(["'])avia_google_recaptcha_front_script-js-extra\1[^>]*>[\s\S]*?<\/script>\s*/gi,
+    "",
+  );
+  normalized = normalized.replace(
+    /<script[^>]*(?:google\.com\/recaptcha|avia_google_recaptcha|recaptcha)[^>]*>[\s\S]*?<\/script>\s*/gi,
+    "",
+  );
+  normalized = normalized.replace(
+    /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>\s*/gi,
+    "",
+  );
+  normalized = normalized.replace(
+    /<div[^>]*class=(["'])avia-disabled-form\1[^>]*>[\s\S]*?<\/div>\s*/gi,
+    "",
+  );
+  normalized = normalized.replace(
     /\/wp-content\/uploads\/[A-Za-z0-9._%/-]+\.(?:png|jpe?g)(?:\?[^"'\s)>]*)?/gi,
     (assetPath: string): string => {
       const basePath = assetPath.split("?")[0];
@@ -157,6 +173,17 @@ function normalizeInternalLinks(markup: string): string {
   return normalized;
 }
 
+function sanitizeClassNames(value: string): string {
+  if (!value) return "";
+
+  const blocked = new Set(["av-recaptcha-enabled", "av-google-badge-hide"]);
+  return value
+    .split(/\s+/)
+    .map((token) => token.trim())
+    .filter((token) => token && !blocked.has(token))
+    .join(" ");
+}
+
 function parseMirroredDocument(route: string, sourceFile: string): ParsedMirroredPage {
   const absolutePath = resolve(MIRROR_ROOT, sourceFile);
   const rawFile = readFileSync(absolutePath, "utf-8");
@@ -176,8 +203,8 @@ function parseMirroredDocument(route: string, sourceFile: string): ParsedMirrore
   return {
     route,
     lang: htmlLang && htmlLang.toLowerCase() !== "en-us" ? htmlLang : "es-MX",
-    htmlClass: extractAttribute(htmlAttributes, "class"),
-    bodyClass: extractAttribute(bodyAttributes, "class"),
+    htmlClass: sanitizeClassNames(extractAttribute(htmlAttributes, "class")),
+    bodyClass: sanitizeClassNames(extractAttribute(bodyAttributes, "class")),
     headHtml: normalizeInternalLinks(headMatch[1]),
     bodyHtml: normalizeInternalLinks(bodyMatch[2]),
   };
