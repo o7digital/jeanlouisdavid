@@ -59,6 +59,15 @@ const { page } = Astro.props as { page: ParsedMirroredPage };
           display: none !important;
         }
       }
+
+      .av-masonry-container.av-js-disabled .av-masonry-entry {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .av-masonry-container.av-js-disabled .av-masonry-entry.av-masonry-item-no-image {
+        display: none;
+      }
     </style>
   </head>
   <body id="top" class={page.bodyClass || undefined}>
