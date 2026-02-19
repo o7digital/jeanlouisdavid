@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 export type MirroredPageDefinition = {
@@ -16,6 +16,7 @@ export type ParsedMirroredPage = {
 };
 
 const MIRROR_ROOT = resolve(process.cwd(), "mirror");
+const PUBLIC_ROOT = resolve(process.cwd(), "public");
 
 export const MIRRORED_PAGES: ReadonlyArray<MirroredPageDefinition> = [
   { route: "/", sourceFile: "index.html" },
@@ -83,6 +84,7 @@ const DIRECT_FILE_LINKS = new Map<string, string>([
 ]);
 
 const pageCache = new Map<string, ParsedMirroredPage>();
+const localAssetCache = new Map<string, boolean>();
 
 function extractAttribute(rawAttributes: string | undefined, attribute: string): string {
   if (!rawAttributes) return "";
@@ -96,6 +98,23 @@ function normalizeInternalLinks(markup: string): string {
   normalized = normalized.replace(/%3F/gi, "?");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx\//gi, "/");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx/gi, "");
+  normalized = normalized.replace(
+    /\/wp-content\/uploads\/[A-Za-z0-9._%/-]+\.(?:png|jpe?g)(?:\?[^"'\s)>]*)?/gi,
+    (assetPath: string): string => {
+      const basePath = assetPath.split("?")[0];
+      const webpPath = basePath.replace(/\.(png|jpe?g)$/i, ".webp");
+      const cacheKey = webpPath.toLowerCase();
+      const knownExists = localAssetCache.get(cacheKey);
+      if (knownExists !== undefined) {
+        return knownExists ? webpPath : basePath;
+      }
+
+      const absoluteCandidate = resolve(PUBLIC_ROOT, webpPath.replace(/^\/+/, ""));
+      const webpExists = existsSync(absoluteCandidate);
+      localAssetCache.set(cacheKey, webpExists);
+      return webpExists ? webpPath : basePath;
+    },
+  );
 
   normalized = normalized.replace(
     /index\.html\?p=(\d+)(?:\.html)?/gi,
