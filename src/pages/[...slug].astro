@@ -1,5 +1,6 @@
 ---
 import MirroredDocument from "../components/MirroredDocument.astro";
+import { DEFAULT_LOCALE } from "../lib/i18n";
 import { MIRRORED_PAGES, getMirroredPage } from "../lib/mirror";
 
 export function getStaticPaths() {
@@ -17,4 +18,4 @@ const { route } = Astro.props as { route: string };
 const page = getMirroredPage(route);
 ---
 
-<MirroredDocument page={page} />
+<MirroredDocument page={page} locale={DEFAULT_LOCALE} />

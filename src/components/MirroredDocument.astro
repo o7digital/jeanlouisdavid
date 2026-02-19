@@ -2,38 +2,78 @@
 import ClientBoot from "./ClientBoot.jsx";
 import type { ParsedMirroredPage } from "../lib/mirror";
 import {
+  DEFAULT_LOCALE,
+  LOCALE_HTML_TAG,
+  LOCALE_OG_TAG,
+  SUPPORTED_LOCALES,
+  injectLanguageSwitch,
+  localizeInternalLinks,
+  localizeNavigationLabels,
+  normalizeLocale,
+  type Locale,
+} from "../lib/i18n";
+import {
   absoluteUrl,
-  canonicalPath,
+  canonicalPathForLocale,
   extractTitleFromHead,
   getJsonLd,
   getSeoDescription,
   getSeoImageUrl,
+  getSeoTitle,
 } from "../lib/seo";
 
-const { page } = Astro.props as { page: ParsedMirroredPage };
-const title = extractTitleFromHead(page.headHtml);
-const description = getSeoDescription(page.route);
-const canonical = absoluteUrl(canonicalPath(page.route));
+const { page, locale: localeProp } = Astro.props as {
+  page: ParsedMirroredPage;
+  locale?: string;
+};
+
+const locale = normalizeLocale(localeProp);
+const localizedHeadHtml = localizeInternalLinks(page.headHtml, locale);
+const sanitizedHeadHtml = localizedHeadHtml.replace(/<title[^>]*>[\s\S]*?<\/title>/i, "");
+let localizedBodyHtml = localizeInternalLinks(page.bodyHtml, locale);
+localizedBodyHtml = localizeNavigationLabels(localizedBodyHtml, locale);
+localizedBodyHtml = injectLanguageSwitch(localizedBodyHtml, page.route, locale);
+
+const fallbackTitle = extractTitleFromHead(localizedHeadHtml);
+const title = getSeoTitle(page.route, fallbackTitle, locale);
+const description = getSeoDescription(page.route, locale);
+const canonical = absoluteUrl(canonicalPathForLocale(page.route, locale));
+const xDefaultCanonical = absoluteUrl(canonicalPathForLocale(page.route, DEFAULT_LOCALE));
+const alternateLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
+  locale: entryLocale,
+  href: absoluteUrl(canonicalPathForLocale(page.route, entryLocale)),
+  hreflang: LOCALE_HTML_TAG[entryLocale],
+}));
+const ogLocaleAlternates = SUPPORTED_LOCALES.filter(
+  (entryLocale): entryLocale is Locale => entryLocale !== locale,
+).map((entryLocale) => LOCALE_OG_TAG[entryLocale]);
 const ogImage = getSeoImageUrl();
 const jsonLd = getJsonLd({
   canonical,
   description,
   route: page.route,
   title,
+  locale,
 });
 ---
 
 <!doctype html>
-<html lang={page.lang} class={page.htmlClass || undefined}>
+<html lang={LOCALE_HTML_TAG[locale]} class={page.htmlClass || undefined}>
   <head>
-    <Fragment set:html={page.headHtml} />
+    <Fragment set:html={sanitizedHeadHtml} />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" hreflang="es-MX" href={canonical} />
-    <link rel="alternate" hreflang="x-default" href={canonical} />
+    {alternateLinks.map((entry) => (
+      <link rel="alternate" hreflang={entry.hreflang} href={entry.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefaultCanonical} />
     <meta property="og:site_name" content="Jean Louis David Mexico" />
-    <meta property="og:locale" content="es_MX" />
+    <meta property="og:locale" content={LOCALE_OG_TAG[locale]} />
+    {ogLocaleAlternates.map((entryLocale) => (
+      <meta property="og:locale:alternate" content={entryLocale} />
+    ))}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -62,6 +102,90 @@ const jsonLd = getJsonLd({
         opacity: 1;
       }
 
+      #menu-item-language-switch {
+        position: relative;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__details {
+        position: relative;
+        height: 100%;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__summary {
+        list-style: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 88px;
+        line-height: 88px;
+        padding: 0 13px;
+        text-transform: uppercase;
+        font-size: 13px;
+        font-weight: 600;
+        color: inherit;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__summary::-webkit-details-marker {
+        display: none;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__summary::marker {
+        content: "";
+      }
+
+      #menu-item-language-switch .jld-lang-switch__caret {
+        width: 6px;
+        height: 6px;
+        margin-top: -3px;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        transform: rotate(45deg);
+      }
+
+      #menu-item-language-switch .jld-lang-switch__menu {
+        position: absolute;
+        top: calc(100% - 8px);
+        right: 0;
+        min-width: 74px;
+        margin: 0;
+        padding: 8px 0;
+        list-style: none;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: #1f2024;
+        box-shadow: 0 14px 26px rgba(0, 0, 0, 0.28);
+        z-index: 600;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__menu > li {
+        margin: 0;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__link {
+        display: block;
+        padding: 9px 14px;
+        line-height: 1;
+        text-decoration: none;
+        color: #f4f4f4;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+      }
+
+      #menu-item-language-switch .jld-lang-switch__link:hover,
+      #menu-item-language-switch .jld-lang-switch__link:focus-visible,
+      #menu-item-language-switch .jld-lang-switch__link.is-active {
+        color: #d7bb7a;
+      }
+
+      @media (min-width: 768px) {
+        #menu-item-language-switch .jld-lang-switch__details:not([open]) .jld-lang-switch__menu {
+          display: none;
+        }
+      }
+
       @media (min-width: 990px) {
         .av-desktop-hide {
           display: none !important;
@@ -80,6 +204,12 @@ const jsonLd = getJsonLd({
 
       @media (min-width: 480px) and (max-width: 767px) {
         .av-small-hide {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 767px) {
+        #menu-item-language-switch {
           display: none !important;
         }
       }
@@ -247,7 +377,7 @@ const jsonLd = getJsonLd({
     </style>
   </head>
   <body id="top" class={page.bodyClass || undefined}>
-    <ClientBoot client:load route={page.route} />
-    <Fragment set:html={page.bodyHtml} />
+    <ClientBoot client:load route={canonicalPathForLocale(page.route, locale)} />
+    <Fragment set:html={localizedBodyHtml} />
   </body>
 </html>

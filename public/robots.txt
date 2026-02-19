@@ -1,6 +1,8 @@
 User-agent: *
+Allow: /
 Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
+Disallow: /wp-login.php
+Disallow: /xmlrpc.php
 
 # START WPFORMS BLOCK
 # ---------------------------
@@ -9,4 +11,4 @@ Disallow: /wp-content/uploads/wpforms/
 # ---------------------------
 # END WPFORMS BLOCK
 
-Sitemap: https://jeanlouisdavid.com.mx/wp-sitemap.xml
+Sitemap: https://jeanlouisdavid.com.mx/sitemap.xml

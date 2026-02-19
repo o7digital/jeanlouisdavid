@@ -31,10 +31,6 @@ function hydrateLazySources() {
 }
 
 function revealMasonryFallback() {
-  document.querySelectorAll(".av-masonry-container.av-js-disabled").forEach((container) => {
-    container.classList.remove("av-js-disabled");
-  });
-
   document.querySelectorAll(".av-masonry .av-masonry-entry").forEach((entry) => {
     if (entry.classList.contains("av-masonry-item-no-image")) {
       entry.setAttribute("aria-hidden", "true");
@@ -47,10 +43,75 @@ function revealMasonryFallback() {
   });
 }
 
-function loadLiteSpeedScripts() {
-  if (typeof window.litespeed_load_delayed_js_force === "function") {
-    window.litespeed_load_delayed_js_force();
+function triggerLiteSpeedScripts() {
+  if (window.__jldLiteSpeedTriggered) return;
+  if (typeof window.litespeed_load_delayed_js_force !== "function") return;
+
+  window.__jldLiteSpeedTriggered = true;
+  window.litespeed_load_delayed_js_force();
+}
+
+function deferLiteSpeedScripts(route) {
+  const interactionEvents = ["pointerdown", "wheel", "touchstart", "keydown", "mouseover"];
+  const currentRoute = route || window.location.pathname;
+  const normalizedRoute =
+    currentRoute
+      .replace(/^\/(?:en|fr)(?=\/)/, "")
+      .replace(/\/?$/, "/") || "/";
+  const eagerRoutes = new Set(["/servicios/"]);
+
+  if (eagerRoutes.has(currentRoute) || eagerRoutes.has(normalizedRoute)) {
+    const eagerTimerId = window.setTimeout(() => {
+      triggerLiteSpeedScripts();
+    }, 150);
+
+    return () => {
+      window.clearTimeout(eagerTimerId);
+    };
   }
+
+  const cleanupHandlers = [];
+  let hasTriggered = false;
+  let fallbackTimerId = null;
+  let mapObserver = null;
+
+  const triggerOnce = () => {
+    if (hasTriggered) return;
+    hasTriggered = true;
+
+    triggerLiteSpeedScripts();
+    cleanupHandlers.forEach((cleanup) => cleanup());
+    cleanupHandlers.length = 0;
+  };
+
+  interactionEvents.forEach((eventName) => {
+    const onInteraction = () => triggerOnce();
+    window.addEventListener(eventName, onInteraction, { passive: true });
+    cleanupHandlers.push(() => window.removeEventListener(eventName, onInteraction));
+  });
+
+  const mapNode = document.querySelector("#av_gmap_0, .av_gmaps_main_wrap");
+  if (mapNode && "IntersectionObserver" in window) {
+    mapObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          triggerOnce();
+        }
+      },
+      { rootMargin: "250px 0px" },
+    );
+    mapObserver.observe(mapNode);
+    cleanupHandlers.push(() => mapObserver?.disconnect());
+  }
+
+  fallbackTimerId = window.setTimeout(() => {
+    triggerOnce();
+  }, 5000);
+  cleanupHandlers.push(() => window.clearTimeout(fallbackTimerId));
+
+  return () => {
+    cleanupHandlers.forEach((cleanup) => cleanup());
+  };
 }
 
 export default function ClientBoot({ route }) {
@@ -76,7 +137,7 @@ export default function ClientBoot({ route }) {
     };
 
     runFallbacks();
-    loadLiteSpeedScripts();
+    const cleanupLiteSpeed = deferLiteSpeedScripts(route);
 
     const refreshTimers = [150, 600, 1400].map((delay) =>
       window.setTimeout(runFallbacks, delay),
@@ -84,6 +145,7 @@ export default function ClientBoot({ route }) {
 
     return () => {
       refreshTimers.forEach((timerId) => window.clearTimeout(timerId));
+      cleanupLiteSpeed?.();
     };
   }, [route]);
 

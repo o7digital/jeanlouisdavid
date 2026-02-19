@@ -1,8 +1,9 @@
 ---
 import MirroredDocument from "../components/MirroredDocument.astro";
+import { DEFAULT_LOCALE } from "../lib/i18n";
 import { getMirroredPage } from "../lib/mirror";
 
 const page = getMirroredPage("/");
 ---
 
-<MirroredDocument page={page} />
+<MirroredDocument page={page} locale={DEFAULT_LOCALE} />

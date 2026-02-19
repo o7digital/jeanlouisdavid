@@ -1,0 +1,30 @@
+---
+import MirroredDocument from "../../components/MirroredDocument.astro";
+import { NON_DEFAULT_LOCALES, normalizeLocale } from "../../lib/i18n";
+import { MIRRORED_PAGES, getMirroredPage } from "../../lib/mirror";
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.flatMap((locale) =>
+    MIRRORED_PAGES.filter((page) => page.route !== "/").map((page) => ({
+      params: {
+        locale,
+        slug: page.route.replace(/^\/|\/$/g, ""),
+      },
+      props: {
+        locale,
+        route: page.route,
+      },
+    })),
+  );
+}
+
+const { locale: rawLocale, route } = Astro.props as {
+  locale: string;
+  route: string;
+};
+
+const locale = normalizeLocale(rawLocale);
+const page = getMirroredPage(route);
+---
+
+<MirroredDocument page={page} locale={locale} />

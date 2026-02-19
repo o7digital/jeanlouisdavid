@@ -98,6 +98,17 @@ function normalizeInternalLinks(markup: string): string {
   normalized = normalized.replace(/%3F/gi, "?");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx\//gi, "/");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx/gi, "");
+  normalized = normalized.replace(/<link[^>]+rel=(["'])canonical\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+rel=(["'])shortlink\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+href=(["'])[^"']*wp-json[^"']*\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+rel=(["'])EditURI\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+rel=(["'])pingback\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+type=(["'])application\/rss\+xml\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<link[^>]+href=(["'])https:\/\/gmpg\.org\/xfn\/11\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+name=(["'])description\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+name=(["'])robots\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+property=(["'])og:[^"']+\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+name=(["'])twitter:[^"']+\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(
     /\/wp-content\/uploads\/[A-Za-z0-9._%/-]+\.(?:png|jpe?g)(?:\?[^"'\s)>]*)?/gi,
     (assetPath: string): string => {
@@ -131,6 +142,17 @@ function normalizeInternalLinks(markup: string): string {
 
   normalized = normalized.replace(/index\.html#top/gi, "/#top");
   normalized = normalized.replace(/\.css\?ver=[^"'\s>]+\.css/gi, ".css");
+  normalized = normalized.replace(
+    /\b(href|src|action|data-src|data-srcset)=("|')((?:\.\.\/)+)([^"']*)\2/gi,
+    (_fullMatch, attribute: string, quote: string, _prefix: string, rest: string): string =>
+      `${attribute}=${quote}/${rest.replace(/^\/+/, "")}${quote}`,
+  );
+  normalized = normalized.replace(
+    /url\((['"]?)((?:\.\.\/)+)([^'")]+)\1\)/gi,
+    (_fullMatch, quote: string, _prefix: string, rest: string): string =>
+      `url(${quote}/${rest.replace(/^\/+/, "")}${quote})`,
+  );
+  normalized = normalized.replace(/(["'])\.\.\/\/+/g, "$1/");
 
   return normalized;
 }
@@ -149,10 +171,11 @@ function parseMirroredDocument(route: string, sourceFile: string): ParsedMirrore
 
   const htmlAttributes = htmlTagMatch?.[1];
   const bodyAttributes = bodyMatch[1];
+  const htmlLang = extractAttribute(htmlAttributes, "lang");
 
   return {
     route,
-    lang: extractAttribute(htmlAttributes, "lang") || "en-US",
+    lang: htmlLang && htmlLang.toLowerCase() !== "en-us" ? htmlLang : "es-MX",
     htmlClass: extractAttribute(htmlAttributes, "class"),
     bodyClass: extractAttribute(bodyAttributes, "class"),
     headHtml: normalizeInternalLinks(headMatch[1]),
