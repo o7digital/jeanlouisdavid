@@ -10,6 +10,22 @@ const { page } = Astro.props as { page: ParsedMirroredPage };
   <head>
     <Fragment set:html={page.headHtml} />
     <style is:global>
+      #full_slider_1 .avia-slideshow-inner > li,
+      .avia-fullscreen-slider .avia-slideshow-inner > li {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      #full_slider_1 .avia-slideshow-inner > li:first-child {
+        position: relative;
+        opacity: 1;
+      }
+
+      .avia-fullscreen-slider .avia-slideshow-inner > li:first-child {
+        opacity: 1;
+      }
+
       @media (min-width: 990px) {
         .av-desktop-hide {
           display: none !important;
@@ -45,7 +61,7 @@ const { page } = Astro.props as { page: ParsedMirroredPage };
       }
     </style>
   </head>
-  <body class={page.bodyClass || undefined}>
+  <body id="top" class={page.bodyClass || undefined}>
     <ClientBoot client:load route={page.route} />
     <Fragment set:html={page.bodyHtml} />
   </body>
