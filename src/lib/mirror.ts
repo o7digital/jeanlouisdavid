@@ -126,6 +126,22 @@ function normalizeInternalLinks(markup: string): string {
     "",
   );
   normalized = normalized.replace(
+    /\b(href|src|action|data-src|poster)=("|')(?!https?:|\/\/|\/|#|mailto:|tel:|javascript:|data:)((?:wp-content|wp-includes|wp-admin|wp-json|feed\/|xmlrpc\.php|favicon(?:\.|\/)|sitemap\.xml|robots\.txt)[^"']*)\2/gi,
+    (_fullMatch: string, attribute: string, quote: string, value: string): string =>
+      `${attribute}=${quote}/${value}${quote}`,
+  );
+  normalized = normalized.replace(
+    /\bdata-srcset=(["'])([^"']+)\1/gi,
+    (_fullMatch: string, quote: string, value: string): string => {
+      const rewritten = value.replace(
+        /(^|,\s*)(?!(?:https?:|\/\/|\/|data:))((?:wp-content|wp-includes)[^,\s]*)/gi,
+        (_innerMatch, prefix: string, path: string): string => `${prefix}/${path}`,
+      );
+
+      return `data-srcset=${quote}${rewritten}${quote}`;
+    },
+  );
+  normalized = normalized.replace(
     /\/wp-content\/uploads\/[A-Za-z0-9._%/-]+\.(?:png|jpe?g)(?:\?[^"'\s)>]*)?/gi,
     (assetPath: string): string => {
       const basePath = assetPath.split("?")[0];
