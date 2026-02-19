@@ -40,7 +40,15 @@ export function normalizeLocale(value: string | undefined): Locale {
 
 export function normalizeRoutePath(route: string): string {
   if (!route || route === "/") return "/";
-  return `/${route.replace(/^\/|\/$/g, "")}/`;
+
+  const normalized = route.replace(/^\/|\/$/g, "");
+  if (!normalized) return "/";
+  if (/^index\.html$/i.test(normalized)) return "/";
+
+  const withoutTrailingIndex = normalized.replace(/\/index\.html$/i, "");
+  if (!withoutTrailingIndex) return "/";
+
+  return `/${withoutTrailingIndex}/`;
 }
 
 export function localizedPath(route: string, locale: Locale): string {
@@ -75,6 +83,11 @@ export function stripLocalePrefix(pathname: string): { locale: Locale; route: st
 }
 
 export function localizeInternalUrl(urlValue: string, locale: Locale): string {
+  const rootIndexMatch = urlValue.match(/^index\.html([?#].*)?$/i);
+  if (rootIndexMatch) {
+    return `${localizedPath("/", locale)}${rootIndexMatch[1] ?? ""}`;
+  }
+
   if (locale === DEFAULT_LOCALE) return urlValue;
   if (!urlValue.startsWith("/") || urlValue.startsWith("//")) return urlValue;
 
