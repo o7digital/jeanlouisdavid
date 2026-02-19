@@ -1,0 +1,8 @@
+---
+import MirroredDocument from "../components/MirroredDocument.astro";
+import { getMirroredPage } from "../lib/mirror";
+
+const page = getMirroredPage("/");
+---
+
+<MirroredDocument page={page} />

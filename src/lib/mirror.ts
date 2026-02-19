@@ -1,0 +1,156 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+export type MirroredPageDefinition = {
+  route: string;
+  sourceFile: string;
+};
+
+export type ParsedMirroredPage = {
+  route: string;
+  lang: string;
+  htmlClass: string;
+  bodyClass: string;
+  headHtml: string;
+  bodyHtml: string;
+};
+
+const MIRROR_ROOT = resolve(process.cwd(), "mirror");
+
+export const MIRRORED_PAGES: ReadonlyArray<MirroredPageDefinition> = [
+  { route: "/", sourceFile: "index.html" },
+  { route: "/nosotros/", sourceFile: "nosotros/index.html" },
+  { route: "/sucursales/", sourceFile: "sucursales/index.html" },
+  { route: "/servicios/", sourceFile: "servicios/index.html" },
+  { route: "/contacto/", sourceFile: "contacto/index.html" },
+  { route: "/colecciones/", sourceFile: "colecciones/index.html" },
+  { route: "/privacidad/", sourceFile: "privacidad.html" },
+  {
+    route: "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+    sourceFile: "adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/index.html",
+  },
+  {
+    route: "/looks-de-la-coleccion-primavera-verano-2023/",
+    sourceFile: "looks-de-la-coleccion-primavera-verano-2023/index.html",
+  },
+  {
+    route: "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+    sourceFile: "mixlight-la-tecnica-para-iluminar-el-cabello/index.html",
+  },
+  {
+    route: "/plurality-coleccion-primavera-verano-2024/",
+    sourceFile: "plurality-coleccion-primavera-verano-2024/index.html",
+  },
+];
+
+const WP_ID_TO_ROUTE = new Map<string, string>([
+  ["16", "/"],
+  ["59", "/nosotros/"],
+  ["98", "/sucursales/"],
+  ["135", "/servicios/"],
+  ["150", "/contacto/"],
+  ["164", "/colecciones/"],
+  ["195", "/privacidad/"],
+  ["28", "/plurality-coleccion-primavera-verano-2024/"],
+  ["41", "/mixlight-la-tecnica-para-iluminar-el-cabello/"],
+  ["44", "/looks-de-la-coleccion-primavera-verano-2023/"],
+  ["52", "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/"],
+]);
+
+const DIRECT_FILE_LINKS = new Map<string, string>([
+  ["privacidad.html", "/privacidad/"],
+  ["nosotros/index.html", "/nosotros/"],
+  ["sucursales/index.html", "/sucursales/"],
+  ["servicios/index.html", "/servicios/"],
+  ["contacto/index.html", "/contacto/"],
+  ["colecciones/index.html", "/colecciones/"],
+  [
+    "adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/index.html",
+    "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+  ],
+  [
+    "looks-de-la-coleccion-primavera-verano-2023/index.html",
+    "/looks-de-la-coleccion-primavera-verano-2023/",
+  ],
+  [
+    "mixlight-la-tecnica-para-iluminar-el-cabello/index.html",
+    "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+  ],
+  [
+    "plurality-coleccion-primavera-verano-2024/index.html",
+    "/plurality-coleccion-primavera-verano-2024/",
+  ],
+]);
+
+const pageCache = new Map<string, ParsedMirroredPage>();
+
+function extractAttribute(rawAttributes: string | undefined, attribute: string): string {
+  if (!rawAttributes) return "";
+  const match = rawAttributes.match(new RegExp(`${attribute}=(["'])(.*?)\\1`, "i"));
+  return match?.[2] ?? "";
+}
+
+function normalizeInternalLinks(markup: string): string {
+  let normalized = markup;
+
+  normalized = normalized.replace(/%3F/gi, "?");
+  normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx\//gi, "/");
+  normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx/gi, "");
+
+  normalized = normalized.replace(
+    /index\.html\?p=(\d+)(?:\.html)?/gi,
+    (fullMatch, id: string): string => WP_ID_TO_ROUTE.get(id) ?? fullMatch,
+  );
+  normalized = normalized.replace(
+    /\/\?p=(\d+)/gi,
+    (fullMatch, id: string): string => WP_ID_TO_ROUTE.get(id) ?? fullMatch,
+  );
+
+  for (const [from, to] of DIRECT_FILE_LINKS.entries()) {
+    normalized = normalized.split(from).join(to);
+  }
+
+  normalized = normalized.replace(/index\.html#top/gi, "/#top");
+  normalized = normalized.replace(/\.css\?ver=[^"'\s>]+\.css/gi, ".css");
+
+  return normalized;
+}
+
+function parseMirroredDocument(route: string, sourceFile: string): ParsedMirroredPage {
+  const absolutePath = resolve(MIRROR_ROOT, sourceFile);
+  const rawFile = readFileSync(absolutePath, "utf-8");
+
+  const htmlTagMatch = rawFile.match(/<html([^>]*)>/i);
+  const headMatch = rawFile.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+  const bodyMatch = rawFile.match(/<body([^>]*)>([\s\S]*?)<\/body>/i);
+
+  if (!headMatch || !bodyMatch) {
+    throw new Error(`Impossible de parser le mirror pour ${route} (${sourceFile})`);
+  }
+
+  const htmlAttributes = htmlTagMatch?.[1];
+  const bodyAttributes = bodyMatch[1];
+
+  return {
+    route,
+    lang: extractAttribute(htmlAttributes, "lang") || "en-US",
+    htmlClass: extractAttribute(htmlAttributes, "class"),
+    bodyClass: extractAttribute(bodyAttributes, "class"),
+    headHtml: normalizeInternalLinks(headMatch[1]),
+    bodyHtml: normalizeInternalLinks(bodyMatch[2]),
+  };
+}
+
+export function getMirroredPage(route: string): ParsedMirroredPage {
+  const existing = pageCache.get(route);
+  if (existing) return existing;
+
+  const definition = MIRRORED_PAGES.find((entry) => entry.route === route);
+  if (!definition) {
+    throw new Error(`Route miroir inconnue: ${route}`);
+  }
+
+  const parsed = parseMirroredDocument(definition.route, definition.sourceFile);
+  pageCache.set(route, parsed);
+  return parsed;
+}

@@ -1,0 +1,52 @@
+---
+import ClientBoot from "./ClientBoot.jsx";
+import type { ParsedMirroredPage } from "../lib/mirror";
+
+const { page } = Astro.props as { page: ParsedMirroredPage };
+---
+
+<!doctype html>
+<html lang={page.lang} class={page.htmlClass || undefined}>
+  <head>
+    <Fragment set:html={page.headHtml} />
+    <style is:global>
+      @media (min-width: 990px) {
+        .av-desktop-hide {
+          display: none !important;
+        }
+
+        .avia-fullscreen-slider {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 768px) and (max-width: 989px) {
+        .av-medium-hide {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 480px) and (max-width: 767px) {
+        .av-small-hide {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 479px) {
+        .av-mini-hide {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .avia-fullwidth-slider.av-small-hide.av-mini-hide {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body class={page.bodyClass || undefined}>
+    <ClientBoot client:load route={page.route} />
+    <Fragment set:html={page.bodyHtml} />
+  </body>
+</html>

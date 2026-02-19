@@ -1,0 +1,20 @@
+---
+import MirroredDocument from "../components/MirroredDocument.astro";
+import { MIRRORED_PAGES, getMirroredPage } from "../lib/mirror";
+
+export function getStaticPaths() {
+  return MIRRORED_PAGES.filter((page) => page.route !== "/").map((page) => ({
+    params: {
+      slug: page.route.replace(/^\/|\/$/g, ""),
+    },
+    props: {
+      route: page.route,
+    },
+  }));
+}
+
+const { route } = Astro.props as { route: string };
+const page = getMirroredPage(route);
+---
+
+<MirroredDocument page={page} />
