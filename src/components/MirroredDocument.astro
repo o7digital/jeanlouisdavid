@@ -1,14 +1,50 @@
 ---
 import ClientBoot from "./ClientBoot.jsx";
 import type { ParsedMirroredPage } from "../lib/mirror";
+import {
+  absoluteUrl,
+  canonicalPath,
+  extractTitleFromHead,
+  getJsonLd,
+  getSeoDescription,
+  getSeoImageUrl,
+} from "../lib/seo";
 
 const { page } = Astro.props as { page: ParsedMirroredPage };
+const title = extractTitleFromHead(page.headHtml);
+const description = getSeoDescription(page.route);
+const canonical = absoluteUrl(canonicalPath(page.route));
+const ogImage = getSeoImageUrl();
+const jsonLd = getJsonLd({
+  canonical,
+  description,
+  route: page.route,
+  title,
+});
 ---
 
 <!doctype html>
 <html lang={page.lang} class={page.htmlClass || undefined}>
   <head>
     <Fragment set:html={page.headHtml} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es-MX" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+    <meta property="og:site_name" content="Jean Louis David Mexico" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Jean Louis David Mexico" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={jsonLd} />
     <style is:global>
       #full_slider_1 .avia-slideshow-inner > li,
       .avia-fullscreen-slider .avia-slideshow-inner > li {
@@ -57,6 +93,146 @@ const { page } = Astro.props as { page: ParsedMirroredPage };
       @media (max-width: 767px) {
         .avia-fullwidth-slider.av-small-hide.av-mini-hide {
           display: none !important;
+        }
+      }
+
+      /* Fallback styles for Enfold mobile burger overlay.
+         Some mirrored LiteSpeed CSS snapshots omit these rules. */
+      @media (max-width: 767px) {
+        .av-burger-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 1200;
+          display: none;
+          opacity: 0;
+        }
+
+        .av-burger-overlay-bg {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .av-burger-overlay-scroll {
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 100%;
+          width: min(82vw, 430px);
+          background: #1f2024;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+          box-shadow: -18px 0 42px rgba(0, 0, 0, 0.45);
+        }
+
+        .av-burger-overlay-inner {
+          min-height: 100%;
+          padding: 96px 0 28px;
+        }
+
+        html.av-burger-overlay-active .av-burger-overlay-bg {
+          opacity: 1;
+        }
+
+        html.av-burger-overlay-active .av-burger-overlay-scroll {
+          transform: translateX(0);
+        }
+
+        #av-burger-menu-ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        #av-burger-menu-ul > li {
+          margin: 0;
+          opacity: 0;
+          transform: translateX(16px);
+          transition:
+            opacity 0.25s ease,
+            transform 0.25s ease;
+        }
+
+        #av-burger-menu-ul > li.av-active-burger-items {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        #av-burger-menu-ul > li > a {
+          display: block;
+          margin: 0;
+          padding: 18px 34px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+          color: #f4f4f4 !important;
+          font-family: "playfair display", Helvetica, Arial, sans-serif;
+          font-size: clamp(2.1rem, 8.3vw, 2.55rem);
+          font-weight: 400;
+          line-height: 1.12;
+          text-decoration: none;
+          background: transparent !important;
+        }
+
+        #av-burger-menu-ul > li > a .avia-menu-text {
+          color: inherit !important;
+        }
+
+        #av-burger-menu-ul > li > a .avia-menu-fx,
+        #av-burger-menu-ul > li > a .avia-bullet {
+          display: none !important;
+        }
+
+        .av-width-submenu > a {
+          position: relative;
+          padding-right: 56px !important;
+        }
+
+        .av-width-submenu > a .av-submenu-indicator {
+          position: absolute;
+          right: 26px;
+          top: 50%;
+          width: 11px;
+          height: 11px;
+          margin-top: -5px;
+          border-right: 1px solid rgba(255, 255, 255, 0.85);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+          transform: rotate(45deg);
+        }
+
+        #av-burger-menu-ul .sub-menu {
+          margin: 0;
+          padding: 0;
+          background: rgba(255, 255, 255, 0.04);
+        }
+
+        #av-burger-menu-ul .sub-menu > li > a {
+          font-size: clamp(1.65rem, 6.8vw, 2.05rem);
+          padding-left: 46px;
+        }
+
+        .av-hamburger--spin.is-active .av-hamburger-inner {
+          transform: rotate(225deg);
+          transition-delay: 0.12s;
+          transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        .av-hamburger--spin.is-active .av-hamburger-inner::before {
+          top: 0;
+          opacity: 0;
+          transition:
+            top 0.1s ease-out,
+            opacity 0.1s 0.12s ease-out;
+        }
+
+        .av-hamburger--spin.is-active .av-hamburger-inner::after {
+          bottom: 0;
+          transform: rotate(-90deg);
+          transition:
+            bottom 0.1s ease-out,
+            transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
         }
       }
 
