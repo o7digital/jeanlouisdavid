@@ -1,5 +1,34 @@
 import { useEffect } from "react";
 
+const SUPPORTED_LOCALES = ["es", "en", "fr"];
+const LOCALE_TAGS = {
+  es: "es-MX",
+  en: "en-US",
+  fr: "fr-FR",
+};
+
+function getCurrentLocale() {
+  const htmlLang = (document.documentElement.lang || "").toLowerCase();
+  if (htmlLang.startsWith("fr")) return "fr";
+  if (htmlLang.startsWith("en")) return "en";
+  return "es";
+}
+
+function normalizeRoutePath(path) {
+  if (!path || path === "/") return "/";
+  const pathname = path.split("#")[0].split("?")[0] || "/";
+  return pathname.endsWith("/") ? pathname : `${pathname}/`;
+}
+
+function stripLocalePrefix(path) {
+  return path.replace(/^\/(?:en|fr)(?=\/|$)/, "") || "/";
+}
+
+function buildLocalizedPath(basePath, locale) {
+  if (locale === "es") return basePath;
+  return `/${locale}${basePath === "/" ? "/" : basePath}`;
+}
+
 function hydrateLazyImages() {
   document.querySelectorAll("img[data-src], img[data-srcset], img[data-sizes]").forEach((image) => {
     const src = image.getAttribute("src") || "";
@@ -88,6 +117,87 @@ function normalizeContactSubmit() {
   } else {
     submitInput.value = "Enviar mensaje";
   }
+}
+
+function enhanceMobileBurger(route) {
+  const activeLocale = getCurrentLocale();
+  const currentRoute = normalizeRoutePath(route || window.location.pathname || "/");
+  const basePath = stripLocalePrefix(currentRoute);
+
+  const ensureLanguageLinks = () => {
+    const burgerMenu = document.querySelector("#av-burger-menu-ul");
+    if (!(burgerMenu instanceof HTMLElement)) return;
+    if (burgerMenu.querySelector(".jld-mobile-lang-item")) return;
+
+    const languageItem = document.createElement("li");
+    languageItem.className = "menu-item av-active-burger-items jld-mobile-lang-item";
+    languageItem.setAttribute("role", "menuitem");
+
+    const linksWrap = document.createElement("div");
+    linksWrap.className = "jld-mobile-lang-links";
+    linksWrap.setAttribute("aria-label", "Language switcher");
+    linksWrap.setAttribute("role", "navigation");
+
+    SUPPORTED_LOCALES.forEach((locale) => {
+      const link = document.createElement("a");
+      link.className = "jld-mobile-lang__link";
+      if (locale === activeLocale) {
+        link.classList.add("is-active");
+      }
+
+      link.href = buildLocalizedPath(basePath, locale);
+      link.textContent = locale.toUpperCase();
+      link.setAttribute("hreflang", LOCALE_TAGS[locale]);
+      link.setAttribute("lang", LOCALE_TAGS[locale]);
+      link.setAttribute("aria-label", LOCALE_TAGS[locale]);
+      linksWrap.appendChild(link);
+    });
+
+    languageItem.appendChild(linksWrap);
+    burgerMenu.appendChild(languageItem);
+  };
+
+  const handleBurgerNavigation = (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+
+    const link = target.closest("#av-burger-menu-ul a[href]");
+    if (!(link instanceof HTMLAnchorElement)) return;
+
+    const rawHref = link.getAttribute("href");
+    if (!rawHref || rawHref.startsWith("#")) return;
+
+    const resolved = new URL(rawHref, window.location.origin);
+    if (resolved.origin !== window.location.origin) return;
+
+    const nextPath = `${resolved.pathname}${resolved.search}${resolved.hash}`;
+    const currentPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (nextPath === currentPath) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    window.location.assign(nextPath);
+  };
+
+  ensureLanguageLinks();
+  const refreshTimers = [140, 420, 900].map((delay) =>
+    window.setTimeout(ensureLanguageLinks, delay),
+  );
+
+  const menuObserver = new MutationObserver(() => {
+    ensureLanguageLinks();
+  });
+  menuObserver.observe(document.body, { childList: true, subtree: true });
+
+  document.addEventListener("click", handleBurgerNavigation, true);
+
+  return () => {
+    refreshTimers.forEach((timerId) => window.clearTimeout(timerId));
+    menuObserver.disconnect();
+    document.removeEventListener("click", handleBurgerNavigation, true);
+  };
 }
 
 function triggerLiteSpeedScripts() {
@@ -185,6 +295,7 @@ export default function ClientBoot({ route }) {
     };
 
     runFallbacks();
+    const cleanupBurger = enhanceMobileBurger(route);
     const cleanupLiteSpeed = deferLiteSpeedScripts(route);
 
     const refreshTimers = [150, 600, 1400].map((delay) =>
@@ -193,6 +304,7 @@ export default function ClientBoot({ route }) {
 
     return () => {
       refreshTimers.forEach((timerId) => window.clearTimeout(timerId));
+      cleanupBurger?.();
       cleanupLiteSpeed?.();
     };
   }, [route]);
