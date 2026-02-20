@@ -92,6 +92,40 @@ function extractAttribute(rawAttributes: string | undefined, attribute: string):
   return match?.[2] ?? "";
 }
 
+function normalizeLegacyPath(value: string): string {
+  if (!value) return value;
+
+  const normalizedValue = value.replace(/%3F/gi, "?").replace(/%3D/gi, "=");
+
+  if (/^(?:https?:|\/\/|#|mailto:|tel:|javascript:|data:)/i.test(normalizedValue)) {
+    return normalizedValue;
+  }
+
+  const pageIdMatch = normalizedValue.match(/^\/?index\.html\?p=(\d+)(?:\.html)?$/i);
+  if (pageIdMatch) {
+    return WP_ID_TO_ROUTE.get(pageIdMatch[1]) ?? normalizedValue;
+  }
+
+  if (/^\/?(?:\.\/)?index\.html(?:#top)?$/i.test(normalizedValue)) {
+    return normalizedValue.toLowerCase().includes("#top") ? "/#top" : "/";
+  }
+
+  const routeIndexMatch = normalizedValue.match(
+    /^(?:\.\/)?([^?#]*\/)?index\.html(\?[^#]*)?(#.*)?$/i,
+  );
+
+  if (routeIndexMatch) {
+    const rawRoute = routeIndexMatch[1] ?? "";
+    const query = routeIndexMatch[2] ?? "";
+    const hash = routeIndexMatch[3] ?? "";
+    const routePath = rawRoute ? `/${rawRoute.replace(/^\/+|\/+$/g, "")}/` : "/";
+    const normalizedQuery = query.replace(/^\?s=\.html$/i, "?s=");
+    return `${routePath}${normalizedQuery}${hash}`;
+  }
+
+  return normalizedValue;
+}
+
 function normalizeInternalLinks(markup: string): string {
   let normalized = markup;
 
@@ -185,6 +219,11 @@ function normalizeInternalLinks(markup: string): string {
       `url(${quote}/${rest.replace(/^\/+/, "")}${quote})`,
   );
   normalized = normalized.replace(/(["'])\.\.\/\/+/g, "$1/");
+  normalized = normalized.replace(
+    /\b(href|action)=("|')([^"']+)\2/gi,
+    (_fullMatch: string, attribute: string, quote: string, value: string): string =>
+      `${attribute}=${quote}${normalizeLegacyPath(value)}${quote}`,
+  );
 
   return normalized;
 }

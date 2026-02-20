@@ -28,19 +28,19 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
       "/",
-      "Descubre la experiencia Jean Louis David en Mexico: servicios de estilismo, color, barberia y atencion personalizada.",
+      "Descubre la experiencia Jean Louis David en México: servicios de estilismo, color, barbería y atención personalizada.",
     ],
     [
       "/servicios/",
-      "Conoce nuestros servicios de corte, peinado, manicure, pedicure y barberia con atencion experta y personalizada.",
+      "Conoce nuestros servicios de corte, peinado, manicure, pedicure y barbería con atención experta y personalizada.",
     ],
     [
       "/sucursales/",
-      "Ubica las sucursales Jean Louis David en Mexico y agenda tu cita en el salon mas cercano.",
+      "Ubica las sucursales Jean Louis David en México y agenda tu cita en el salón más cercano.",
     ],
     [
       "/nosotros/",
-      "Conoce la filosofia, estilo y propuesta de Jean Louis David para una experiencia de belleza distintiva.",
+      "Conoce la filosofía, estilo y propuesta de Jean Louis David para una experiencia de belleza distintiva.",
     ],
     [
       "/colecciones/",
@@ -48,11 +48,11 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/contacto/",
-      "Contacta a Jean Louis David y agenda tu cita por WhatsApp para una asesoria personalizada.",
+      "Contacta a Jean Louis David y agenda tu cita por WhatsApp para una asesoría personalizada.",
     ],
     [
       "/privacidad/",
-      "Consulta el aviso de privacidad de Jean Louis David Mexico.",
+      "Consulta el aviso de privacidad de Jean Louis David México.",
     ],
   ]),
   en: new Map<string, string>([
@@ -88,11 +88,11 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   fr: new Map<string, string>([
     [
       "/",
-      "Decouvrez l'experience Jean Louis David au Mexique: coiffure, coloration, barbier et accompagnement personnalise.",
+      "Découvrez l'expérience Jean Louis David au Mexique : coiffure, coloration, barbier et accompagnement personnalisé.",
     ],
     [
       "/servicios/",
-      "Decouvrez nos services de coupe, coiffage, manucure, pedicure et barbier avec une attention experte et personnalisee.",
+      "Découvrez nos services de coupe, coiffage, manucure, pédicure et barbier avec une attention experte et personnalisée.",
     ],
     [
       "/sucursales/",
@@ -100,7 +100,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Decouvrez la philosophie, le style et la proposition Jean Louis David pour une experience beaute distinctive.",
+      "Découvrez la philosophie, le style et la proposition Jean Louis David pour une expérience beauté distinctive.",
     ],
     [
       "/colecciones/",
@@ -108,24 +108,24 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/contacto/",
-      "Contactez Jean Louis David et prenez rendez-vous via WhatsApp pour un conseil personnalise.",
+      "Contactez Jean Louis David et prenez rendez-vous via WhatsApp pour un conseil personnalisé.",
     ],
     [
       "/privacidad/",
-      "Consultez la politique de confidentialite de Jean Louis David Mexique.",
+      "Consultez la politique de confidentialité de Jean Louis David Mexique.",
     ],
   ]),
 };
 
 const DEFAULT_DESCRIPTION_BY_LOCALE: Record<Locale, string> = {
-  es: "Jean Louis David Mexico: estilismo, tendencias y servicios premium para cuidar y transformar tu imagen.",
+  es: "Jean Louis David México: estilismo, tendencias y servicios premium para cuidar y transformar tu imagen.",
   en: "Jean Louis David Mexico: premium styling, trends and salon services to elevate your look.",
   fr: "Jean Louis David Mexique: coiffure, tendances et services premium pour sublimer votre image.",
 };
 
 const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
-    ["/", "Jean Louis David - Salon CDMX"],
+    ["/", "Jean Louis David - Salón CDMX"],
     ["/servicios/", "Servicios - Jean Louis David"],
     ["/sucursales/", "Sucursales - Jean Louis David"],
     ["/nosotros/", "Nosotros - Jean Louis David"],
@@ -143,13 +143,13 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/privacidad/", "Privacy Notice - Jean Louis David"],
   ]),
   fr: new Map<string, string>([
-    ["/", "Jean Louis David - Salon a Mexico"],
+    ["/", "Jean Louis David - Salon à Mexico"],
     ["/servicios/", "Services - Jean Louis David"],
     ["/sucursales/", "Salons - Jean Louis David"],
-    ["/nosotros/", "A propos - Jean Louis David"],
+    ["/nosotros/", "À propos - Jean Louis David"],
     ["/colecciones/", "Collections - Jean Louis David"],
     ["/contacto/", "Contact - Jean Louis David"],
-    ["/privacidad/", "Politique de confidentialite - Jean Louis David"],
+    ["/privacidad/", "Politique de confidentialité - Jean Louis David"],
   ]),
 };
 

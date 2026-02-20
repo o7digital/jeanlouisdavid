@@ -502,6 +502,80 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
         "BE YOURSELF, STAND TALL, DARE.",
       ],
     ],
+    "/privacidad/": [
+      ["<strong>RESPONSABLE</strong>", "<strong>DATA CONTROLLER</strong>"],
+      ["DATOS PERSONALES", "PERSONAL DATA"],
+      ["QUÉ SON LOS COOKIES Y CÓMO SE UTILIZAN", "WHAT COOKIES ARE AND HOW WE USE THEM"],
+      ["USO DE LA INFORMACIÓN", "USE OF INFORMATION"],
+      [
+        "LIMITACIÓN DE USO Y DIVULGACIÓN DE LA INFORMACIÓN",
+        "LIMITATION OF USE AND DISCLOSURE OF INFORMATION",
+      ],
+      [
+        "TRANSFERENCIAS DE INFORMACIÓN CON TERCEROS",
+        "DATA TRANSFERS TO THIRD PARTIES",
+      ],
+      ["PROTECCIÓN", "SECURITY"],
+      ["CAMBIOS EN EL AVISO DE PRIVACIDAD", "CHANGES TO THE PRIVACY NOTICE"],
+      [
+        "En cumplimiento a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, la empresa COMERCIALIZADORA E IMPORTADORA DE SERVICIOS ALEBERTH es responsable de sus datos personales. El &#8220;Usuario&#8221; podrá contactar a la empresa en cualquier momento a través de nuestro correo electrónico contacto@jeanlouisdavid.com.mx o directamente en nuestra tienda, Juan Salvador Agraz 15, Local 201A , Col. Santa Fe, Cuajimalpa de Morelos, Ciudad de México.",
+        "In compliance with the Federal Law on Protection of Personal Data Held by Private Parties, COMERCIALIZADORA E IMPORTADORA DE SERVIC&#73;OS ALEBERTH is responsible for your personal data. The &#8220;User&#8221; may contact the company at any time through our email contacto@jeanlouisdavid.com.mx or directly at our salon, Juan Salvador Agraz 15, Local 201A, Col. Santa Fe, Cuajimalpa de Morelos, Mexico City.",
+      ],
+      [
+        "Protegemos y salvaguardamos sus datos personales para evitar el daño, pérdida, destrucción, robo, extravío, alteración, así como el tratamiento no autorizado de sus datos personales.",
+        "We protect and safeguard your personal data to prevent damage, loss, destruction, theft, misplacement, alteration, and any unauthorized processing of your personal data.",
+      ],
+      [
+        "La información deberá ser veraz y completa. El usuario responderá en todo momento por los datos proporcionados y en ningún caso la empresa será responsable de la veracidad de los mismos.",
+        "Information must be true and complete. The user is always responsible for the data provided, and under no circumstances will the company be responsible for its accuracy.",
+      ],
+      [
+        "La información solicitada al usuario en el sitio web de la empresa, será entra otra: Nombre completo. Teléfonos. Dirección Postal. Mail. Datos de Facturación. Datos de Tarjeta de Crédito. Sus datos personales serán tratados con base a en los principios de licitud, consentimiento, información, calidad, finalidad, lealtad, proporcionalidad y responsabilidad en términos de la Legislación. Se mantendrá la confidencialidad de sus datos personales estableciendo y manteniendo de forma efectiva las medidas de seguridad administrativas, técnicas y físicas, para evitar su daño, pérdida, alteración, destrucción, uso, acceso o divulgación indebida.",
+        "The information requested from the user on the company website includes, among others: Full name, phone numbers, mailing address, email, billing details, and credit card data. Your personal data will be processed according to the principles of lawfulness, consent, information, quality, purpose, loyalty, proportionality, and accountability, in accordance with applicable legislation. The confidentiality of your personal data will be maintained through effective administrative, technical, and physical security measures to prevent damage, loss, alteration, destruction, improper use, access, or disclosure.",
+      ],
+      [
+        "La aceptación de las cookies no es un requisito para visitar nuestra página. Las cookies son pequeños archivos de texto que identifican a tu computadora con nuestro servidor como un usuario único cuando tú visitas ciertas páginas en nuestro sitio y que son guardados por tu navegador de internet en el disco duro de tu computadora. Las cookies se pueden utilizar para reconocer tu dirección de protocolo de internet, que te ahorra tiempo mientras quieres entrar a nuestro sitio. Sólo utilizamos cookies para tu comodidad. Tu navegador puede ser configurado para no aceptar cookies, pero esto sería restringir el uso de nuestra página. Por favor, acepta nuestra garantía de que el uso de cookies no contiene datos de carácter personal o privado, y están libres de virus. Si deseas obtener más información acerca de las cookies, ve a http://www.allaboutcookies.org, y para obtener información sobre la eliminación de ellos desde el navegador, ve a http://www.allaboutcookies.org/manage-cookies/index.html. En el caso de empleo de cookies, el botón de &#8220;ayuda&#8221; que se encuentra en la barra de herramientas de la mayoría de los navegadores, le dirá cómo evitar aceptar nuevos cookies, cómo hacer que el navegador le notifique cuando recibe un nuevo cookie o cómo deshabilitar todos los cookies.",
+        "Accepting cookies is not required to visit our website. Cookies are small text files that identify your computer to our server as a unique user when you visit certain pages on our site, and they are stored by your browser on your computer&#39;s hard drive. Cookies may be used to recognize your internet protocol address, which saves time when entering our website. We use cookies only for your convenience. Your browser can be configured to reject cookies, but this may restrict the use of our website. Please note that cookies do not contain personal or private data and are virus-free. For more information about cookies, visit http://www.allaboutcookies.org, and for information on deleting them from your browser, visit http://www.allaboutcookies.org/manage-cookies/index.html. If cookies are used, the &#8220;help&#8221; button in most browsers&#39; toolbar will tell you how to prevent new cookies, how to receive notifications when you get a new cookie, or how to disable all cookies.",
+      ],
+      [
+        "La información solicitada permite a la empresa contactar a los usuarios y potenciales clientes cuando sea necesario para completar los procedimientos de compra. Así mismo la empresa utilizará la información obtenida para:",
+        "The information requested allows the company to contact users and potential clients when necessary to complete purchasing procedures. The company will also use the information obtained to:",
+      ],
+      ["Procurar un servicio eficiente", "Provide efficient service"],
+      [
+        "Informar sobre nuevos productos o servicios que estén relacionados con el contratado o adquirido por el cliente",
+        "Inform you about new products or services related to those contracted or acquired by the client",
+      ],
+      [
+        "Dar cumplimiento a obligaciones contraídas con nuestros clientes",
+        "Comply with obligations undertaken with our clients",
+      ],
+      [
+        "Informar sobre cambios de nuestros productos o servicios",
+        "Inform you about changes to our products or services",
+      ],
+      ["Proveer una mejor atención al usuario.", "Provide better customer service."],
+      [
+        "Los datos personales o empresariales proporcionados por el usuario formarán parte de un archivo que contendrá su perfil. El usuario puede modificar su perfil en cualquier momento utilizando su número de usuario y contraseña.",
+        "The personal or business data provided by the user will become part of a file containing their profile. The user may modify their profile at any time using their username and password.",
+      ],
+      [
+        "En nuestro programa de notificación de promociones, ofertas y servicios a través de correo electrónico, sólo la empresa tiene acceso a la información recabada. Este tipo de publicidad se realiza mediante avisos y mensajes promocionales de correo electrónico, los cuales sólo serán enviados a usted y a aquellos contactos registrados para tal propósito, esta indicación podrá usted modificarla en cualquier momento enviando un correo a contacto@jeanlouisdavid.com.mx. En los correos electrónicos enviados, pueden incluirse ocasionalmente ofertas de terceras partes que sean nuestros socios comerciales.",
+        "In our promotions, offers, and services notification program via email, only the company has access to the collected information. This type of advertising is carried out through notices and promotional email messages, which will only be sent to you and to contacts registered for that purpose. You may change this preference at any time by sending an email to contacto@jeanlouisdavid.com.mx. Emails sent may occasionally include offers from third parties that are our business partners.",
+      ],
+      [
+        "La empresa únicamente realiza remisiones de datos para cumplir con las obligaciones contraídas con los clientes. La empresa solo compartirá datos cuando haya sido requerido por orden judicial para cumplir con las disposiciones procesales.",
+        "The company only transfers data to fulfill obligations undertaken with clients. The company will share data only when required by court order to comply with legal procedural provisions.",
+      ],
+      [
+        "Al momento de comprar un producto en línea, se pedirán datos bancarios para los cuales le ofrecemos seguridad y confidencialidad de los datos que proporciona. Sin embargo, y a pesar de contar cada día con herramientas más seguras, la protección de los datos enviados a través de Internet no se puede garantizar al 100%; por lo que una vez recibidos, se hará todo lo posible por salvaguardar la información.",
+        "When purchasing a product online, banking data will be requested, and we offer security and confidentiality for the information you provide. However, despite increasingly secure tools, protection of data sent over the Internet cannot be guaranteed 100%; therefore, once received, every possible measure will be taken to safeguard the information.",
+      ],
+      [
+        "Nos reservamos el derecho de efectuar en cualquier momento modificaciones o actualizaciones al presente aviso de privacidad, para la atención de novedades legislativas o jurisprudenciales, políticas internas, nuevos requerimientos para la prestación u ofrecimiento de nuestros servicios o productos y prácticas del mercado. Estas modificaciones estarán disponibles al público a través de nuestra página de Internet sección aviso de privacidad.",
+        "We reserve the right to make modifications or updates to this privacy notice at any time in response to legislative or case-law developments, internal policies, new requirements for providing or offering our services or products, and market practices. These changes will be made available to the public through the privacy notice section on our website.",
+      ],
+    ],
   },
   fr: {
     "/": [
@@ -604,6 +678,86 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
         "SOYEZ VOUS-MÊME, AFFIRMEZ-VOUS, OSEZ.",
       ],
     ],
+    "/privacidad/": [
+      ["<strong>RESPONSABLE</strong>", "<strong>RESPONSABLE DU TRAITEMENT</strong>"],
+      ["DATOS PERSONALES", "DONNÉES PERSONNELLES"],
+      [
+        "QUÉ SON LOS COOKIES Y CÓMO SE UTILIZAN",
+        "QUE SONT LES COOKIES ET COMMENT ILS SONT UTILISÉS",
+      ],
+      ["USO DE LA INFORMACIÓN", "UTILISATION DES INFORMATIONS"],
+      [
+        "LIMITACIÓN DE USO Y DIVULGACIÓN DE LA INFORMACIÓN",
+        "LIMITATION DE L&#39;UTILISATION ET DE LA DIVULGATION DES INFORMATIONS",
+      ],
+      [
+        "TRANSFERENCIAS DE INFORMACIÓN CON TERCEROS",
+        "TRANSFERTS D&#39;INFORMATIONS À DES TIERS",
+      ],
+      ["PROTECCIÓN", "PROTECTION"],
+      [
+        "CAMBIOS EN EL AVISO DE PRIVACIDAD",
+        "MODIFICATIONS DE LA POLITIQUE DE CONFIDENTIALITÉ",
+      ],
+      [
+        "En cumplimiento a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, la empresa COMERCIALIZADORA E IMPORTADORA DE SERVICIOS ALEBERTH es responsable de sus datos personales. El &#8220;Usuario&#8221; podrá contactar a la empresa en cualquier momento a través de nuestro correo electrónico contacto@jeanlouisdavid.com.mx o directamente en nuestra tienda, Juan Salvador Agraz 15, Local 201A , Col. Santa Fe, Cuajimalpa de Morelos, Ciudad de México.",
+        "Conformément à la Loi fédérale sur la protection des données personnelles détenues par des particuliers, la société COMERCIALIZADORA E IMPORTADORA DE SERVIC&#73;OS ALEBERTH est responsable de vos données personnelles. L&#8220;Utilisateur&#8221; peut contacter la société à tout moment via notre e-mail contacto@jeanlouisdavid.com.mx ou directement dans notre salon, Juan Salvador Agraz 15, Local 201A, Col. Santa Fe, Cuajimalpa de Morelos, Ciudad de México.",
+      ],
+      [
+        "Protegemos y salvaguardamos sus datos personales para evitar el daño, pérdida, destrucción, robo, extravío, alteración, así como el tratamiento no autorizado de sus datos personales.",
+        "Nous protégeons et préservons vos données personnelles afin d&#39;éviter tout dommage, perte, destruction, vol, égarement, altération, ainsi que tout traitement non autorisé de vos données personnelles.",
+      ],
+      [
+        "La información deberá ser veraz y completa. El usuario responderá en todo momento por los datos proporcionados y en ningún caso la empresa será responsable de la veracidad de los mismos.",
+        "Les informations fournies doivent être exactes et complètes. L&#39;utilisateur est à tout moment responsable des données fournies et la société ne pourra en aucun cas être tenue responsable de leur exactitude.",
+      ],
+      [
+        "La información solicitada al usuario en el sitio web de la empresa, será entra otra: Nombre completo. Teléfonos. Dirección Postal. Mail. Datos de Facturación. Datos de Tarjeta de Crédito. Sus datos personales serán tratados con base a en los principios de licitud, consentimiento, información, calidad, finalidad, lealtad, proporcionalidad y responsabilidad en términos de la Legislación. Se mantendrá la confidencialidad de sus datos personales estableciendo y manteniendo de forma efectiva las medidas de seguridad administrativas, técnicas y físicas, para evitar su daño, pérdida, alteración, destrucción, uso, acceso o divulgación indebida.",
+        "Les informations demandées à l&#39;utilisateur sur le site web de la société comprennent notamment : nom complet, numéros de téléphone, adresse postale, e-mail, données de facturation et données de carte bancaire. Vos données personnelles seront traitées selon les principes de licéité, de consentement, d&#39;information, de qualité, de finalité, de loyauté, de proportionnalité et de responsabilité, conformément à la législation applicable. La confidentialité de vos données personnelles sera maintenue au moyen de mesures de sécurité administratives, techniques et physiques effectives, afin d&#39;éviter tout dommage, perte, altération, destruction, usage, accès ou divulgation indue.",
+      ],
+      [
+        "La aceptación de las cookies no es un requisito para visitar nuestra página. Las cookies son pequeños archivos de texto que identifican a tu computadora con nuestro servidor como un usuario único cuando tú visitas ciertas páginas en nuestro sitio y que son guardados por tu navegador de internet en el disco duro de tu computadora. Las cookies se pueden utilizar para reconocer tu dirección de protocolo de internet, que te ahorra tiempo mientras quieres entrar a nuestro sitio. Sólo utilizamos cookies para tu comodidad. Tu navegador puede ser configurado para no aceptar cookies, pero esto sería restringir el uso de nuestra página. Por favor, acepta nuestra garantía de que el uso de cookies no contiene datos de carácter personal o privado, y están libres de virus. Si deseas obtener más información acerca de las cookies, ve a http://www.allaboutcookies.org, y para obtener información sobre la eliminación de ellos desde el navegador, ve a http://www.allaboutcookies.org/manage-cookies/index.html. En el caso de empleo de cookies, el botón de &#8220;ayuda&#8221; que se encuentra en la barra de herramientas de la mayoría de los navegadores, le dirá cómo evitar aceptar nuevos cookies, cómo hacer que el navegador le notifique cuando recibe un nuevo cookie o cómo deshabilitar todos los cookies.",
+        "L&#39;acceptation des cookies n&#39;est pas une condition pour visiter notre site. Les cookies sont de petits fichiers texte qui identifient votre ordinateur auprès de notre serveur comme un utilisateur unique lorsque vous consultez certaines pages de notre site, et qui sont enregistrés par votre navigateur sur le disque dur de votre ordinateur. Les cookies peuvent être utilisés pour reconnaître votre adresse de protocole Internet, ce qui vous fait gagner du temps lors de votre accès à notre site. Nous utilisons les cookies uniquement pour votre confort. Votre navigateur peut être configuré pour refuser les cookies, mais cela peut limiter l&#39;utilisation de notre site. Veuillez noter que l&#39;utilisation des cookies ne contient pas de données personnelles ou privées et qu&#39;ils sont exempts de virus. Si vous souhaitez en savoir plus sur les cookies, consultez http://www.allaboutcookies.org, et pour savoir comment les supprimer depuis votre navigateur, consultez http://www.allaboutcookies.org/manage-cookies/index.html. En cas d&#39;utilisation de cookies, le bouton &#8220;aide&#8221; situé dans la barre d&#39;outils de la plupart des navigateurs vous indiquera comment empêcher l&#39;acceptation de nouveaux cookies, comment être averti lors de la réception d&#39;un nouveau cookie, ou comment désactiver tous les cookies.",
+      ],
+      [
+        "La información solicitada permite a la empresa contactar a los usuarios y potenciales clientes cuando sea necesario para completar los procedimientos de compra. Así mismo la empresa utilizará la información obtenida para:",
+        "Les informations demandées permettent à la société de contacter les utilisateurs et les clients potentiels lorsque cela est nécessaire pour finaliser les procédures d&#39;achat. De même, la société utilisera les informations obtenues pour :",
+      ],
+      ["Procurar un servicio eficiente", "Assurer un service efficace"],
+      [
+        "Informar sobre nuevos productos o servicios que estén relacionados con el contratado o adquirido por el cliente",
+        "Informer sur de nouveaux produits ou services liés à ceux contractés ou acquis par le client",
+      ],
+      [
+        "Dar cumplimiento a obligaciones contraídas con nuestros clientes",
+        "Respecter les obligations contractées envers nos clients",
+      ],
+      [
+        "Informar sobre cambios de nuestros productos o servicios",
+        "Informer des changements concernant nos produits ou services",
+      ],
+      ["Proveer una mejor atención al usuario.", "Offrir un meilleur accompagnement à l&#39;utilisateur."],
+      [
+        "Los datos personales o empresariales proporcionados por el usuario formarán parte de un archivo que contendrá su perfil. El usuario puede modificar su perfil en cualquier momento utilizando su número de usuario y contraseña.",
+        "Les données personnelles ou professionnelles fournies par l&#39;utilisateur feront partie d&#39;un fichier contenant son profil. L&#39;utilisateur peut modifier son profil à tout moment en utilisant son identifiant et son mot de passe.",
+      ],
+      [
+        "En nuestro programa de notificación de promociones, ofertas y servicios a través de correo electrónico, sólo la empresa tiene acceso a la información recabada. Este tipo de publicidad se realiza mediante avisos y mensajes promocionales de correo electrónico, los cuales sólo serán enviados a usted y a aquellos contactos registrados para tal propósito, esta indicación podrá usted modificarla en cualquier momento enviando un correo a contacto@jeanlouisdavid.com.mx. En los correos electrónicos enviados, pueden incluirse ocasionalmente ofertas de terceras partes que sean nuestros socios comerciales.",
+        "Dans notre programme de notification des promotions, offres et services par e-mail, seule la société a accès aux informations collectées. Ce type de communication est réalisé au moyen d&#39;avis et de messages promotionnels envoyés par e-mail, qui seront adressés uniquement à vous et aux contacts enregistrés à cette fin. Vous pouvez modifier cette préférence à tout moment en envoyant un e-mail à contacto@jeanlouisdavid.com.mx. Les e-mails envoyés peuvent occasionnellement inclure des offres de tiers qui sont nos partenaires commerciaux.",
+      ],
+      [
+        "La empresa únicamente realiza remisiones de datos para cumplir con las obligaciones contraídas con los clientes. La empresa solo compartirá datos cuando haya sido requerido por orden judicial para cumplir con las disposiciones procesales.",
+        "La société effectue uniquement des transferts de données afin de respecter les obligations contractées envers ses clients. Elle ne partagera des données que lorsqu&#39;une décision judiciaire l&#39;exige pour se conformer aux dispositions procédurales.",
+      ],
+      [
+        "Al momento de comprar un producto en línea, se pedirán datos bancarios para los cuales le ofrecemos seguridad y confidencialidad de los datos que proporciona. Sin embargo, y a pesar de contar cada día con herramientas más seguras, la protección de los datos enviados a través de Internet no se puede garantizar al 100%; por lo que una vez recibidos, se hará todo lo posible por salvaguardar la información.",
+        "Lors de l&#39;achat d&#39;un produit en ligne, des données bancaires seront demandées, pour lesquelles nous assurons la sécurité et la confidentialité des informations fournies. Toutefois, malgré des outils chaque jour plus sûrs, la protection des données transmises via Internet ne peut pas être garantie à 100 % ; une fois reçues, toutes les mesures possibles seront prises pour protéger ces informations.",
+      ],
+      [
+        "Nos reservamos el derecho de efectuar en cualquier momento modificaciones o actualizaciones al presente aviso de privacidad, para la atención de novedades legislativas o jurisprudenciales, políticas internas, nuevos requerimientos para la prestación u ofrecimiento de nuestros servicios o productos y prácticas del mercado. Estas modificaciones estarán disponibles al público a través de nuestra página de Internet sección aviso de privacidad.",
+        "Nous nous réservons le droit d&#39;apporter à tout moment des modifications ou des mises à jour à la présente politique de confidentialité, afin de tenir compte des évolutions législatives ou jurisprudentielles, des politiques internes, des nouvelles exigences pour la fourniture ou l&#39;offre de nos services ou produits, ainsi que des pratiques du marché. Ces modifications seront mises à la disposition du public sur la section politique de confidentialité de notre site Internet.",
+      ],
+    ],
   },
 };
 
@@ -613,6 +767,12 @@ export function localizePageContent(markup: string, locale: Locale, route: strin
   const normalizedRoute = normalizeRoutePath(route);
   const commonReplacements = COMMON_TEXT_REPLACEMENTS[locale];
   const routeReplacements = ROUTE_TEXT_REPLACEMENTS[locale][normalizedRoute] ?? [];
+  const privacyReplacements = ROUTE_TEXT_REPLACEMENTS[locale]["/privacidad/"] ?? [];
+  const shouldUsePrivacyFallback =
+    routeReplacements.length === 0 && /\/privacidad(?:\.html)?\/?$/i.test(normalizedRoute);
+  const effectiveRouteReplacements = shouldUsePrivacyFallback
+    ? privacyReplacements
+    : routeReplacements;
 
-  return applyReplacements(markup, [...routeReplacements, ...commonReplacements]);
+  return applyReplacements(markup, [...effectiveRouteReplacements, ...commonReplacements]);
 }
