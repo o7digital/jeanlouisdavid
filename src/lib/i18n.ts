@@ -205,11 +205,24 @@ export function injectLanguageSwitch(markup: string, route: string, locale: Loca
 type Replacement = readonly [string, string];
 
 function replaceInSegment(segment: string, replacements: ReadonlyArray<Replacement>): string {
+  const orderedReplacements = [...replacements].sort(
+    ([sourceA], [sourceB]) => sourceB.length - sourceA.length,
+  );
   let localized = segment;
 
-  for (const [source, target] of replacements) {
-    if (!source || source === target) continue;
-    localized = localized.split(source).join(target);
+  for (let pass = 0; pass < 4; pass += 1) {
+    let next = localized;
+
+    for (const [source, target] of orderedReplacements) {
+      if (!source || source === target) continue;
+      next = next.split(source).join(target);
+    }
+
+    if (next === localized) {
+      break;
+    }
+
+    localized = next;
   }
 
   return localized;
@@ -230,6 +243,13 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
   en: [
     ["Personalización hasta el infinito", "Infinite Personalization"],
     ["Personalización Hasta el Infinito", "Infinite Personalization"],
+    ["Nuestros Servicios", "Our Services"],
+    ["Nuestros Services", "Our Services"],
+    ["Nuestro Services", "Our Services"],
+    ["Nuestras Sucursales", "Our Locations"],
+    ["Nuestras Locations", "Our Locations"],
+    ["Sucursales en México", "Our Location in Mexico"],
+    ["Locations en México", "Our Location in Mexico"],
     ["Conócenos", "Learn More"],
     ["Citas", "Appointments"],
     ["Agenda tu Cita", "Book Your Appointment"],
@@ -256,7 +276,6 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Teléfono / WhatsApp", "Phone / WhatsApp"],
     ["Mensaje", "Message"],
     ["Enviar mensaje", "Send Message"],
-    ["Nuestros Servicios", "Our Services"],
     ["Cortes", "Haircuts"],
     ["Corte Dama", "Women's Haircut"],
     ["Corte Caballero", "Men's Haircut"],
@@ -285,7 +304,6 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Barbería", "Barbering"],
     ["Bigote", "Mustache"],
     ["Media Barba", "Half Beard"],
-    ["Sucursales en México", "Locations in Mexico"],
     ["Jean Louis David México", "Jean Louis David Mexico"],
     ["Conoce más", "Learn More"],
     ["Un Legado de Innovación y Pasión", "A Legacy of Innovation and Passion"],
@@ -299,6 +317,13 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
   fr: [
     ["Personalización hasta el infinito", "Personnalisation a l'infini"],
     ["Personalización Hasta el Infinito", "Personnalisation a l'infini"],
+    ["Nuestros Servicios", "Nos Services"],
+    ["Nuestros Services", "Nos Services"],
+    ["Nuestro Services", "Nos Services"],
+    ["Nuestras Sucursales", "Nos Salons"],
+    ["Nuestras Salons", "Nos Salons"],
+    ["Sucursales en México", "Nos Salons a Mexico"],
+    ["Salons en México", "Nos Salons a Mexico"],
     ["Conócenos", "Nous decouvrir"],
     ["Citas", "Rendez-vous"],
     ["Agenda tu Cita", "Prenez rendez-vous"],
@@ -313,7 +338,7 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Servicios", "Services"],
     ["Sucursales", "Salons"],
     ["Nosotros", "A propos"],
-    ["Colecciones", "Collections"],
+    ["Colecciones", "Nos Collections"],
     ["Contacto", "Contact"],
     ["Envíanos un mensaje", "Envoyez-nous un message"],
     ["Datos de contacto", "Coordonnees"],
@@ -325,7 +350,6 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Teléfono / WhatsApp", "Telephone / WhatsApp"],
     ["Mensaje", "Message"],
     ["Enviar mensaje", "Envoyer le message"],
-    ["Nuestros Servicios", "Nos services"],
     ["Cortes", "Coupes"],
     ["Corte Dama", "Coupe Femme"],
     ["Corte Caballero", "Coupe Homme"],
@@ -357,15 +381,14 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Barbería", "Barbier"],
     ["Bigote", "Moustache"],
     ["Media Barba", "Demi barbe"],
-    ["Sucursales en México", "Salons au Mexique"],
     ["Jean Louis David México", "Jean Louis David Mexique"],
     ["Conoce más", "En savoir plus"],
     ["Un Legado de Innovación y Pasión", "Un heritage d'innovation et de passion"],
     ["Jean Louis David en el Mundo", "Jean Louis David dans le monde"],
-    ["Aspectos de la Colección", "Looks de la collection"],
-    ["Looks de la Colección &#8211; Primavera Verano 2024", "Looks de la collection Printemps-Ete 2024"],
-    ["Looks de la colección Primavera-Verano 2023", "Looks de la collection Printemps-Ete 2023"],
-    ["¡Adopta el bob (cuadrado), EL corte de moda de la temporada!", "Adoptez le carre, LA coupe tendance de la saison !"],
+    ["Aspectos de la Colección", "Aperçus de la collection"],
+    ["Looks de la Colección &#8211; Primavera Verano 2024", "Aperçus de la collection Printemps-Été 2024"],
+    ["Looks de la colección Primavera-Verano 2023", "Aperçus de la collection Printemps-Été 2023"],
+    ["¡Adopta el bob (cuadrado), EL corte de moda de la temporada!", "Adoptez le carré, LA coupe tendance de la saison !"],
     ["Mixlight, la técnica emblemática de Jean Louis David para iluminar el cabello", "Mixlight, la technique signature de Jean Louis David pour illuminer les cheveux"],
     ["Scroll to top", "Retour en haut"],
   ],
@@ -435,6 +458,22 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
         "Continuando con la temporada anterior, los cortes y colores inspirados en el underground te invitan a cambiar los códigos, a inventar tus propias reglas y a destacar entre la multitud.",
         "Continuing from last season, underground-inspired cuts and colors invite you to break the rules, create your own codes, and stand out from the crowd.",
       ],
+      [
+        "Celebrar la personalidad de cada uno, a través del cabello que a veces se expresa tanto como las palabras",
+        "Celebrating each person's individuality through hair that sometimes speaks as loudly as words",
+      ],
+      [
+        "Una declaración de cabello posible gracias al vanguardismo de los estilistas de Jean Louis David, con inspiraciones constantemente renovadas. Aquí, la arquitectura brutalista y el radicalismo urbano sirven como patio de recreo",
+        "A hair statement made possible by the avant-garde vision of Jean Louis David stylists, fueled by constantly renewed inspiration. Here, brutalist architecture and urban radicalism become a playground",
+      ],
+      [
+        "para las almas rebeldes.",
+        "for rebellious souls.",
+      ],
+      [
+        "SÉ TÚ MISMO, AFÍRATE, ATRÉVETE.",
+        "BE YOURSELF, STAND TALL, DARE.",
+      ],
     ],
   },
   fr: {
@@ -491,11 +530,27 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
     "/colecciones/": [
       [
         "Un viento de audacia anuncia la primavera. Un soplo de libertad caracteriza el verano. Este es el humor de Jean Louis David para la estación cálida.",
-        "Un vent d'audace annonce le printemps. Un souffle de liberte caracterise l'ete. C'est l'esprit Jean Louis David pour la belle saison.",
+        "Un vent d'audace annonce le printemps. Un souffle de liberté caractérise l'été. C'est l'esprit Jean Louis David pour la belle saison.",
       ],
       [
         "Continuando con la temporada anterior, los cortes y colores inspirados en el underground te invitan a cambiar los códigos, a inventar tus propias reglas y a destacar entre la multitud.",
-        "Dans la continuite de la saison precedente, les coupes et couleurs inspirees de l'underground vous invitent a bousculer les codes, inventer vos propres regles et sortir du lot.",
+        "Dans la continuité de la saison précédente, les coupes et couleurs inspirées de l'underground vous invitent à bousculer les codes, à inventer vos propres règles et à sortir du lot.",
+      ],
+      [
+        "Celebrar la personalidad de cada uno, a través del cabello que a veces se expresa tanto como las palabras",
+        "Célébrer la personnalité de chacun, à travers des cheveux qui s'expriment parfois autant que les mots",
+      ],
+      [
+        "Una declaración de cabello posible gracias al vanguardismo de los estilistas de Jean Louis David, con inspiraciones constantemente renovadas. Aquí, la arquitectura brutalista y el radicalismo urbano sirven como patio de recreo",
+        "Une expression capillaire rendue possible grâce à l'avant-gardisme des stylistes Jean Louis David, nourrie par des inspirations constamment renouvelées. Ici, l'architecture brutaliste et le radicalisme urbain servent de terrain de jeu",
+      ],
+      [
+        "para las almas rebeldes.",
+        "pour les âmes rebelles.",
+      ],
+      [
+        "SÉ TÚ MISMO, AFÍRATE, ATRÉVETE.",
+        "SOYEZ VOUS-MÊME, AFFIRMEZ-VOUS, OSEZ.",
       ],
     ],
   },
