@@ -1,8 +1,8 @@
 ---
+import ClientBoot from "./ClientBoot.jsx";
 import type { ParsedMirroredPage } from "../lib/mirror";
 import {
   DEFAULT_LOCALE,
-  LOCALE_CODE_LABEL,
   LOCALE_HTML_TAG,
   LOCALE_OG_TAG,
   SUPPORTED_LOCALES,
@@ -28,83 +28,6 @@ const { page, locale: localeProp } = Astro.props as {
   locale?: string;
 };
 
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/xkovvbwz";
-
-function configureContactForm(markup: string): string {
-  if (!markup) return markup;
-
-  let normalized = markup;
-
-  normalized = normalized.replace(
-    /<form([^>]*class=(["'])[^"']*avia_ajax_form[^"']*\2[^>]*)>/gi,
-    (_match: string, attributes: string): string => {
-      let nextAttributes = attributes;
-
-      if (/\baction=/.test(nextAttributes)) {
-        nextAttributes = nextAttributes.replace(
-          /\baction=(["'])[^"']*\1/i,
-          `action="${FORMSPREE_ENDPOINT}"`,
-        );
-      } else {
-        nextAttributes += ` action="${FORMSPREE_ENDPOINT}"`;
-      }
-
-      if (/\bmethod=/.test(nextAttributes)) {
-        nextAttributes = nextAttributes.replace(/\bmethod=(["'])[^"']*\1/i, `method="post"`);
-      } else {
-        nextAttributes += ` method="post"`;
-      }
-
-      if (!/\baccept-charset=/.test(nextAttributes)) {
-        nextAttributes += ` accept-charset="UTF-8"`;
-      }
-
-      return `<form${nextAttributes}>`;
-    },
-  );
-
-  normalized = normalized.replace(/\bname=(["'])avia_1_1\1/gi, `name="name"`);
-  normalized = normalized.replace(/\bname=(["'])avia_2_1\1/gi, `name="phone"`);
-  normalized = normalized.replace(/\bname=(["'])avia_3_1\1/gi, `name="email"`);
-  normalized = normalized.replace(/\bname=(["'])avia_4_1\1/gi, `name="message"`);
-
-  normalized = normalized.replace(
-    /<p[^>]*class=(["'])hidden\1[^>]*>\s*<input[^>]*name=(["'])avia_5_1\2[^>]*>\s*<\/p>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<input[^>]*name=(["'])avia_generated_form1\1[^>]*>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>(?:\s*<\/div>)?\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<div[^>]*class=(["'])avia-disabled-form\1[^>]*>[\s\S]*?<\/div>\s*/gi,
-    "",
-  );
-
-  return normalized;
-}
-
-function cleanupPrivacyCopy(markup: string, locale: Locale): string {
-  if (!markup) return markup;
-  if (locale === "es") return markup;
-
-  let normalized = markup;
-  normalized = normalized.replace(/SERVIC&#73;OS/gi, "SERVICIOS");
-
-  if (locale === "fr") {
-    normalized = normalized.replace(
-      /RESPONSABLE DU TRAITEMENT DU TRAITEMENT/gi,
-      "RESPONSABLE DU TRAITEMENT",
-    );
-  }
-
-  return normalized;
-}
-
 const locale = normalizeLocale(localeProp);
 const localizedHeadHtml = localizeInternalLinks(page.headHtml, locale);
 const sanitizedHeadHtml = localizedHeadHtml.replace(/<title[^>]*>[\s\S]*?<\/title>/i, "");
@@ -112,12 +35,6 @@ let localizedBodyHtml = localizeInternalLinks(page.bodyHtml, locale);
 localizedBodyHtml = localizeNavigationLabels(localizedBodyHtml, locale);
 localizedBodyHtml = localizePageContent(localizedBodyHtml, locale, page.route);
 localizedBodyHtml = injectLanguageSwitch(localizedBodyHtml, page.route, locale);
-if (page.route === "/contacto/") {
-  localizedBodyHtml = configureContactForm(localizedBodyHtml);
-}
-if (page.route === "/privacidad/") {
-  localizedBodyHtml = cleanupPrivacyCopy(localizedBodyHtml, locale);
-}
 localizedBodyHtml = localizedBodyHtml.replace(/©\s*Copyright\s*2024/gi, "© Copyright 2026");
 if (!localizedBodyHtml.includes("o7digital.com")) {
   localizedBodyHtml = localizedBodyHtml.replace(
@@ -149,14 +66,6 @@ const jsonLd = getJsonLd({
 });
 const hasBodyH1 = /<h1\b/i.test(localizedBodyHtml);
 const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
-const clientBootRoute = canonicalPathForLocale(page.route, locale);
-const mobileLanguageLabel = locale === "fr" ? "Langue" : locale === "en" ? "Language" : "Idioma";
-const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
-  code: LOCALE_CODE_LABEL[entryLocale],
-  href: canonicalPathForLocale(page.route, entryLocale),
-  localeTag: LOCALE_HTML_TAG[entryLocale],
-  active: entryLocale === locale,
-}));
 ---
 
 <!doctype html>
@@ -372,7 +281,7 @@ const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
           top: 0;
           right: 0;
           height: 100%;
-          width: min(88vw, 430px);
+          width: min(82vw, 430px);
           background: #1f2024;
           transform: translateX(100%);
           transition: transform 0.3s ease;
@@ -465,52 +374,6 @@ const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
           padding-left: 46px;
         }
 
-        #av-burger-menu-ul > li.jld-mobile-language-links {
-          opacity: 1;
-          transform: none;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.22);
-          padding: 14px 34px 18px;
-        }
-
-        #av-burger-menu-ul > li.jld-mobile-language-links .jld-mobile-language-links__label {
-          display: block;
-          margin-bottom: 10px;
-          color: rgba(244, 244, 244, 0.72);
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-        }
-
-        #av-burger-menu-ul > li.jld-mobile-language-links .jld-mobile-language-links__list {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-
-        #av-burger-menu-ul > li.jld-mobile-language-links a.jld-mobile-language-link {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 52px;
-          height: auto;
-          line-height: 1;
-          padding: 9px 12px;
-          border: 1px solid rgba(255, 255, 255, 0.35);
-          border-radius: 999px;
-          color: #f4f4f4 !important;
-          font-size: 0.9rem;
-          font-weight: 600;
-          letter-spacing: 0.06em;
-          text-decoration: none;
-          text-transform: uppercase;
-        }
-
-        #av-burger-menu-ul > li.jld-mobile-language-links a.jld-mobile-language-link.is-active {
-          border-color: #d7bb7a;
-          color: #d7bb7a !important;
-        }
-
         .av-hamburger--spin.is-active .av-hamburger-inner {
           transform: rotate(225deg);
           transition-delay: 0.12s;
@@ -534,12 +397,6 @@ const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
         }
       }
 
-      @media (max-width: 479px) {
-        .av-burger-overlay-scroll {
-          width: 100vw;
-        }
-      }
-
       .av-masonry-container.av-js-disabled .av-masonry-entry {
         visibility: visible;
         opacity: 1;
@@ -550,13 +407,8 @@ const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
       }
 
       /* Contact form: keep submit button aligned below inputs and make it readable. */
-      body.page-id-150 #top .avia_ajax_form p.form_element {
-        float: none !important;
-        clear: both;
-        width: 100%;
-      }
-
       body.page-id-150 #top .avia_ajax_form p.form_element:not(.form_fullwidth) {
+        clear: both;
         width: 100%;
         margin-top: 18px;
         text-align: left;
@@ -609,236 +461,7 @@ const mobileLanguageLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
     </style>
   </head>
   <body id="top" class={page.bodyClass || undefined}>
-    <script
-      is:inline
-      define:vars={{ route: clientBootRoute, languageLinks: mobileLanguageLinks, languageLabel: mobileLanguageLabel }}
-    >
-      (() => {
-        const currentRoute = typeof route === "string" && route ? route : window.location.pathname;
-        document.documentElement.setAttribute("data-jld-clone", "astro");
-        document.documentElement.setAttribute("data-jld-route", currentRoute);
-        const mobileLanguageEntries = Array.isArray(languageLinks)
-          ? languageLinks
-              .map((entry) => {
-                if (!entry || typeof entry !== "object") return null;
-                const code = typeof entry.code === "string" ? entry.code : "";
-                const href = typeof entry.href === "string" ? entry.href : "";
-                const localeTag = typeof entry.localeTag === "string" ? entry.localeTag : "";
-                const active = entry.active === true;
-
-                if (!code || !href || !localeTag) return null;
-                return { code, href, localeTag, active };
-              })
-              .filter(Boolean)
-          : [];
-
-        const escapeHtml = (value) =>
-          String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;");
-
-        const injectMobileLanguageLinks = () => {
-          if (!mobileLanguageEntries.length) return false;
-
-          const burgerMenu = document.getElementById("av-burger-menu-ul");
-          if (!(burgerMenu instanceof HTMLElement)) return false;
-          if (burgerMenu.querySelector(".jld-mobile-language-links")) return true;
-
-          const linksMarkup = mobileLanguageEntries
-            .map((entry) => {
-              const activeClass = entry.active ? " is-active" : "";
-              const ariaCurrent = entry.active ? ' aria-current="page"' : "";
-
-              return `<a class="jld-mobile-language-link${activeClass}" href="${escapeHtml(entry.href)}" hreflang="${escapeHtml(entry.localeTag)}" lang="${escapeHtml(entry.localeTag)}"${ariaCurrent}>${escapeHtml(entry.code)}</a>`;
-            })
-            .join("");
-
-          const languageItem = document.createElement("li");
-          languageItem.className = "jld-mobile-language-links av-active-burger-items";
-          languageItem.setAttribute("role", "menuitem");
-          languageItem.innerHTML = `<span class="jld-mobile-language-links__label">${escapeHtml(languageLabel || "Language")}</span><div class="jld-mobile-language-links__list">${linksMarkup}</div>`;
-          burgerMenu.appendChild(languageItem);
-
-          return true;
-        };
-
-        const scheduleMobileLanguageInjection = () => {
-          if (injectMobileLanguageLinks()) return;
-          [80, 180, 360, 680].forEach((delay) => {
-            window.setTimeout(injectMobileLanguageLinks, delay);
-          });
-        };
-
-        document.addEventListener("click", (event) => {
-          const target = event.target;
-          if (!(target instanceof Element)) return;
-
-          if (
-            target.closest(
-              ".av-burger-menu-main, .av-hamburger, .av-hamburger-box, .av-hamburger-inner",
-            )
-          ) {
-            scheduleMobileLanguageInjection();
-          }
-        });
-
-        const hydratePictureSources = (image) => {
-          const picture =
-            image.parentElement && image.parentElement.tagName === "PICTURE"
-              ? image.parentElement
-              : null;
-
-          if (!picture) return;
-
-          picture.querySelectorAll("source[data-srcset]").forEach((source) => {
-            const dataSrcSet = source.getAttribute("data-srcset");
-            if (dataSrcSet && !source.getAttribute("srcset")) {
-              source.setAttribute("srcset", dataSrcSet);
-            }
-          });
-        };
-
-        const hydrateImage = (image) => {
-          const src = image.getAttribute("src") || "";
-          const dataSrc = image.getAttribute("data-src");
-          const dataSrcSet = image.getAttribute("data-srcset");
-          const dataSizes = image.getAttribute("data-sizes");
-          const isHighPriority = image.getAttribute("fetchpriority") === "high";
-
-          if (dataSrc && (!src || src.startsWith("data:image/"))) {
-            image.setAttribute("src", dataSrc);
-          }
-
-          if (dataSrcSet && !image.getAttribute("srcset")) {
-            image.setAttribute("srcset", dataSrcSet);
-          }
-
-          if (dataSizes && !image.getAttribute("sizes")) {
-            image.setAttribute("sizes", dataSizes);
-          }
-
-          if (!image.hasAttribute("decoding")) {
-            image.setAttribute("decoding", "async");
-          }
-
-          if (!image.hasAttribute("loading")) {
-            image.setAttribute("loading", isHighPriority ? "eager" : "lazy");
-          }
-
-          hydratePictureSources(image);
-        };
-
-        const shouldHydrateImmediately = (image, index) => {
-          if (image.getAttribute("fetchpriority") === "high") return true;
-          if (index < 2) return true;
-
-          const rect = image.getBoundingClientRect();
-          return rect.top < window.innerHeight * 1.5;
-        };
-
-        const hydrateLazyImages = () => {
-          const images = Array.from(
-            document.querySelectorAll("img[data-src], img[data-srcset], img[data-sizes]"),
-          );
-          if (!images.length) return;
-
-          const hasObserver = typeof window.IntersectionObserver === "function";
-          const observer = hasObserver
-            ? new IntersectionObserver(
-                (entries, activeObserver) => {
-                  entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    if (!(entry.target instanceof HTMLImageElement)) return;
-
-                    hydrateImage(entry.target);
-                    activeObserver.unobserve(entry.target);
-                  });
-                },
-                { rootMargin: "260px 0px" },
-              )
-            : null;
-
-          images.forEach((node, index) => {
-            if (!(node instanceof HTMLImageElement)) return;
-
-            if (!observer || shouldHydrateImmediately(node, index)) {
-              hydrateImage(node);
-              return;
-            }
-
-            if (!node.hasAttribute("loading")) {
-              node.setAttribute("loading", "lazy");
-            }
-            observer.observe(node);
-          });
-        };
-
-        const hydrateLazySources = () => {
-          document.querySelectorAll("source[data-srcset]").forEach((source) => {
-            const picture = source.closest("picture");
-            const pictureImage = picture ? picture.querySelector("img") : null;
-            const imageSrc = pictureImage ? pictureImage.getAttribute("src") || "" : "";
-
-            if (imageSrc.startsWith("data:image/")) {
-              return;
-            }
-
-            const dataSrcSet = source.getAttribute("data-srcset");
-            if (dataSrcSet && !source.getAttribute("srcset")) {
-              source.setAttribute("srcset", dataSrcSet);
-            }
-          });
-        };
-
-        const revealMasonryFallback = () => {
-          document.querySelectorAll(".av-masonry .av-masonry-entry").forEach((entry) => {
-            if (entry.classList.contains("av-masonry-item-no-image")) {
-              entry.setAttribute("aria-hidden", "true");
-              entry.style.display = "none";
-              return;
-            }
-
-            entry.style.visibility = "visible";
-            entry.style.opacity = "1";
-          });
-        };
-
-        const applyFullscreenSlideBackgrounds = () => {
-          document
-            .querySelectorAll(".avia-fullscreen-slider .avia-slideshow-inner > li[data-img-url]")
-            .forEach((slide) => {
-              const imageUrl = slide.getAttribute("data-img-url");
-              if (imageUrl && !slide.style.backgroundImage) {
-                slide.style.backgroundImage = `url("${imageUrl}")`;
-              }
-            });
-        };
-
-        const runFallbacks = () => {
-          hydrateLazyImages();
-          hydrateLazySources();
-          revealMasonryFallback();
-          applyFullscreenSlideBackgrounds();
-          injectMobileLanguageLinks();
-        };
-
-        const initialize = () => {
-          runFallbacks();
-          scheduleMobileLanguageInjection();
-          [180, 650, 1400].forEach((delay) => {
-            window.setTimeout(runFallbacks, delay);
-          });
-        };
-
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", initialize, { once: true });
-        } else {
-          initialize();
-        }
-      })();
-    </script>
+    <ClientBoot client:load route={canonicalPathForLocale(page.route, locale)} />
     {!hasBodyH1 && <h1 class="jld-visually-hidden">{pageHeading}</h1>}
     <Fragment set:html={localizedBodyHtml} />
   </body>

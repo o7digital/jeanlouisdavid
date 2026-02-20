@@ -126,22 +126,6 @@ function normalizeLegacyPath(value: string): string {
   return normalizedValue;
 }
 
-function stripInlineSegment(markup: string, startMarker: string, endMarker: string): string {
-  let normalized = markup;
-  let startIndex = normalized.indexOf(startMarker);
-
-  while (startIndex !== -1) {
-    const endIndex = normalized.indexOf(endMarker, startIndex);
-    if (endIndex === -1) break;
-
-    normalized =
-      normalized.slice(0, startIndex) + normalized.slice(endIndex + endMarker.length);
-    startIndex = normalized.indexOf(startMarker, startIndex);
-  }
-
-  return normalized;
-}
-
 function normalizeInternalLinks(markup: string): string {
   let normalized = markup;
 
@@ -155,93 +139,10 @@ function normalizeInternalLinks(markup: string): string {
   normalized = normalized.replace(/<link[^>]+rel=(["'])pingback\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(/<link[^>]+type=(["'])application\/rss\+xml\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(/<link[^>]+href=(["'])https:\/\/gmpg\.org\/xfn\/11\1[^>]*>\s*/gi, "");
-  normalized = normalized.replace(/<link[^>]+data-asynced[^>]*>\s*/gi, "");
-  normalized = normalized.replace(
-    /<link[^>]+href=(["'])[^"']*\/wp-content\/litespeed\/ucss\/[^"']*\1[^>]*>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(/<meta[^>]*\bname=(["'])description\1[^>]*>\s*/gi, "");
-  normalized = normalized.replace(/<meta[^>]*\bname=(["'])robots\1[^>]*>\s*/gi, "");
-  normalized = normalized.replace(/<meta[^>]*\bproperty=(["'])og:[^"']+\1[^>]*>\s*/gi, "");
-  normalized = normalized.replace(/<meta[^>]*\bname=(["'])twitter:[^"']+\1[^>]*>\s*/gi, "");
-  normalized = normalized.replace(/<div[^>]*\bid=(["'])fb-root\1[^>]*>\s*<\/div>\s*/gi, "");
-  normalized = normalized.replace(
-    /<style[^>]+id=(["'])joinchat-button-style-inline-css\1[^>]*>[\s\S]*?<\/style>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<style[^>]+id=(["'])wpforms-css-vars-root\1[^>]*>[\s\S]*?<\/style>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<style[^>]+id=(["'])global-styles-inline-css\1[^>]*>[\s\S]*?<\/style>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<div[^>]*class=(["'])[^"']*joinchat[^"']*\1[^>]*>[\s\S]*?<\/div>\s*(?=<script|<\/body|$)/gi,
-    "",
-  );
-  normalized = stripInlineSegment(
-    normalized,
-    ":root{--joinchat-ico:",
-    "@media (prefers-reduced-motion){.joinchat{animation:none}}",
-  );
-  normalized = stripInlineSegment(
-    normalized,
-    ":root{--wpforms-field-border-radius:",
-    "--wpforms-container-shadow-size-box-shadow:none}",
-  );
-  normalized = normalized.replace(/<!--\[if lt IE 9\]>[\s\S]*?<!\[endif\]-->\s*/gi, "");
-  normalized = normalized.replace(/<script[^>]*data-no-optimize[^>]*>[\s\S]*?<\/script>\s*/gi, "");
-  normalized = normalized.replace(
-    /<script[^>]*(?:src|data-src)=(["'])[^"']*\/wp-(?:content|includes|admin)[^"']*\1[^>]*>[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]+type=(["'])litespeed\/javascript\1[^>]*>[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*const litespeed_ui_events=\[[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var avia_framework_globals=avia_framework_globals\|\|\{\}[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(/<script[^>]*>\s*var mejsL10n=[\s\S]*?<\/script>\s*/gi, "");
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var _wpmejsSettings=[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var av_google_map=\{\};[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var AviaReCAPTCHA_front=[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var litespeed_docref=sessionStorage\.getItem\("litespeed_docref"\)[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*var litespeed_vary=document\.cookie[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]+css_async\.min\.js[^>]*><\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\s*!function\(t,e\)\{"object"==typeof exports&&"undefined"!=typeof module\?module\.exports=e\(\):[\s\S]*?<\/script>\s*/gi,
-    "",
-  );
-  normalized = normalized.replace(
-    /<script[^>]*>\(function\(\)\{var html=document\.getElementsByTagName\(['"]html['"]\)\[0\][\s\S]*?<\/script>\s*/gi,
-    "",
-  );
+  normalized = normalized.replace(/<meta[^>]+name=(["'])description\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+name=(["'])robots\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+property=(["'])og:[^"']+\1[^>]*>\s*/gi, "");
+  normalized = normalized.replace(/<meta[^>]+name=(["'])twitter:[^"']+\1[^>]*>\s*/gi, "");
   normalized = normalized.replace(
     /<script[^>]+id=(["'])avia_google_recaptcha_front_script-js-extra\1[^>]*>[\s\S]*?<\/script>\s*/gi,
     "",
@@ -251,7 +152,7 @@ function normalizeInternalLinks(markup: string): string {
     "",
   );
   normalized = normalized.replace(
-    /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>(?:\s*<\/div>)?\s*/gi,
+    /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>\s*/gi,
     "",
   );
   normalized = normalized.replace(
