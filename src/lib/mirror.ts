@@ -129,6 +129,20 @@ function normalizeLegacyPath(value: string): string {
 function normalizeInternalLinks(markup: string): string {
   let normalized = markup;
 
+  // Repair malformed LiteSpeed critical CSS escape sequences from the mirror.
+  normalized = normalized.replace(/<meta charset=(["'])UTF-8\1\s*\/>\s*20/gi, () => "\\20");
+
+  // Convert async preload stylesheets to regular stylesheets for deterministic rendering.
+  normalized = normalized.replace(
+    /<link\b[^>]*\brel=(["'])preload\1[^>]*\bas=(["'])style\2[^>]*>/gi,
+    (tag: string): string =>
+      tag
+        .replace(/\brel=(["'])preload\1/i, 'rel="stylesheet"')
+        .replace(/\s+\bonload=(["']).*?\1/gi, "")
+        .replace(/\s+\bas=(["'])style\1/gi, "")
+        .replace(/\s+\bdata-asynced=(["']).*?\1/gi, ""),
+  );
+
   normalized = normalized.replace(/%3F/gi, "?");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx\//gi, "/");
   normalized = normalized.replace(/https?:\/\/(?:www\.)?jeanlouisdavid\.com\.mx/gi, "");
