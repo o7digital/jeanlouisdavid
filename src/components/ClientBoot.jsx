@@ -119,6 +119,97 @@ function normalizeContactSubmit() {
   }
 }
 
+function normalizeCollectionTitles() {
+  if (!document.body.classList.contains("page-id-164")) return;
+
+  const entries = document.querySelectorAll("#top .avia-content-slider .slide-entry-wrap > article.slide-entry");
+  if (entries.length === 0) return;
+
+  let rebuiltAny = false;
+
+  entries.forEach((entryNode) => {
+    if (!(entryNode instanceof HTMLElement)) return;
+
+    const imageLink = entryNode.querySelector("a.slide-image");
+    if (!(imageLink instanceof HTMLAnchorElement)) return;
+
+    let titleAnchor = entryNode.querySelector(".slide-content .slide-entry-title a");
+    if (!(titleAnchor instanceof HTMLAnchorElement)) {
+      titleAnchor = entryNode.querySelector(".jld-collection-title a");
+    }
+
+    const fallbackTitle = imageLink.getAttribute("title") || "";
+    const titleText = (titleAnchor?.textContent || fallbackTitle).trim();
+    if (!titleText) return;
+
+    const titleHref = titleAnchor?.getAttribute("href") || imageLink.getAttribute("href") || "#";
+    const titleValue = titleAnchor?.getAttribute("title") || titleText;
+
+    let rebuiltTitleWrap = entryNode.querySelector(".jld-collection-title");
+    if (!(rebuiltTitleWrap instanceof HTMLDivElement)) {
+      rebuiltTitleWrap = document.createElement("div");
+      rebuiltTitleWrap.className = "jld-collection-title";
+    }
+
+    let rebuiltAnchor = rebuiltTitleWrap.querySelector("a");
+    if (!(rebuiltAnchor instanceof HTMLAnchorElement)) {
+      rebuiltAnchor = document.createElement("a");
+      rebuiltTitleWrap.appendChild(rebuiltAnchor);
+    }
+
+    rebuiltAnchor.href = titleHref;
+    rebuiltAnchor.title = titleValue;
+    rebuiltAnchor.textContent = titleText;
+
+    if (imageLink.nextElementSibling !== rebuiltTitleWrap) {
+      imageLink.insertAdjacentElement("afterend", rebuiltTitleWrap);
+    }
+
+    entryNode.style.display = "flex";
+    entryNode.style.flexDirection = "column";
+    entryNode.style.alignItems = "stretch";
+
+    entryNode.querySelectorAll(".slide-content").forEach((legacyNode) => {
+      if (!(legacyNode instanceof HTMLElement)) return;
+      legacyNode.style.display = "none";
+    });
+
+    rebuiltAny = true;
+  });
+
+  if (rebuiltAny) {
+    document.body.classList.add("jld-collections-rebuilt");
+  }
+}
+
+function stabilizeCollectionTitles() {
+  if (!document.body.classList.contains("page-id-164")) return undefined;
+
+  const root = document.querySelector("#top .avia-content-slider .slide-entry-wrap");
+  if (!(root instanceof HTMLElement)) return undefined;
+
+  const observer = new MutationObserver(() => {
+    normalizeCollectionTitles();
+  });
+  observer.observe(root, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["class", "style"],
+  });
+
+  const refreshTimers = [120, 400, 900, 1800, 3600, 5200].map((delay) =>
+    window.setTimeout(normalizeCollectionTitles, delay),
+  );
+
+  normalizeCollectionTitles();
+
+  return () => {
+    observer.disconnect();
+    refreshTimers.forEach((timerId) => window.clearTimeout(timerId));
+  };
+}
+
 function enhanceMobileBurger(route) {
   const activeLocale = getCurrentLocale();
   const currentRoute = normalizeRoutePath(route || window.location.pathname || "/");
@@ -292,9 +383,11 @@ export default function ClientBoot({ route }) {
       hydrateLazySources();
       revealMasonryFallback();
       normalizeContactSubmit();
+      normalizeCollectionTitles();
     };
 
     runFallbacks();
+    const cleanupCollections = stabilizeCollectionTitles();
     const cleanupBurger = enhanceMobileBurger(route);
     const cleanupLiteSpeed = deferLiteSpeedScripts(route);
 
@@ -304,6 +397,7 @@ export default function ClientBoot({ route }) {
 
     return () => {
       refreshTimers.forEach((timerId) => window.clearTimeout(timerId));
+      cleanupCollections?.();
       cleanupBurger?.();
       cleanupLiteSpeed?.();
     };
