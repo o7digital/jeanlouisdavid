@@ -152,6 +152,10 @@ function normalizeInternalLinks(markup: string): string {
     "",
   );
   normalized = normalized.replace(
+    /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>\s*<\/div>\s*/gi,
+    "",
+  );
+  normalized = normalized.replace(
     /<div[^>]*class=(["'])[^"']*av-recaptcha-area[^"']*\1[^>]*>[\s\S]*?<\/div>\s*/gi,
     "",
   );
