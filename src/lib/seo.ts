@@ -24,6 +24,47 @@ export function normalizeSiteUrl(rawUrl: string | undefined): string {
 
 export const SITE_URL = normalizeSiteUrl(process.env.SITE_URL || process.env.PUBLIC_SITE_URL);
 
+type ArticleMetadata = {
+  ogImagePath: string;
+  datePublished: string;
+  dateModified: string;
+};
+
+const ARTICLE_METADATA_BY_ROUTE = new Map<string, ArticleMetadata>([
+  [
+    "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+    {
+      ogImagePath: "/wp-content/uploads/2024/07/VISUEL_1_BANNIERE_ARTICLE.webp",
+      datePublished: "2024-07-23T02:41:19-06:00",
+      dateModified: "2024-09-06T04:32:14-06:00",
+    },
+  ],
+  [
+    "/looks-de-la-coleccion-primavera-verano-2023/",
+    {
+      ogImagePath: "/wp-content/uploads/2024/07/FORMAT-1-HOME-PAGE-3-1280x450-1.webp",
+      datePublished: "2024-07-23T02:41:19-06:00",
+      dateModified: "2024-07-23T02:41:19-06:00",
+    },
+  ],
+  [
+    "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+    {
+      ogImagePath: "/wp-content/uploads/2024/07/maxlight.webp",
+      datePublished: "2024-07-23T02:41:19-06:00",
+      dateModified: "2024-07-23T02:41:19-06:00",
+    },
+  ],
+  [
+    "/plurality-coleccion-primavera-verano-2024/",
+    {
+      ogImagePath: "/wp-content/uploads/2024/07/Plurality.webp",
+      datePublished: "2024-07-23T02:41:19-06:00",
+      dateModified: "2024-07-23T02:41:19-06:00",
+    },
+  ],
+]);
+
 const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
@@ -53,6 +94,22 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     [
       "/privacidad/",
       "Consulta el aviso de privacidad de Jean Louis David México.",
+    ],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "Descubre cómo llevar el bob cuadrado, el corte tendencia de la temporada, con el sello de estilo Jean Louis David.",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Inspírate con los looks Primavera-Verano 2023 de Jean Louis David: cortes, color y movimiento para un estilo actual.",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Conoce Mixlight, la técnica exclusiva de Jean Louis David para iluminar el cabello y lograr reflejos naturales.",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Explora los looks de la colección Primavera-Verano 2024 de Jean Louis David y encuentra tu próximo estilo.",
     ],
   ]),
   en: new Map<string, string>([
@@ -84,6 +141,22 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
       "/privacidad/",
       "Review Jean Louis David Mexico's privacy notice.",
     ],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "Discover how to wear the bob cut, the season's trend hairstyle, with Jean Louis David's signature style.",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Get inspired by Jean Louis David Spring-Summer 2023 looks with modern cuts, color and movement.",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Discover Mixlight, Jean Louis David's signature technique to brighten hair with natural-looking highlights.",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Explore Jean Louis David Spring-Summer 2024 collection looks and find your next signature style.",
+    ],
   ]),
   fr: new Map<string, string>([
     [
@@ -114,6 +187,22 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
       "/privacidad/",
       "Consultez la politique de confidentialité de Jean Louis David Mexique.",
     ],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "Découvrez comment adopter le carré, la coupe tendance de la saison, avec la signature Jean Louis David.",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Inspirez-vous des looks Printemps-Été 2023 Jean Louis David : coupes, couleur et mouvement.",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Découvrez Mixlight, la technique signature Jean Louis David pour illuminer les cheveux avec naturel.",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Explorez les looks de la collection Printemps-Été 2024 Jean Louis David et trouvez votre prochain style.",
+    ],
   ]),
 };
 
@@ -132,6 +221,22 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/colecciones/", "Colecciones - Jean Louis David"],
     ["/contacto/", "Contacto - Jean Louis David"],
     ["/privacidad/", "Aviso de Privacidad - Jean Louis David"],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "¡Adopta el bob (cuadrado), EL corte de moda de la temporada! - Jean Louis David",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Looks de la colección Primavera-Verano 2023 - Jean Louis David",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight, la técnica emblemática de Jean Louis David para iluminar el cabello - Jean Louis David",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Looks de la Colección - Primavera Verano 2024 - Jean Louis David",
+    ],
   ]),
   en: new Map<string, string>([
     ["/", "Jean Louis David - Mexico City Salon"],
@@ -141,6 +246,22 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/colecciones/", "Collections - Jean Louis David"],
     ["/contacto/", "Contact Us - Jean Louis David"],
     ["/privacidad/", "Privacy Notice - Jean Louis David"],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "Try the bob cut, THE trend haircut of the season! - Jean Louis David",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Spring-Summer 2023 Collection Looks - Jean Louis David",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight, Jean Louis David's signature technique to illuminate hair - Jean Louis David",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Spring-Summer 2024 Collection Looks - Jean Louis David",
+    ],
   ]),
   fr: new Map<string, string>([
     ["/", "Jean Louis David - Salon à Mexico"],
@@ -150,6 +271,22 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/colecciones/", "Collections - Jean Louis David"],
     ["/contacto/", "Contact - Jean Louis David"],
     ["/privacidad/", "Politique de confidentialité - Jean Louis David"],
+    [
+      "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
+      "Adoptez le carré, LA coupe tendance de la saison ! - Jean Louis David",
+    ],
+    [
+      "/looks-de-la-coleccion-primavera-verano-2023/",
+      "Aperçus de la collection Printemps-Été 2023 - Jean Louis David",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight, la technique signature de Jean Louis David pour illuminer les cheveux - Jean Louis David",
+    ],
+    [
+      "/plurality-coleccion-primavera-verano-2024/",
+      "Aperçus de la collection Printemps-Été 2024 - Jean Louis David",
+    ],
   ]),
 };
 
@@ -196,8 +333,16 @@ export function getSeoTitle(
   return TITLE_BY_ROUTE[locale].get(canonicalPath(route)) ?? fallbackTitle;
 }
 
-export function getSeoImageUrl(): string {
-  return absoluteUrl(DEFAULT_OG_IMAGE);
+function getArticleMetadata(route: string): ArticleMetadata | undefined {
+  return ARTICLE_METADATA_BY_ROUTE.get(canonicalPath(route));
+}
+
+function stripBrandSuffix(value: string): string {
+  return value.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
+}
+
+export function getSeoImageUrl(route: string = "/"): string {
+  return absoluteUrl(getArticleMetadata(route)?.ogImagePath ?? DEFAULT_OG_IMAGE);
 }
 
 export type JsonLdParams = {
@@ -219,6 +364,7 @@ export function getJsonLd({
   const languageTag = LOCALE_HTML_TAG[locale];
   const homePath = canonicalPathForLocale("/", locale);
   const sitePath = canonicalPathForLocale("/", locale);
+  const articleMetadata = getArticleMetadata(routePath);
 
   const items = [
     {
@@ -276,6 +422,36 @@ export function getJsonLd({
       },
     },
   ];
+
+  if (articleMetadata) {
+    items.push({
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: stripBrandSuffix(title),
+      description,
+      image: [absoluteUrl(articleMetadata.ogImagePath)],
+      datePublished: articleMetadata.datePublished,
+      dateModified: articleMetadata.dateModified,
+      inLanguage: languageTag,
+      url: canonical,
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonical,
+      },
+      author: {
+        "@type": "Organization",
+        name: "Jean Louis David Mexico",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Jean Louis David Mexico",
+        logo: {
+          "@type": "ImageObject",
+          url: absoluteUrl("/wp-content/uploads/2024/07/logo-bco.webp"),
+        },
+      },
+    });
+  }
 
   return JSON.stringify(items);
 }
