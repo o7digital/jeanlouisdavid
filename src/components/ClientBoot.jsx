@@ -43,41 +43,6 @@ function revealMasonryFallback() {
   });
 }
 
-function normalizeCollectionCards() {
-  if (!document.body.classList.contains("page-id-164")) return;
-
-  document.querySelectorAll("#top .avia-content-slider .slide-entry").forEach((entry) => {
-    if (!(entry instanceof HTMLElement)) return;
-
-    const wrap = entry.closest(".slide-entry-wrap");
-    if (wrap instanceof HTMLElement && window.getComputedStyle(wrap).display === "none") return;
-
-    const imageLink = entry.querySelector("a.slide-image");
-    const titleLink = entry.querySelector(".slide-entry-title a");
-    const legacyContent = entry.querySelector(".slide-content");
-
-    if (legacyContent instanceof HTMLElement) {
-      legacyContent.style.display = "none";
-    }
-
-    if (!(imageLink instanceof HTMLAnchorElement)) return;
-    if (!(titleLink instanceof HTMLAnchorElement)) return;
-    if (entry.querySelector("a.jld-slide-caption")) return;
-
-    const caption = document.createElement("a");
-    caption.className = "jld-slide-caption";
-    caption.href = titleLink.getAttribute("href") || imageLink.getAttribute("href") || "#";
-    caption.textContent = (titleLink.textContent || "").trim();
-
-    const titleValue = titleLink.getAttribute("title");
-    if (titleValue) {
-      caption.setAttribute("title", titleValue);
-    }
-
-    imageLink.insertAdjacentElement("afterend", caption);
-  });
-}
-
 function normalizeContactSubmit() {
   if (!document.body.classList.contains("page-id-150")) return;
 
@@ -216,7 +181,6 @@ export default function ClientBoot({ route }) {
       hydrateLazyImages();
       hydrateLazySources();
       revealMasonryFallback();
-      normalizeCollectionCards();
       normalizeContactSubmit();
     };
 
