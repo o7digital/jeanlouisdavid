@@ -115,9 +115,10 @@ const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
 
       /* Keep collection card titles directly under each image across locales. */
       body.page-id-164 #top .avia-content-slider .slide-entry {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
+        display: block !important;
+        float: left !important;
+        height: auto !important;
+        min-height: 0 !important;
       }
 
       body.page-id-164 #top .avia-content-slider .slide-entry .slide-image,
@@ -140,8 +141,10 @@ const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
         transform: none !important;
         opacity: 1 !important;
         visibility: visible !important;
+        clear: both !important;
         float: none !important;
         display: block !important;
+        height: auto !important;
         margin: 12px 0 0 !important;
         padding: 0 !important;
         min-height: 0 !important;
