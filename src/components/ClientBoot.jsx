@@ -43,6 +43,88 @@ function revealMasonryFallback() {
   });
 }
 
+function normalizeCollectionCards() {
+  if (!document.body.classList.contains("page-id-164")) return;
+
+  document.querySelectorAll("#top .avia-content-slider .slide-entry").forEach((entry) => {
+    if (!(entry instanceof HTMLElement)) return;
+
+    const wrap = entry.closest(".slide-entry-wrap");
+    if (wrap instanceof HTMLElement && window.getComputedStyle(wrap).display === "none") return;
+
+    const imageLink = entry.querySelector("a.slide-image");
+    const titleLink = entry.querySelector(".slide-entry-title a");
+    const legacyContent = entry.querySelector(".slide-content");
+
+    if (legacyContent instanceof HTMLElement) {
+      legacyContent.style.display = "none";
+    }
+
+    if (!(imageLink instanceof HTMLAnchorElement)) return;
+    if (!(titleLink instanceof HTMLAnchorElement)) return;
+    if (entry.querySelector("a.jld-slide-caption")) return;
+
+    const caption = document.createElement("a");
+    caption.className = "jld-slide-caption";
+    caption.href = titleLink.getAttribute("href") || imageLink.getAttribute("href") || "#";
+    caption.textContent = (titleLink.textContent || "").trim();
+
+    const titleValue = titleLink.getAttribute("title");
+    if (titleValue) {
+      caption.setAttribute("title", titleValue);
+    }
+
+    imageLink.insertAdjacentElement("afterend", caption);
+  });
+}
+
+function normalizeContactSubmit() {
+  if (!document.body.classList.contains("page-id-150")) return;
+
+  const form = document.querySelector("#top form.avia_ajax_form");
+  if (!(form instanceof HTMLFormElement)) return;
+
+  let submitInput = form.querySelector('input[type="submit"].button');
+  if (!(submitInput instanceof HTMLInputElement)) return;
+
+  const messageField = form.querySelector("#element_avia_4_1");
+  if (!(messageField instanceof HTMLElement)) return;
+
+  let submitRow = form.querySelector("p.jld-submit-row");
+  if (!(submitRow instanceof HTMLParagraphElement)) {
+    submitRow = document.createElement("p");
+    submitRow.className = "form_element form_fullwidth jld-submit-row";
+    messageField.insertAdjacentElement("afterend", submitRow);
+  }
+
+  if (!submitRow.contains(submitInput)) {
+    submitRow.appendChild(submitInput);
+  }
+
+  form.querySelectorAll('p.form_element input[type="submit"].button').forEach((node) => {
+    if (!(node instanceof HTMLInputElement) || node === submitInput) return;
+    const wrapper = node.closest("p.form_element");
+    wrapper?.remove();
+  });
+
+  const legacyWrapper = submitInput.closest("p.form_element");
+  if (legacyWrapper instanceof HTMLParagraphElement && legacyWrapper !== submitRow) {
+    legacyWrapper.remove();
+  }
+
+  submitInput = form.querySelector("p.jld-submit-row input[type='submit'].button");
+  if (!(submitInput instanceof HTMLInputElement)) return;
+
+  const lang = document.documentElement.lang || "";
+  if (lang.startsWith("fr")) {
+    submitInput.value = "Envoyer le message";
+  } else if (lang.startsWith("en")) {
+    submitInput.value = "Send message";
+  } else {
+    submitInput.value = "Enviar mensaje";
+  }
+}
+
 function triggerLiteSpeedScripts() {
   if (window.__jldLiteSpeedTriggered) return;
   if (typeof window.litespeed_load_delayed_js_force !== "function") return;
@@ -134,6 +216,8 @@ export default function ClientBoot({ route }) {
       hydrateLazyImages();
       hydrateLazySources();
       revealMasonryFallback();
+      normalizeCollectionCards();
+      normalizeContactSubmit();
     };
 
     runFallbacks();
