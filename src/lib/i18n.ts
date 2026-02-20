@@ -127,7 +127,7 @@ const NAV_LABELS: Record<Exclude<Locale, "es">, NavLabelMap> = {
     Sucursales: "Locations",
     Colecciones: "Collections",
     Nosotros: "About",
-    Contacto: "Contact",
+    Contacto: "Contact Us",
     Search: "Search",
   },
   fr: {
@@ -250,6 +250,7 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Nuestras Locations", "Our Salons"],
     ["Sucursales en México", "Our Salons in Mexico"],
     ["Locations en México", "Our Salons in Mexico"],
+    ["Acerca de Nosotros", "About"],
     ["Conócenos", "Learn More"],
     ["Citas", "Appointments"],
     ["Agenda tu Cita", "Book Your Appointment"],
@@ -258,14 +259,14 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Redes Sociales", "Social Media"],
     ["Mas notas", "More Posts"],
     ["Buscar", "Search"],
-    ["CONTACTO", "CONTACT"],
+    ["CONTACTO", "CONTACT US"],
     ["SUCURSALES", "LOCATIONS"],
     ["SERVICIOS", "SERVICES"],
     ["Servicios", "Services"],
     ["Sucursales", "Locations"],
     ["Nosotros", "About"],
     ["Colecciones", "Collections"],
-    ["Contacto", "Contact"],
+    ["Contacto", "Contact Us"],
     ["Envíanos un mensaje", "Send us a message"],
     ["Datos de contacto", "Contact Details"],
     ["Sucursal Santa Fe", "Santa Fe Branch"],
@@ -312,7 +313,7 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Looks de la Colección &#8211; Primavera Verano 2024", "Spring-Summer 2024 Collection Looks"],
     ["Looks de la colección Primavera-Verano 2023", "Spring-Summer 2023 Collection Looks"],
     ["¡Adopta el bob (cuadrado), EL corte de moda de la temporada!", "Try the bob cut, THE trend haircut of the season!"],
-    ["Mixlight, la técnica emblemática de Jean Louis David para iluminar el cabello", "Mixlight, Jean Louis David's signature technique to illuminate hair"],
+    ["Mixlight, la técnica emblemática de Jean Louis David para iluminar el cabello", "Mixlight, Jean Louis David&#39;s signature technique to illuminate hair"],
   ],
   fr: [
     ["Personalización hasta el infinito", "Personnalisation à l'infini"],
@@ -324,6 +325,7 @@ const COMMON_TEXT_REPLACEMENTS: Record<Exclude<Locale, "es">, ReadonlyArray<Repl
     ["Nuestras Salons", "Nos salons"],
     ["Sucursales en México", "Nos salons au Mexique"],
     ["Salons en México", "Nos salons au Mexique"],
+    ["Acerca de Nosotros", "À propos"],
     ["Conócenos", "Nous découvrir"],
     ["Citas", "Rendez-vous"],
     ["Agenda tu Cita", "Prenez rendez-vous"],
@@ -443,6 +445,30 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
         "Personalización Hasta el Infinito",
         "Infinite Personalization",
       ],
+      [
+        "Desde su fundación en 1961 en la icónica Avenida de Wagram en París, Jean Louis David ha sido sinónimo de innovación, elegancia y vanguardia en el mundo de la belleza. Con una visión única y una pasión por destacar la belleza femenina, Jean Louis David transformó el peinado en un arte que evoluciona constantemente, adaptándose a los gustos y deseos de cada época.",
+        "Since its founding in 1961 on the iconic Avenue de Wagram in Paris, Jean Louis David has stood for innovation, elegance, and avant-garde beauty. With a unique vision and a passion for highlighting feminine beauty, Jean Louis David turned hairstyling into an art that constantly evolves with the tastes and desires of each era.",
+      ],
+      [
+        "Con su espíritu visionario, Jean Louis David revolucionó la peluquería en los años 70, creando técnicas y estilos que liberaron a las mujeres de los cortes rígidos. Su famoso corte escalado, introducido por primera vez en 1970, rompió con las normas establecidas y sigue siendo un ícono hasta hoy. Pero su legado va más allá de la técnica: Jean Louis David entendió que la belleza es una expresión personal, y dedicó su vida a ofrecer a las mujeres estilos modernos, versátiles y fáciles de llevar.",
+        "With his visionary spirit, Jean Louis David revolutionized hairdressing in the 1970s, creating techniques and styles that freed women from rigid cuts. His famous layered cut, introduced in 1970, broke established rules and remains iconic today. But his legacy goes beyond technique: Jean Louis David understood that beauty is personal expression, and he dedicated his life to offering modern, versatile, easy-to-wear styles.",
+      ],
+      [
+        "<strong>Jean Louis David</strong>, un visionario del estilismo y cortes de cabello, abrió su primer salón en París en 1961, revolucionando el mundo de la belleza con técnicas innovadoras y un enfoque único hacia la feminidad. Inspirado por los grandes fotógrafos de los años 60, Jean Louis David convirtió el peinado en un arte, rompiendo con las convenciones de la época. Hoy en día, su legado sigue vivo a través de un equipo artístico que continúa reinventando cortes, colores y peinados para mujeres en todo el mundo.",
+        "<strong>Jean Louis David</strong>, a visionary in hairstyling and haircut design, opened his first salon in Paris in 1961, transforming the beauty world with innovative techniques and a unique approach to femininity. Inspired by leading photographers of the 1960s, Jean Louis David turned hairstyling into an art, breaking with the conventions of the time. Today, his legacy lives on through an artistic team that keeps reinventing cuts, colors, and styles for women around the world.",
+      ],
+      [
+        "Para que cada corte sea único, la visita al salón empieza siempre con un intercambio individual y personalizado, llamado <strong>Momento Colección</strong>: seleccionar los cortes preferidos en los books exclusivos de los salones Jean Louis David e intercambiar opiniones con el peluquero para saber si se puede realizar o no ese corte en función del tipo de pelo o del estilo particular de cada una. Y para garantizar una calidad irreprochable, los salones Jean Louis David trabajan exclusivamente con los productos L’Oréal Professionnel, Kérastase et Redken.",
+        "To make each haircut unique, every salon visit begins with an individual and personalized consultation called <strong>Collection Moment</strong>: selecting preferred cuts from Jean Louis David salon books and discussing with the stylist whether that cut can be achieved according to hair type and personal style. To ensure impeccable quality, Jean Louis David salons work exclusively with L&#39;Oréal Professionnel, Kérastase, and Redken products.",
+      ],
+      [
+        "Con más de 1,000 salones en todo el mundo, Jean Louis David es una marca de referencia en salones de belleza. En México, contamos con dos sucursales en en Polanco y Santa Fe. Cada salón mantiene la esencia de nuestra marca, adaptando las tendencias globales al estilo y necesidades de nuestras clientas locales.",
+        "With more than 1,000 salons worldwide, Jean Louis David is a benchmark beauty-salon brand. In Mexico, we have two locations in Polanco and Santa Fe. Each salon preserves the essence of our brand while adapting global trends to the style and needs of our local clients.",
+      ],
+      [
+        "Nuestro compromiso es ofrecer cortes y colores que no solo luzcan espectaculares, sino que también sean fáciles de mantener en casa. Nos dedicamos a crear estilos que perduren y resalten lo mejor de cada visitante, con el toque audaz y moderno que caracteriza a nuestros salones.",
+        "Our commitment is to offer cuts and colors that not only look spectacular, but are also easy to maintain at home. We create styles that last and highlight the best of every visitor, with the bold, modern touch that defines our salons.",
+      ],
     ],
     "/contacto/": [
       [
@@ -453,7 +479,7 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
     "/colecciones/": [
       [
         "Un viento de audacia anuncia la primavera. Un soplo de libertad caracteriza el verano. Este es el humor de Jean Louis David para la estación cálida.",
-        "A wave of boldness announces spring. A breath of freedom defines summer. This is Jean Louis David's mood for the warm season.",
+        "A wave of boldness announces spring. A breath of freedom defines summer. This is Jean Louis David&#39;s mood for the warm season.",
       ],
       [
         "Continuando con la temporada anterior, los cortes y colores inspirados en el underground te invitan a cambiar los códigos, a inventar tus propias reglas y a destacar entre la multitud.",
@@ -520,6 +546,30 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
       [
         "Personalización Hasta el Infinito",
         "Personnalisation à l'infini",
+      ],
+      [
+        "Desde su fundación en 1961 en la icónica Avenida de Wagram en París, Jean Louis David ha sido sinónimo de innovación, elegancia y vanguardia en el mundo de la belleza. Con una visión única y una pasión por destacar la belleza femenina, Jean Louis David transformó el peinado en un arte que evoluciona constantemente, adaptándose a los gustos y deseos de cada época.",
+        "Depuis sa fondation en 1961 sur l'emblématique avenue de Wagram à Paris, Jean Louis David est synonyme d'innovation, d'élégance et d'avant-garde dans l'univers de la beauté. Avec une vision unique et une passion pour révéler la beauté féminine, Jean Louis David a transformé la coiffure en un art en évolution constante, adapté aux goûts et aux envies de chaque époque.",
+      ],
+      [
+        "Con su espíritu visionario, Jean Louis David revolucionó la peluquería en los años 70, creando técnicas y estilos que liberaron a las mujeres de los cortes rígidos. Su famoso corte escalado, introducido por primera vez en 1970, rompió con las normas establecidas y sigue siendo un ícono hasta hoy. Pero su legado va más allá de la técnica: Jean Louis David entendió que la belleza es una expresión personal, y dedicó su vida a ofrecer a las mujeres estilos modernos, versátiles y fáciles de llevar.",
+        "Avec son esprit visionnaire, Jean Louis David a révolutionné la coiffure dans les années 1970, en créant des techniques et des styles qui ont libéré les femmes des coupes rigides. Sa célèbre coupe dégradée, introduite pour la première fois en 1970, a brisé les codes établis et reste iconique aujourd'hui. Mais son héritage va au-delà de la technique : Jean Louis David a compris que la beauté est une expression personnelle, et il a consacré sa vie à proposer aux femmes des styles modernes, polyvalents et faciles à porter.",
+      ],
+      [
+        "<strong>Jean Louis David</strong>, un visionario del estilismo y cortes de cabello, abrió su primer salón en París en 1961, revolucionando el mundo de la belleza con técnicas innovadoras y un enfoque único hacia la feminidad. Inspirado por los grandes fotógrafos de los años 60, Jean Louis David convirtió el peinado en un arte, rompiendo con las convenciones de la época. Hoy en día, su legado sigue vivo a través de un equipo artístico que continúa reinventando cortes, colores y peinados para mujeres en todo el mundo.",
+        "<strong>Jean Louis David</strong>, visionnaire du stylisme et de la coupe, a ouvert son premier salon à Paris en 1961, révolutionnant le monde de la beauté avec des techniques innovantes et une approche unique de la féminité. Inspiré par les grands photographes des années 1960, Jean Louis David a fait de la coiffure un art, en rompant avec les conventions de l'époque. Aujourd'hui, son héritage continue de vivre grâce à une équipe artistique qui réinvente sans cesse coupes, couleurs et coiffures pour les femmes du monde entier.",
+      ],
+      [
+        "Para que cada corte sea único, la visita al salón empieza siempre con un intercambio individual y personalizado, llamado <strong>Momento Colección</strong>: seleccionar los cortes preferidos en los books exclusivos de los salones Jean Louis David e intercambiar opiniones con el peluquero para saber si se puede realizar o no ese corte en función del tipo de pelo o del estilo particular de cada una. Y para garantizar una calidad irreprochable, los salones Jean Louis David trabajan exclusivamente con los productos L’Oréal Professionnel, Kérastase et Redken.",
+        "Pour que chaque coupe soit unique, la visite au salon commence toujours par un échange individuel et personnalisé, appelé <strong>Moment Collection</strong> : sélectionner les coupes préférées dans les books exclusifs des salons Jean Louis David et échanger avec le coiffeur pour savoir si la coupe peut être réalisée selon le type de cheveux et le style propre à chacune. Et pour garantir une qualité irréprochable, les salons Jean Louis David travaillent exclusivement avec les produits L&#39;Oréal Professionnel, Kérastase et Redken.",
+      ],
+      [
+        "Con más de 1,000 salones en todo el mundo, Jean Louis David es una marca de referencia en salones de belleza. En México, contamos con dos sucursales en en Polanco y Santa Fe. Cada salón mantiene la esencia de nuestra marca, adaptando las tendencias globales al estilo y necesidades de nuestras clientas locales.",
+        "Avec plus de 1 000 salons dans le monde, Jean Louis David est une marque de référence dans l'univers de la coiffure. Au Mexique, nous comptons deux salons, à Polanco et à Santa Fe. Chaque salon préserve l'essence de notre marque tout en adaptant les tendances mondiales au style et aux besoins de notre clientèle locale.",
+      ],
+      [
+        "Nuestro compromiso es ofrecer cortes y colores que no solo luzcan espectaculares, sino que también sean fáciles de mantener en casa. Nos dedicamos a crear estilos que perduren y resalten lo mejor de cada visitante, con el toque audaz y moderno que caracteriza a nuestros salones.",
+        "Notre engagement est de proposer des coupes et des couleurs qui ne sont pas seulement spectaculaires, mais aussi faciles à entretenir à la maison. Nous créons des styles durables qui révèlent le meilleur de chaque visiteur, avec la touche audacieuse et moderne qui caractérise nos salons.",
       ],
     ],
     "/contacto/": [

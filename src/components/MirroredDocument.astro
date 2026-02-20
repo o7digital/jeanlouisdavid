@@ -104,6 +104,22 @@ const jsonLd = getJsonLd({
         opacity: 1;
       }
 
+      /* Keep collection card titles directly under each image across locales. */
+      body.page-id-164 #top .avia-content-slider .slide-entry {
+        display: flex;
+        flex-direction: column;
+      }
+
+      body.page-id-164 #top .avia-content-slider .slide-entry .slide-image,
+      body.page-id-164 #top .avia-content-slider .slide-entry .slide-content {
+        width: 100%;
+      }
+
+      body.page-id-164 #top .avia-content-slider .slide-entry .slide-content {
+        position: static !important;
+        margin-top: 0 !important;
+      }
+
       #menu-item-language-switch {
         position: relative;
       }

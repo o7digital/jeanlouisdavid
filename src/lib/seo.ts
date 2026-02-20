@@ -139,7 +139,7 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/sucursales/", "Locations - Jean Louis David"],
     ["/nosotros/", "About - Jean Louis David"],
     ["/colecciones/", "Collections - Jean Louis David"],
-    ["/contacto/", "Contact - Jean Louis David"],
+    ["/contacto/", "Contact Us - Jean Louis David"],
     ["/privacidad/", "Privacy Notice - Jean Louis David"],
   ]),
   fr: new Map<string, string>([
