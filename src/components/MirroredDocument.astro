@@ -96,6 +96,15 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SFV4K3F3LG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-SFV4K3F3LG');
+    </script>
     <script type="application/ld+json" set:html={jsonLd} />
     <style is:global>
       #full_slider_1 .avia-slideshow-inner > li,
