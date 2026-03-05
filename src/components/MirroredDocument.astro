@@ -20,6 +20,7 @@ import {
   getJsonLd,
   getSeoDescription,
   getSeoImageUrl,
+  getSeoKeywords,
   getSeoTitle,
 } from "../lib/seo";
 
@@ -46,6 +47,7 @@ if (!localizedBodyHtml.includes("o7digital.com")) {
 const fallbackTitle = extractTitleFromHead(localizedHeadHtml);
 const title = getSeoTitle(page.route, fallbackTitle, locale);
 const description = getSeoDescription(page.route, locale);
+const keywords = getSeoKeywords(page.route, locale);
 const canonical = absoluteUrl(canonicalPathForLocale(page.route, locale));
 const xDefaultCanonical = absoluteUrl(canonicalPathForLocale(page.route, DEFAULT_LOCALE));
 const alternateLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
@@ -75,6 +77,7 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
     <Fragment set:html={sanitizedHeadHtml} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
     {alternateLinks.map((entry) => (

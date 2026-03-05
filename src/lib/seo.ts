@@ -65,31 +65,112 @@ const ARTICLE_METADATA_BY_ROUTE = new Map<string, ArticleMetadata>([
   ],
 ]);
 
+const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
+  es: new Map<string, string>([
+    [
+      "/",
+      "salón de belleza CDMX, peluquería Santa Fe, corte de cabello Polanco, coloración Mexico, peinados CDMX, estilista Santa Fe Polanco, tratamientos capilares Mexico, barbería CDMX",
+    ],
+    [
+      "/servicios/",
+      "corte de cabello Polanco, peinados profesionales CDMX, coloración premium Santa Fe, manicure pedicure Mexico, barbería Santa Fe, tratamientos capilares Polanco CDMX",
+    ],
+    [
+      "/sucursales/",
+      "salón Jean Louis David Mexico, peluquería Santa Fe, estilista Polanco, sucursales CDMX, salón de belleza Santa Fe Polanco",
+    ],
+    [
+      "/nosotros/",
+      "Jean Louis David Mexico, salón de belleza CDMX, peluquería francesa Santa Fe, estilista profesional Polanco",
+    ],
+    [
+      "/colecciones/",
+      "colecciones moda capilar Mexico, tendencias peinados CDMX, estilos Jean Louis David Santa Fe Polanco",
+    ],
+    [
+      "/contacto/",
+      "cita salón belleza CDMX, reserva peluquería Santa Fe, contacto Jean Louis David Polanco Mexico",
+    ],
+  ]),
+  en: new Map<string, string>([
+    [
+      "/",
+      "hair salon Mexico CDMX, hairdresser Santa Fe, haircut Polanco, hair coloring Mexico City, professional hairstylist CDMX, barber shop Santa Fe Polanco",
+    ],
+    [
+      "/servicios/",
+      "haircut Santa Fe, professional styling Polanco, premium hair color CDMX, manicure pedicure Mexico, barber services Santa Fe Polanco",
+    ],
+    [
+      "/sucursales/",
+      "Jean Louis David salon Mexico, hairdresser Santa Fe, stylist Polanco, beauty salon CDMX locations",
+    ],
+    [
+      "/nosotros/",
+      "Jean Louis David Mexico, French hair salon CDMX, professional stylist Santa Fe Polanco",
+    ],
+    [
+      "/colecciones/",
+      "hair fashion collections Mexico, hairstyle trends CDMX, Jean Louis David styles Santa Fe Polanco",
+    ],
+    [
+      "/contacto/",
+      "book hair salon CDMX, hair appointment Santa Fe, contact Jean Louis David Polanco Mexico",
+    ],
+  ]),
+  fr: new Map<string, string>([
+    [
+      "/",
+      "salon de coiffure Mexico CDMX, coiffeur Santa Fe, coupe cheveux Polanco, coloration Mexico, styliste CDMX, salon beauté Santa Fe Polanco",
+    ],
+    [
+      "/servicios/",
+      "coupe cheveux Santa Fe, coiffure professionnelle Polanco, coloration premium CDMX, manucure pédicure Mexico, barbier Santa Fe Polanco",
+    ],
+    [
+      "/sucursales/",
+      "salon Jean Louis David Mexico, coiffeur Santa Fe, styliste Polanco, salon de beauté CDMX",
+    ],
+    [
+      "/nosotros/",
+      "Jean Louis David Mexico, salon coiffure français CDMX, coiffeur professionnel Santa Fe Polanco",
+    ],
+    [
+      "/colecciones/",
+      "collections mode capillaire Mexico, tendances coiffure CDMX, styles Jean Louis David Santa Fe Polanco",
+    ],
+    [
+      "/contacto/",
+      "rendez-vous salon beauté CDMX, réservation coiffeur Santa Fe, contact Jean Louis David Polanco Mexico",
+    ],
+  ]),
+};
+
 const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
       "/",
-      "Descubre la experiencia Jean Louis David en México: servicios de estilismo, color, barbería y atención personalizada.",
+      "Descubre la experiencia Jean Louis David en CDMX: servicios de estilismo, color, barbería y atención personalizada en Santa Fe y Polanco. Tu salón de belleza premium en Mexico.",
     ],
     [
       "/servicios/",
-      "Conoce nuestros servicios de corte, peinado, manicure, pedicure y barbería con atención experta y personalizada.",
+      "Conoce nuestros servicios de corte, peinado, coloración, manicure, pedicure y barbería en CDMX. Atención experta en Santa Fe y Polanco con técnicas exclusivas.",
     ],
     [
       "/sucursales/",
-      "Ubica las sucursales Jean Louis David en México y agenda tu cita en el salón más cercano.",
+      "Ubica las sucursales Jean Louis David en CDMX (Santa Fe y Polanco) y agenda tu cita en el salón más cercano. Experiencia profesional en Mexico.",
     ],
     [
       "/nosotros/",
-      "Conoce la filosofía, estilo y propuesta de Jean Louis David para una experiencia de belleza distintiva.",
+      "Conoce la filosofía y estilo Jean Louis David: salón de belleza premium en CDMX con presencia en Santa Fe y Polanco para una experiencia distintiva.",
     ],
     [
       "/colecciones/",
-      "Explora las colecciones y tendencias de Jean Louis David para inspirar tu siguiente look.",
+      "Explora las colecciones y tendencias de Jean Louis David en Mexico. Inspírate con los estilos de moda en CDMX, Santa Fe y Polanco.",
     ],
     [
       "/contacto/",
-      "Contacta a Jean Louis David y agenda tu cita por WhatsApp para una asesoría personalizada.",
+      "Contacta Jean Louis David en CDMX y agenda tu cita en Santa Fe o Polanco por WhatsApp. Asesoría personalizada en tu salón de confianza en Mexico.",
     ],
     [
       "/privacidad/",
@@ -315,6 +396,11 @@ export function absoluteUrl(path: string): string {
 export function extractTitleFromHead(headHtml: string): string {
   const titleMatch = headHtml.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
   return decodeHtml(titleMatch?.[1] ?? "Jean Louis David Mexico");
+}
+
+export function getSeoKeywords(route: string, locale: Locale = DEFAULT_LOCALE): string {
+  const normalizedRoute = canonicalPath(route);
+  return KEYWORDS_BY_ROUTE[locale].get(normalizedRoute) ?? "";
 }
 
 export function getSeoDescription(route: string, locale: Locale = DEFAULT_LOCALE): string {
