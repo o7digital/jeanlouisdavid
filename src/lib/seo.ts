@@ -554,10 +554,62 @@ export function getJsonLd({
   return JSON.stringify(items);
 }
 
+const FOOTER_KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
+  es: [
+    "salón de cabello CDMX",
+    "peluquería en Ciudad de México",
+    "corte de cabello CDMX",
+    "corte de mujer CDMX",
+    "corte de hombre CDMX",
+    "peinado profesional CDMX",
+    "coloración capilar CDMX",
+    "tinte de cabello CDMX",
+    "retoque de raíz CDMX",
+    "tratamiento capilar reparador CDMX",
+    "hidratación capilar CDMX",
+    "barbería CDMX",
+    "corte + barba CDMX",
+    "salón de cabello Polanco CDMX",
+    "salón de cabello Santa Fe CDMX Cuajimalpa",
+  ],
+  en: [
+    "hair salon Mexico City",
+    "hair salon CDMX",
+    "haircut Mexico City",
+    "women’s haircut Mexico City",
+    "men’s haircut Mexico City",
+    "hair styling Mexico City",
+    "professional blowout Mexico City",
+    "hair coloring Mexico City",
+    "hair dye Mexico City",
+    "root touch-up Mexico City",
+    "hair treatment Mexico City",
+    "deep conditioning Mexico City",
+    "barber shop Mexico City",
+    "men’s grooming Mexico City",
+    "hair salon Polanco CDMX",
+  ],
+  fr: [
+    "salon de coiffure Mexico City",
+    "salon de coiffure CDMX",
+    "coupe de cheveux Mexico",
+    "coupe femme Mexico",
+    "coupe homme Mexico",
+    "coiffage Mexico",
+    "brushing Mexico",
+    "coloration capillaire Mexico",
+    "teinture cheveux Mexico",
+    "retouche racines Mexico",
+    "soin capillaire réparateur Mexico",
+    "soin hydratant cheveux Mexico",
+    "barbier Mexico",
+    "service barbe Mexico",
+    "salon capillaire Polanco CDMX",
+  ],
+};
+
 export function getFooterKeywords(locale: Locale = DEFAULT_LOCALE): string[] {
-  const keywords = getSeoKeywords("/", locale);
-  if (!keywords) return [];
-  return keywords.split(",").map((k) => k.trim());
+  return [...FOOTER_KEYWORDS_BY_LOCALE[locale]];
 }
 
 function decodeHtml(value: string): string {
