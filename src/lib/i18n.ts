@@ -202,6 +202,25 @@ export function injectLanguageSwitch(markup: string, route: string, locale: Loca
   );
 }
 
+function dedupeAdjacentCatalogueItems(markup: string, title: string, price: string): string {
+  const escapedTitle = escapeRegExp(title);
+  const escapedPrice = escapeRegExp(price);
+  const itemPattern =
+    `<li><div class=['"][^'"]*av-catalogue-item[^'"]*['"][^>]*>[\\s\\S]*?` +
+    `<div class=['"]av-catalogue-title['"]>${escapedTitle}<\\/div>` +
+    `<div class=['"]av-catalogue-price['"]>${escapedPrice}<\\/div>[\\s\\S]*?<\\/li>`;
+
+  return markup.replace(new RegExp(`(${itemPattern})(${itemPattern})`, "i"), "$1");
+}
+
+function normalizeMirroredPageContent(markup: string, route: string): string {
+  if (route !== "/servicios/") {
+    return markup;
+  }
+
+  return dedupeAdjacentCatalogueItems(markup, "Director Artístico Caballero", "$1,100");
+}
+
 type Replacement = readonly [string, string];
 
 function replaceInSegment(segment: string, replacements: ReadonlyArray<Replacement>): string {
@@ -762,9 +781,11 @@ const ROUTE_TEXT_REPLACEMENTS: Record<
 };
 
 export function localizePageContent(markup: string, locale: Locale, route: string): string {
-  if (locale === DEFAULT_LOCALE) return markup;
-
   const normalizedRoute = normalizeRoutePath(route);
+  const normalizedMarkup = normalizeMirroredPageContent(markup, normalizedRoute);
+
+  if (locale === DEFAULT_LOCALE) return normalizedMarkup;
+
   const commonReplacements = COMMON_TEXT_REPLACEMENTS[locale];
   const routeReplacements = ROUTE_TEXT_REPLACEMENTS[locale][normalizedRoute] ?? [];
   const privacyReplacements = ROUTE_TEXT_REPLACEMENTS[locale]["/privacidad/"] ?? [];
@@ -774,5 +795,5 @@ export function localizePageContent(markup: string, locale: Locale, route: strin
     ? privacyReplacements
     : routeReplacements;
 
-  return applyReplacements(markup, [...effectiveRouteReplacements, ...commonReplacements]);
+  return applyReplacements(normalizedMarkup, [...effectiveRouteReplacements, ...commonReplacements]);
 }
