@@ -45,10 +45,32 @@ if (!localizedBodyHtml.includes("o7digital.com")) {
   );
 }
 
+function splitFooterKeywords(keywords: string[], lineCount = 3): string[][] {
+  if (keywords.length === 0) return [];
+
+  const normalizedLineCount = Math.min(lineCount, keywords.length);
+  const baseSize = Math.floor(keywords.length / normalizedLineCount);
+  let remainder = keywords.length % normalizedLineCount;
+  const lines: string[][] = [];
+  let offset = 0;
+
+  for (let lineIndex = 0; lineIndex < normalizedLineCount; lineIndex += 1) {
+    const lineSize = baseSize + (remainder > 0 ? 1 : 0);
+    lines.push(keywords.slice(offset, offset + lineSize));
+    offset += lineSize;
+    remainder = Math.max(0, remainder - 1);
+  }
+
+  return lines;
+}
+
 // Inject footer keywords
 const footerKeywords = getFooterKeywords(locale);
 if (footerKeywords.length > 0) {
-  const keywordsHtml = `<p class="footerKeywords">${footerKeywords.join(" · ")}</p>`;
+  const footerKeywordLines = splitFooterKeywords(footerKeywords);
+  const keywordsHtml = `<div class="footerKeywords" aria-label="SEO keywords">${footerKeywordLines
+    .map((line) => `<p class="footerKeywords__line">${line.join(" · ")}</p>`)
+    .join("")}</div>`;
   localizedBodyHtml = localizedBodyHtml.replace(
     /(<\/footer>)/i,
     `${keywordsHtml}$1`,
@@ -240,15 +262,24 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
       }
 
       .footerKeywords {
-        margin: 12px auto 0;
-        max-width: 1120px;
-        padding: 0 20px 8px;
+        margin: 18px auto 0;
+        max-width: 760px;
+        padding: 0 20px 14px;
         text-align: center;
-        font-size: 11px;
-        line-height: 1.7;
+        font-size: 12px;
+        line-height: 1.9;
         color: rgba(194, 194, 194, 0.72);
-        opacity: 0.72;
-        white-space: nowrap;
+        opacity: 0.82;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .footerKeywords__line {
+        margin: 0;
+      }
+
+      .footerKeywords__line + .footerKeywords__line {
+        margin-top: 4px;
       }
 
       @media (min-width: 768px) {
@@ -285,9 +316,10 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
         }
 
         .footerKeywords {
-          white-space: normal;
-          overflow-wrap: anywhere;
-          word-break: break-word;
+          max-width: 92%;
+          padding: 0 16px 14px;
+          font-size: 11px;
+          line-height: 1.8;
         }
       }
 
