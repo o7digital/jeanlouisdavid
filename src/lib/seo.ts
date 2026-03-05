@@ -69,79 +69,91 @@ const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
       "/",
-      "salón de belleza CDMX, peluquería Santa Fe, corte de cabello Polanco, coloración Mexico, peinados CDMX, estilista Santa Fe Polanco, tratamientos capilares Mexico, barbería CDMX",
+      "peluquería CDMX, corte de cabello CDMX, coloración capilar CDMX, peinados CDMX, barbería CDMX, salón capilar Santa Fe CDMX Cuajimalpa, salón capilar Polanco CDMX, Mixlight Jean Louis David",
     ],
     [
       "/servicios/",
-      "corte de cabello Polanco, peinados profesionales CDMX, coloración premium Santa Fe, manicure pedicure Mexico, barbería Santa Fe, tratamientos capilares Polanco CDMX",
+      "servicios capilares CDMX, corte dama CDMX, corte caballero CDMX, peinado profesional CDMX, coloración capilar CDMX, barbería profesional CDMX, tratamientos capilares CDMX",
     ],
     [
       "/sucursales/",
-      "salón Jean Louis David Mexico, peluquería Santa Fe, estilista Polanco, sucursales CDMX, salón de belleza Santa Fe Polanco",
+      "sucursal Jean Louis David Santa Fe CDMX Cuajimalpa, sucursal Jean Louis David Polanco CDMX, salón capilar Santa Fe CDMX, salón capilar Polanco CDMX, cita de cabello CDMX",
     ],
     [
       "/nosotros/",
-      "Jean Louis David Mexico, salón de belleza CDMX, peluquería francesa Santa Fe, estilista profesional Polanco",
+      "historia capilar Jean Louis David, estilismo capilar en CDMX, expertos en corte y color CDMX, peluquería profesional Jean Louis David",
     ],
     [
       "/colecciones/",
-      "colecciones moda capilar Mexico, tendencias peinados CDMX, estilos Jean Louis David Santa Fe Polanco",
+      "tendencias de cabello Jean Louis David, cortes de moda CDMX, peinados de temporada, inspiración coloración capilar",
     ],
     [
       "/contacto/",
-      "cita salón belleza CDMX, reserva peluquería Santa Fe, contacto Jean Louis David Polanco Mexico",
+      "contacto cita capilar CDMX, WhatsApp peluquería CDMX, cita Santa Fe CDMX Cuajimalpa, cita Polanco CDMX, reservar corte color peinado CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, iluminar el cabello con Mixlight, coloración Mixlight CDMX, técnica capilar exclusiva Mixlight",
     ],
   ]),
   en: new Map<string, string>([
     [
       "/",
-      "hair salon Mexico CDMX, hairdresser Santa Fe, haircut Polanco, hair coloring Mexico City, professional hairstylist CDMX, barber shop Santa Fe Polanco",
+      "hair salon CDMX, haircut CDMX, hair color CDMX, hair styling CDMX, barber services CDMX, hair salon Santa Fe CDMX Cuajimalpa, hair salon Polanco CDMX, Mixlight Jean Louis David",
     ],
     [
       "/servicios/",
-      "haircut Santa Fe, professional styling Polanco, premium hair color CDMX, manicure pedicure Mexico, barber services Santa Fe Polanco",
+      "hair services CDMX, women's haircut CDMX, men's haircut CDMX, professional hair styling CDMX, hair color service CDMX, barber services CDMX, hair treatments CDMX",
     ],
     [
       "/sucursales/",
-      "Jean Louis David salon Mexico, hairdresser Santa Fe, stylist Polanco, beauty salon CDMX locations",
+      "Jean Louis David Santa Fe CDMX Cuajimalpa branch, Jean Louis David Polanco CDMX branch, hair salon Santa Fe CDMX, hair salon Polanco CDMX, hair appointment CDMX",
     ],
     [
       "/nosotros/",
-      "Jean Louis David Mexico, French hair salon CDMX, professional stylist Santa Fe Polanco",
+      "Jean Louis David hair legacy, hair styling experts CDMX, haircut and color specialists CDMX, professional hair salon CDMX",
     ],
     [
       "/colecciones/",
-      "hair fashion collections Mexico, hairstyle trends CDMX, Jean Louis David styles Santa Fe Polanco",
+      "Jean Louis David hair trends, seasonal hairstyles CDMX, haircut inspiration, hair color inspiration",
     ],
     [
       "/contacto/",
-      "book hair salon CDMX, hair appointment Santa Fe, contact Jean Louis David Polanco Mexico",
+      "hair appointment contact CDMX, WhatsApp hair booking CDMX, Santa Fe CDMX Cuajimalpa hair booking, Polanco CDMX hair booking, book haircut color styling CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, illuminate hair with Mixlight, Mixlight hair color CDMX, exclusive Mixlight technique",
     ],
   ]),
   fr: new Map<string, string>([
     [
       "/",
-      "salon de coiffure Mexico CDMX, coiffeur Santa Fe, coupe cheveux Polanco, coloration Mexico, styliste CDMX, salon beauté Santa Fe Polanco",
+      "salon de coiffure CDMX, coupe de cheveux CDMX, coloration capillaire CDMX, coiffage CDMX, service barbe CDMX, salon capillaire Santa Fe CDMX Cuajimalpa, salon capillaire Polanco CDMX, Mixlight Jean Louis David",
     ],
     [
       "/servicios/",
-      "coupe cheveux Santa Fe, coiffure professionnelle Polanco, coloration premium CDMX, manucure pédicure Mexico, barbier Santa Fe Polanco",
+      "services capillaires CDMX, coupe femme CDMX, coupe homme CDMX, coiffage professionnel CDMX, coloration capillaire CDMX, service barbe CDMX, traitements capillaires CDMX",
     ],
     [
       "/sucursales/",
-      "salon Jean Louis David Mexico, coiffeur Santa Fe, styliste Polanco, salon de beauté CDMX",
+      "succursale Jean Louis David Santa Fe CDMX Cuajimalpa, succursale Jean Louis David Polanco CDMX, salon capillaire Santa Fe CDMX, salon capillaire Polanco CDMX, rendez-vous coiffure CDMX",
     ],
     [
       "/nosotros/",
-      "Jean Louis David Mexico, salon coiffure français CDMX, coiffeur professionnel Santa Fe Polanco",
+      "heritage capillaire Jean Louis David, experts coiffure CDMX, spécialistes coupe et couleur CDMX, salon de coiffure professionnel CDMX",
     ],
     [
       "/colecciones/",
-      "collections mode capillaire Mexico, tendances coiffure CDMX, styles Jean Louis David Santa Fe Polanco",
+      "tendances cheveux Jean Louis David, coiffures de saison CDMX, inspiration coupe de cheveux, inspiration coloration capillaire",
     ],
     [
       "/contacto/",
-      "rendez-vous salon beauté CDMX, réservation coiffeur Santa Fe, contact Jean Louis David Polanco Mexico",
+      "contact rendez-vous coiffure CDMX, rendez-vous WhatsApp salon coiffure CDMX, rendez-vous Santa Fe CDMX Cuajimalpa, rendez-vous Polanco CDMX, reserver coupe couleur coiffage CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, illuminer les cheveux avec Mixlight, coloration Mixlight CDMX, technique Mixlight exclusive",
     ],
   ]),
 };
@@ -150,11 +162,11 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
       "/",
-      "Descubre la experiencia Jean Louis David en CDMX: servicios de estilismo, color, barbería y atención personalizada en Santa Fe y Polanco. Tu salón de belleza premium en Mexico.",
+      "Salón capilar Jean Louis David en CDMX con corte, coloración, peinado y barbería profesional en Santa Fe CDMX (Cuajimalpa) y Polanco CDMX.",
     ],
     [
       "/servicios/",
-      "Conoce nuestros servicios de corte, peinado, coloración, manicure, pedicure y barbería en CDMX. Atención experta en Santa Fe y Polanco con técnicas exclusivas.",
+      "Servicios 100% capilares en CDMX: corte dama y caballero, peinado, coloración, tratamientos capilares y barbería profesional.",
     ],
     [
       "/sucursales/",
@@ -162,7 +174,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Conoce la filosofía y estilo Jean Louis David: salón de belleza premium en CDMX con presencia en Santa Fe y Polanco para una experiencia distintiva.",
+      "Conoce la historia y visión de Jean Louis David en corte, color y peinado personalizado para cada tipo de cabello.",
     ],
     [
       "/colecciones/",
@@ -170,7 +182,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/contacto/",
-      "Contacta Jean Louis David en CDMX y agenda tu cita en Santa Fe o Polanco por WhatsApp. Asesoría personalizada en tu salón de confianza en Mexico.",
+      "Contacta a Jean Louis David en CDMX y agenda tu cita de cabello por WhatsApp en Santa Fe CDMX (Cuajimalpa) o Polanco CDMX.",
     ],
     [
       "/privacidad/",
@@ -200,7 +212,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/servicios/",
-      "Explore our haircut, styling, manicure, pedicure and barbering services with expert, personalized attention.",
+      "Explore our 100% hair services in CDMX: women's and men's haircuts, styling, hair color, hair treatments and barber services.",
     ],
     [
       "/sucursales/",
@@ -208,7 +220,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Learn about Jean Louis David's philosophy, style and signature beauty approach.",
+      "Learn about Jean Louis David's hair philosophy, legacy and personalized approach to haircut, color and styling.",
     ],
     [
       "/colecciones/",
@@ -246,7 +258,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/servicios/",
-      "Découvrez nos services de coupe, coiffage, manucure, pédicure et barbier avec une attention experte et personnalisée.",
+      "Découvrez nos services 100% capillaires à CDMX : coupe femme/homme, coiffage, coloration, traitements capillaires et barbe.",
     ],
     [
       "/sucursales/",
@@ -254,7 +266,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Découvrez la philosophie, le style et la proposition Jean Louis David pour une expérience beauté distinctive.",
+      "Découvrez la philosophie capillaire et l'héritage Jean Louis David autour de la coupe, de la couleur et du coiffage personnalisés.",
     ],
     [
       "/colecciones/",
