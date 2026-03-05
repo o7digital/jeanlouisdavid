@@ -554,58 +554,121 @@ export function getJsonLd({
   return JSON.stringify(items);
 }
 
+const FOOTER_KEYWORD_TARGET = 25;
+
+const ES_BASE = [
+  "salón de cabello CDMX",
+  "peluquería en Ciudad de México",
+  "corte de cabello CDMX",
+  "corte de mujer CDMX",
+  "corte de hombre CDMX",
+  "peinado profesional CDMX",
+  "coloración capilar CDMX",
+  "tinte de cabello CDMX",
+  "retoque de raíz CDMX",
+  "tratamiento capilar reparador CDMX",
+  "hidratación capilar CDMX",
+  "barbería CDMX",
+  "corte + barba CDMX",
+  "salón de cabello Polanco CDMX",
+  "salón de cabello Santa Fe CDMX Cuajimalpa",
+] as const;
+
+const ES_EXTRA = [
+  "salón premium en CDMX",
+  "peluquería premium en CDMX",
+  "salón de cabello premium CDMX",
+  "estilista profesional en CDMX",
+  "corte de cabello premium CDMX",
+  "coloración capilar premium CDMX",
+  "tratamiento capilar premium CDMX",
+  "barbería premium CDMX",
+  "salón de cabello premium Polanco CDMX",
+  "salón de cabello premium Santa Fe CDMX Cuajimalpa",
+] as const;
+
+const EN_BASE = [
+  "hair salon Mexico City",
+  "hair salon CDMX",
+  "haircut Mexico City",
+  "women’s haircut Mexico City",
+  "men’s haircut Mexico City",
+  "hair styling Mexico City",
+  "professional blowout Mexico City",
+  "hair coloring Mexico City",
+  "hair dye Mexico City",
+  "root touch-up Mexico City",
+  "hair treatment Mexico City",
+  "deep conditioning Mexico City",
+  "barber shop Mexico City",
+  "men’s grooming Mexico City",
+  "hair salon Polanco CDMX",
+] as const;
+
+const EN_EXTRA = [
+  "premium hair salon Mexico City",
+  "luxury hair salon Mexico City",
+  "high-end hair salon Mexico City",
+  "professional hairstylist Mexico City",
+  "premium haircut Mexico City",
+  "premium hair coloring Mexico City",
+  "premium hair treatment Mexico City",
+  "premium barber shop Mexico City",
+  "premium hair salon Polanco CDMX",
+  "premium hair salon Santa Fe CDMX",
+] as const;
+
+const FR_BASE = [
+  "salon de coiffure Mexico City",
+  "salon de coiffure CDMX",
+  "coupe de cheveux Mexico",
+  "coupe femme Mexico",
+  "coupe homme Mexico",
+  "coiffage Mexico",
+  "brushing Mexico",
+  "coloration capillaire Mexico",
+  "teinture cheveux Mexico",
+  "retouche racines Mexico",
+  "soin capillaire réparateur Mexico",
+  "soin hydratant cheveux Mexico",
+  "barbier Mexico",
+  "service barbe Mexico",
+  "salon capillaire Polanco CDMX",
+] as const;
+
+const FR_EXTRA = [
+  "salon premium Mexico City",
+  "salon de coiffure premium Mexico City",
+  "salon haut de gamme Mexico City",
+  "coiffeur professionnel Mexico City",
+  "coupe premium Mexico",
+  "coloration premium Mexico",
+  "soin capillaire premium Mexico",
+  "barbier premium Mexico",
+  "salon premium Polanco CDMX",
+  "salon premium Santa Fe CDMX",
+] as const;
+
+function createFooterKeywordList(locale: Locale, base: readonly string[], extra: readonly string[]): string[] {
+  const keywords = [...base, ...extra];
+
+  if (keywords.length !== FOOTER_KEYWORD_TARGET) {
+    throw new Error(
+      `Expected ${FOOTER_KEYWORD_TARGET} footer keywords for locale "${locale}", received ${keywords.length}.`,
+    );
+  }
+
+  if (new Set(keywords).size !== keywords.length) {
+    throw new Error(`Duplicate footer keywords detected for locale "${locale}".`);
+  }
+
+  return keywords;
+}
+
 const FOOTER_KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
-  es: [
-    "salón de cabello CDMX",
-    "peluquería en Ciudad de México",
-    "corte de cabello CDMX",
-    "corte de mujer CDMX",
-    "corte de hombre CDMX",
-    "peinado profesional CDMX",
-    "coloración capilar CDMX",
-    "tinte de cabello CDMX",
-    "retoque de raíz CDMX",
-    "tratamiento capilar reparador CDMX",
-    "hidratación capilar CDMX",
-    "barbería CDMX",
-    "corte + barba CDMX",
-    "salón de cabello Polanco CDMX",
-    "salón de cabello Santa Fe CDMX Cuajimalpa",
-  ],
-  en: [
-    "hair salon Mexico City",
-    "hair salon CDMX",
-    "haircut Mexico City",
-    "women’s haircut Mexico City",
-    "men’s haircut Mexico City",
-    "hair styling Mexico City",
-    "professional blowout Mexico City",
-    "hair coloring Mexico City",
-    "hair dye Mexico City",
-    "root touch-up Mexico City",
-    "hair treatment Mexico City",
-    "deep conditioning Mexico City",
-    "barber shop Mexico City",
-    "men’s grooming Mexico City",
-    "hair salon Polanco CDMX",
-  ],
-  fr: [
-    "salon de coiffure Mexico City",
-    "salon de coiffure CDMX",
-    "coupe de cheveux Mexico",
-    "coupe femme Mexico",
-    "coupe homme Mexico",
-    "coiffage Mexico",
-    "brushing Mexico",
-    "coloration capillaire Mexico",
-    "teinture cheveux Mexico",
-    "retouche racines Mexico",
-    "soin capillaire réparateur Mexico",
-    "soin hydratant cheveux Mexico",
-    "barbier Mexico",
-    "service barbe Mexico",
-    "salon capillaire Polanco CDMX",
-  ],
+  es: createFooterKeywordList("es", ES_BASE, ES_EXTRA),
+  en: createFooterKeywordList("en", EN_BASE, EN_EXTRA),
+  fr: createFooterKeywordList("fr", FR_BASE, FR_EXTRA),
 };
 
 export function getFooterKeywords(locale: Locale = DEFAULT_LOCALE): string[] {
