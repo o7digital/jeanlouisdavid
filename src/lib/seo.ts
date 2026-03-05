@@ -65,31 +65,124 @@ const ARTICLE_METADATA_BY_ROUTE = new Map<string, ArticleMetadata>([
   ],
 ]);
 
+const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
+  es: new Map<string, string>([
+    [
+      "/",
+      "peluquería CDMX, corte de cabello CDMX, coloración capilar CDMX, peinados CDMX, barbería CDMX, salón capilar Santa Fe CDMX Cuajimalpa, salón capilar Polanco CDMX, Mixlight Jean Louis David",
+    ],
+    [
+      "/servicios/",
+      "servicios capilares CDMX, corte dama CDMX, corte caballero CDMX, peinado profesional CDMX, coloración capilar CDMX, barbería profesional CDMX, tratamientos capilares CDMX",
+    ],
+    [
+      "/sucursales/",
+      "sucursal Jean Louis David Santa Fe CDMX Cuajimalpa, sucursal Jean Louis David Polanco CDMX, salón capilar Santa Fe CDMX, salón capilar Polanco CDMX, cita de cabello CDMX",
+    ],
+    [
+      "/nosotros/",
+      "historia capilar Jean Louis David, estilismo capilar en CDMX, expertos en corte y color CDMX, peluquería profesional Jean Louis David",
+    ],
+    [
+      "/colecciones/",
+      "tendencias de cabello Jean Louis David, cortes de moda CDMX, peinados de temporada, inspiración coloración capilar",
+    ],
+    [
+      "/contacto/",
+      "contacto cita capilar CDMX, WhatsApp peluquería CDMX, cita Santa Fe CDMX Cuajimalpa, cita Polanco CDMX, reservar corte color peinado CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, iluminar el cabello con Mixlight, coloración Mixlight CDMX, técnica capilar exclusiva Mixlight",
+    ],
+  ]),
+  en: new Map<string, string>([
+    [
+      "/",
+      "hair salon CDMX, haircut CDMX, hair color CDMX, hair styling CDMX, barber services CDMX, hair salon Santa Fe CDMX Cuajimalpa, hair salon Polanco CDMX, Mixlight Jean Louis David",
+    ],
+    [
+      "/servicios/",
+      "hair services CDMX, women's haircut CDMX, men's haircut CDMX, professional hair styling CDMX, hair color service CDMX, barber services CDMX, hair treatments CDMX",
+    ],
+    [
+      "/sucursales/",
+      "Jean Louis David Santa Fe CDMX Cuajimalpa branch, Jean Louis David Polanco CDMX branch, hair salon Santa Fe CDMX, hair salon Polanco CDMX, hair appointment CDMX",
+    ],
+    [
+      "/nosotros/",
+      "Jean Louis David hair legacy, hair styling experts CDMX, haircut and color specialists CDMX, professional hair salon CDMX",
+    ],
+    [
+      "/colecciones/",
+      "Jean Louis David hair trends, seasonal hairstyles CDMX, haircut inspiration, hair color inspiration",
+    ],
+    [
+      "/contacto/",
+      "hair appointment contact CDMX, WhatsApp hair booking CDMX, Santa Fe CDMX Cuajimalpa hair booking, Polanco CDMX hair booking, book haircut color styling CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, illuminate hair with Mixlight, Mixlight hair color CDMX, exclusive Mixlight technique",
+    ],
+  ]),
+  fr: new Map<string, string>([
+    [
+      "/",
+      "salon de coiffure CDMX, coupe de cheveux CDMX, coloration capillaire CDMX, coiffage CDMX, service barbe CDMX, salon capillaire Santa Fe CDMX Cuajimalpa, salon capillaire Polanco CDMX, Mixlight Jean Louis David",
+    ],
+    [
+      "/servicios/",
+      "services capillaires CDMX, coupe femme CDMX, coupe homme CDMX, coiffage professionnel CDMX, coloration capillaire CDMX, service barbe CDMX, traitements capillaires CDMX",
+    ],
+    [
+      "/sucursales/",
+      "succursale Jean Louis David Santa Fe CDMX Cuajimalpa, succursale Jean Louis David Polanco CDMX, salon capillaire Santa Fe CDMX, salon capillaire Polanco CDMX, rendez-vous coiffure CDMX",
+    ],
+    [
+      "/nosotros/",
+      "heritage capillaire Jean Louis David, experts coiffure CDMX, spécialistes coupe et couleur CDMX, salon de coiffure professionnel CDMX",
+    ],
+    [
+      "/colecciones/",
+      "tendances cheveux Jean Louis David, coiffures de saison CDMX, inspiration coupe de cheveux, inspiration coloration capillaire",
+    ],
+    [
+      "/contacto/",
+      "contact rendez-vous coiffure CDMX, rendez-vous WhatsApp salon coiffure CDMX, rendez-vous Santa Fe CDMX Cuajimalpa, rendez-vous Polanco CDMX, reserver coupe couleur coiffage CDMX",
+    ],
+    [
+      "/mixlight-la-tecnica-para-iluminar-el-cabello/",
+      "Mixlight Jean Louis David, illuminer les cheveux avec Mixlight, coloration Mixlight CDMX, technique Mixlight exclusive",
+    ],
+  ]),
+};
+
 const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
       "/",
-      "Descubre la experiencia Jean Louis David en México: servicios de estilismo, color, barbería y atención personalizada.",
+      "Salón capilar Jean Louis David en CDMX con corte, coloración, peinado y barbería profesional en Santa Fe CDMX (Cuajimalpa) y Polanco CDMX.",
     ],
     [
       "/servicios/",
-      "Conoce nuestros servicios de corte, peinado, manicure, pedicure y barbería con atención experta y personalizada.",
+      "Servicios 100% capilares en CDMX: corte dama y caballero, peinado, coloración, tratamientos capilares y barbería profesional.",
     ],
     [
       "/sucursales/",
-      "Ubica las sucursales Jean Louis David en México y agenda tu cita en el salón más cercano.",
+      "Ubica las sucursales Jean Louis David en CDMX (Santa Fe y Polanco) y agenda tu cita en el salón más cercano. Experiencia profesional en Mexico.",
     ],
     [
       "/nosotros/",
-      "Conoce la filosofía, estilo y propuesta de Jean Louis David para una experiencia de belleza distintiva.",
+      "Conoce la historia y visión de Jean Louis David en corte, color y peinado personalizado para cada tipo de cabello.",
     ],
     [
       "/colecciones/",
-      "Explora las colecciones y tendencias de Jean Louis David para inspirar tu siguiente look.",
+      "Explora las colecciones y tendencias de Jean Louis David en Mexico. Inspírate con los estilos de moda en CDMX, Santa Fe y Polanco.",
     ],
     [
       "/contacto/",
-      "Contacta a Jean Louis David y agenda tu cita por WhatsApp para una asesoría personalizada.",
+      "Contacta a Jean Louis David en CDMX y agenda tu cita de cabello por WhatsApp en Santa Fe CDMX (Cuajimalpa) o Polanco CDMX.",
     ],
     [
       "/privacidad/",
@@ -119,7 +212,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/servicios/",
-      "Explore our haircut, styling, manicure, pedicure and barbering services with expert, personalized attention.",
+      "Explore our 100% hair services in CDMX: women's and men's haircuts, styling, hair color, hair treatments and barber services.",
     ],
     [
       "/sucursales/",
@@ -127,7 +220,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Learn about Jean Louis David's philosophy, style and signature beauty approach.",
+      "Learn about Jean Louis David's hair philosophy, legacy and personalized approach to haircut, color and styling.",
     ],
     [
       "/colecciones/",
@@ -165,7 +258,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/servicios/",
-      "Découvrez nos services de coupe, coiffage, manucure, pédicure et barbier avec une attention experte et personnalisée.",
+      "Découvrez nos services 100% capillaires à CDMX : coupe femme/homme, coiffage, coloration, traitements capillaires et barbe.",
     ],
     [
       "/sucursales/",
@@ -173,7 +266,7 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ],
     [
       "/nosotros/",
-      "Découvrez la philosophie, le style et la proposition Jean Louis David pour une expérience beauté distinctive.",
+      "Découvrez la philosophie capillaire et l'héritage Jean Louis David autour de la coupe, de la couleur et du coiffage personnalisés.",
     ],
     [
       "/colecciones/",
@@ -317,6 +410,11 @@ export function extractTitleFromHead(headHtml: string): string {
   return decodeHtml(titleMatch?.[1] ?? "Jean Louis David Mexico");
 }
 
+export function getSeoKeywords(route: string, locale: Locale = DEFAULT_LOCALE): string {
+  const normalizedRoute = canonicalPath(route);
+  return KEYWORDS_BY_ROUTE[locale].get(normalizedRoute) ?? "";
+}
+
 export function getSeoDescription(route: string, locale: Locale = DEFAULT_LOCALE): string {
   const normalizedRoute = canonicalPath(route);
   return (
@@ -454,6 +552,64 @@ export function getJsonLd({
   }
 
   return JSON.stringify(items);
+}
+
+const FOOTER_KEYWORDS_BY_LOCALE: Record<Locale, string[]> = {
+  es: [
+    "salón de cabello CDMX",
+    "peluquería en Ciudad de México",
+    "corte de cabello CDMX",
+    "corte de mujer CDMX",
+    "corte de hombre CDMX",
+    "peinado profesional CDMX",
+    "coloración capilar CDMX",
+    "tinte de cabello CDMX",
+    "retoque de raíz CDMX",
+    "tratamiento capilar reparador CDMX",
+    "hidratación capilar CDMX",
+    "barbería CDMX",
+    "corte + barba CDMX",
+    "salón de cabello Polanco CDMX",
+    "salón de cabello Santa Fe CDMX Cuajimalpa",
+  ],
+  en: [
+    "hair salon Mexico City",
+    "hair salon CDMX",
+    "haircut Mexico City",
+    "women’s haircut Mexico City",
+    "men’s haircut Mexico City",
+    "hair styling Mexico City",
+    "professional blowout Mexico City",
+    "hair coloring Mexico City",
+    "hair dye Mexico City",
+    "root touch-up Mexico City",
+    "hair treatment Mexico City",
+    "deep conditioning Mexico City",
+    "barber shop Mexico City",
+    "men’s grooming Mexico City",
+    "hair salon Polanco CDMX",
+  ],
+  fr: [
+    "salon de coiffure Mexico City",
+    "salon de coiffure CDMX",
+    "coupe de cheveux Mexico",
+    "coupe femme Mexico",
+    "coupe homme Mexico",
+    "coiffage Mexico",
+    "brushing Mexico",
+    "coloration capillaire Mexico",
+    "teinture cheveux Mexico",
+    "retouche racines Mexico",
+    "soin capillaire réparateur Mexico",
+    "soin hydratant cheveux Mexico",
+    "barbier Mexico",
+    "service barbe Mexico",
+    "salon capillaire Polanco CDMX",
+  ],
+};
+
+export function getFooterKeywords(locale: Locale = DEFAULT_LOCALE): string[] {
+  return [...FOOTER_KEYWORDS_BY_LOCALE[locale]];
 }
 
 function decodeHtml(value: string): string {

@@ -17,9 +17,11 @@ import {
   absoluteUrl,
   canonicalPathForLocale,
   extractTitleFromHead,
+  getFooterKeywords,
   getJsonLd,
   getSeoDescription,
   getSeoImageUrl,
+  getSeoKeywords,
   getSeoTitle,
 } from "../lib/seo";
 
@@ -43,9 +45,20 @@ if (!localizedBodyHtml.includes("o7digital.com")) {
   );
 }
 
+// Inject footer keywords
+const footerKeywords = getFooterKeywords(locale);
+if (footerKeywords.length > 0) {
+  const keywordsHtml = `<p class="footerKeywords">${footerKeywords.join(" · ")}</p>`;
+  localizedBodyHtml = localizedBodyHtml.replace(
+    /(<\/footer>)/i,
+    `${keywordsHtml}$1`,
+  );
+}
+
 const fallbackTitle = extractTitleFromHead(localizedHeadHtml);
 const title = getSeoTitle(page.route, fallbackTitle, locale);
 const description = getSeoDescription(page.route, locale);
+const keywords = getSeoKeywords(page.route, locale);
 const canonical = absoluteUrl(canonicalPathForLocale(page.route, locale));
 const xDefaultCanonical = absoluteUrl(canonicalPathForLocale(page.route, DEFAULT_LOCALE));
 const alternateLinks = SUPPORTED_LOCALES.map((entryLocale) => ({
@@ -75,6 +88,7 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
     <Fragment set:html={sanitizedHeadHtml} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {keywords && <meta name="keywords" content={keywords} />}
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
     {alternateLinks.map((entry) => (
@@ -225,6 +239,17 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
         color: #d7bb7a;
       }
 
+      .footerKeywords {
+        margin: 12px auto 0;
+        padding: 0 20px 8px;
+        text-align: center;
+        font-size: 11px;
+        line-height: 1.7;
+        color: rgba(194, 194, 194, 0.72);
+        opacity: 0.72;
+        white-space: nowrap;
+      }
+
       @media (min-width: 768px) {
         #menu-item-language-switch .jld-lang-switch__details:not([open]) .jld-lang-switch__menu {
           display: none;
@@ -256,6 +281,12 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
       @media (max-width: 767px) {
         #menu-item-language-switch {
           display: none !important;
+        }
+
+        .footerKeywords {
+          white-space: normal;
+          overflow-wrap: anywhere;
+          word-break: break-word;
         }
       }
 
