@@ -17,6 +17,7 @@ import {
   absoluteUrl,
   canonicalPathForLocale,
   extractTitleFromHead,
+  getFooterKeywords,
   getJsonLd,
   getSeoDescription,
   getSeoImageUrl,
@@ -41,6 +42,16 @@ if (!localizedBodyHtml.includes("o7digital.com")) {
   localizedBodyHtml = localizedBodyHtml.replace(
     /(<span class=['"]copyright['"][^>]*>)([\s\S]*?)(<\/span>)/i,
     `$1$2 | creado por <a href="https://www.o7digital.com/index-digital-agency" target="_blank" rel="noopener">o7digital.com</a>$3`,
+  );
+}
+
+// Inject footer keywords
+const footerKeywords = getFooterKeywords(locale);
+if (footerKeywords.length > 0) {
+  const keywordsHtml = `<div class="jld-footer-keywords" style="text-align: center; font-size: 11px; color: #c2c2c2; margin-top: 15px; padding: 0 20px; line-height: 1.8;">${footerKeywords.join(" · ")}</div>`;
+  localizedBodyHtml = localizedBodyHtml.replace(
+    /(<\/footer>)/i,
+    `${keywordsHtml}$1`,
   );
 }
 

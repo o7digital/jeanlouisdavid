@@ -542,6 +542,12 @@ export function getJsonLd({
   return JSON.stringify(items);
 }
 
+export function getFooterKeywords(locale: Locale = DEFAULT_LOCALE): string[] {
+  const keywords = getSeoKeywords("/", locale);
+  if (!keywords) return [];
+  return keywords.split(",").map((k) => k.trim());
+}
+
 function decodeHtml(value: string): string {
   return value
     .replace(/&#8211;/g, " - ")
