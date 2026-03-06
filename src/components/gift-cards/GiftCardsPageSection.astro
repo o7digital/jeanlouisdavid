@@ -22,8 +22,6 @@ type GiftCardContent = {
   title: string;
   subtitle: string;
   primaryCta: string;
-  secondaryCta: string;
-  meta: string[];
   cardsEyebrow: string;
   cardsTitle: string;
   cardsDescription: string;
@@ -50,8 +48,6 @@ const contentByLocale: Record<Locale, GiftCardContent> = {
     subtitle:
       "Regala estilo, belleza y bienestar con una experiencia exclusiva en Jean Louis David.",
     primaryCta: "Comprar Gift Card",
-    secondaryCta: "Solicitar por WhatsApp",
-    meta: ["Digital", "Premium", "Lista para compartir"],
     cardsEyebrow: "Montos disponibles",
     cardsTitle: "Cuatro formatos, una misma firma de estilo",
     cardsDescription:
@@ -127,8 +123,6 @@ const contentByLocale: Record<Locale, GiftCardContent> = {
     subtitle:
       "Give style, beauty and wellbeing through an exclusive Jean Louis David experience.",
     primaryCta: "Buy Gift Card",
-    secondaryCta: "Request on WhatsApp",
-    meta: ["Digital", "Premium", "Easy to share"],
     cardsEyebrow: "Available amounts",
     cardsTitle: "Four formats with the same signature finish",
     cardsDescription:
@@ -204,8 +198,6 @@ const contentByLocale: Record<Locale, GiftCardContent> = {
     subtitle:
       "Offrez style, beauté et bien-être à travers une expérience exclusive signée Jean Louis David.",
     primaryCta: "Acheter une gift card",
-    secondaryCta: "Demander sur WhatsApp",
-    meta: ["Digitale", "Premium", "Facile à partager"],
     cardsEyebrow: "Montants disponibles",
     cardsTitle: "Quatre formats dans un même esprit premium",
     cardsDescription:
@@ -277,13 +269,12 @@ const contentByLocale: Record<Locale, GiftCardContent> = {
   },
 };
 
-const heroImage = "/wp-content/uploads/2024/07/slide_03-1280x630.webp";
 const locale = (Astro.props.locale as Locale | undefined) ?? "es";
 const content = contentByLocale[locale] ?? contentByLocale.es;
 ---
 
 <div class="jld-gift-page">
-  <section class="jld-gift-hero" style={`--gift-hero-image: url('${heroImage}')`}>
+  <section class="jld-gift-hero">
     <div class="jld-gift-shell jld-gift-hero__inner" data-gift-reveal style="--reveal-delay: 0ms;">
       <div class="jld-gift-hero__content">
         <span class="jld-gift-eyebrow">{content.eyebrow}</span>
@@ -294,16 +285,20 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
           <a href="#" class="jld-gift-button jld-gift-button--solid">
             {content.primaryCta}
           </a>
-          <a href="#" class="jld-gift-button jld-gift-button--ghost">
-            {content.secondaryCta}
-          </a>
         </div>
+      </div>
 
-        <ul class="jld-gift-meta" aria-label="Gift card highlights">
-          {content.meta.map((item) => (
-            <li>{item}</li>
-          ))}
-        </ul>
+      <div class="jld-gift-hero__visual" aria-hidden="true">
+        <div class="jld-gift-hero-stack">
+          <div class="jld-gift-hero-card jld-gift-hero-card--back"></div>
+          <div class="jld-gift-hero-card jld-gift-hero-card--front">
+            <span class="jld-gift-hero-card__brand">Jean Louis David</span>
+            <strong class="jld-gift-hero-card__title">Gift Card</strong>
+            <span class="jld-gift-hero-card__amount">MXN 1,000</span>
+            <div class="jld-gift-hero-card__divider"></div>
+            <span class="jld-gift-hero-card__caption">Premium beauty experience</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -520,22 +515,20 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
   .jld-gift-hero {
     position: relative;
     overflow: hidden;
-    min-height: clamp(620px, 78vh, 860px);
-    padding: 148px 0 112px;
+    padding: 96px 0 62px;
     color: #f7f2eb;
-    background-image:
-      linear-gradient(115deg, rgba(10, 10, 10, 0.86) 0%, rgba(10, 10, 10, 0.58) 48%, rgba(10, 10, 10, 0.42) 100%),
-      var(--gift-hero-image);
-    background-position: center center;
-    background-size: cover;
+    background:
+      radial-gradient(circle at top left, rgba(214, 184, 129, 0.22), transparent 28%),
+      radial-gradient(circle at bottom right, rgba(162, 124, 67, 0.18), transparent 30%),
+      linear-gradient(135deg, #181412 0%, #221b17 54%, #100e0d 100%);
   }
 
   .jld-gift-hero::before {
     content: "";
     position: absolute;
-    inset: auto auto -160px -110px;
-    width: 360px;
-    height: 360px;
+    inset: auto auto -120px -90px;
+    width: 280px;
+    height: 280px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(200, 168, 107, 0.38), transparent 70%);
     filter: blur(8px);
@@ -544,29 +537,33 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
   .jld-gift-hero::after {
     content: "";
     position: absolute;
-    inset: 34px 34px auto auto;
-    width: min(28vw, 320px);
-    height: min(28vw, 320px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 28px;
-    opacity: 0.55;
+    inset: 24px 24px auto auto;
+    width: min(20vw, 220px);
+    height: min(20vw, 220px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    opacity: 0.4;
   }
 
   .jld-gift-hero__inner {
     position: relative;
     z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 34px;
+    align-items: center;
   }
 
   .jld-gift-hero__content {
-    max-width: 760px;
+    max-width: 700px;
   }
 
   .jld-gift-hero__lede {
-    max-width: 55ch;
-    margin-top: 22px;
+    max-width: 49ch;
+    margin-top: 18px;
     color: rgba(247, 242, 235, 0.82);
-    font-size: clamp(1rem, 1.4vw, 1.18rem);
-    line-height: 1.8;
+    font-size: clamp(1rem, 1.2vw, 1.08rem);
+    line-height: 1.72;
   }
 
   .jld-gift-hero__actions,
@@ -617,17 +614,9 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
   }
 
   .jld-gift-button--ghost {
-    background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(255, 255, 255, 0.28);
-    color: #f7f2eb;
-    backdrop-filter: blur(18px);
-  }
-
-  .jld-gift-card .jld-gift-button--ghost {
     color: var(--gift-ink);
     border-color: rgba(23, 19, 17, 0.14);
     background: rgba(255, 255, 255, 0.72);
-    backdrop-filter: none;
   }
 
   .jld-gift-button--small {
@@ -637,31 +626,109 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
     letter-spacing: 0.12em;
   }
 
-  .jld-gift-meta {
+  .jld-gift-hero__visual {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin: 28px 0 0;
-    padding: 0;
-    list-style: none;
+    justify-content: flex-end;
   }
 
-  .jld-gift-meta li {
-    margin: 0;
-    padding: 11px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 999px;
-    color: rgba(247, 242, 235, 0.78);
+  .jld-gift-hero-stack {
+    position: relative;
+    width: min(100%, 420px);
+    aspect-ratio: 1 / 0.78;
+  }
+
+  .jld-gift-hero-card {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 28px 65px rgba(8, 6, 5, 0.28);
+  }
+
+  .jld-gift-hero-card--back {
+    inset: 34px 26px -10px 48px;
+    transform: rotate(8deg);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+      linear-gradient(135deg, #5d4730 0%, #c4a16a 100%);
+    opacity: 0.7;
+  }
+
+  .jld-gift-hero-card--front {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 30px;
+    background:
+      radial-gradient(circle at top right, rgba(230, 211, 180, 0.24), transparent 26%),
+      linear-gradient(145deg, #191614 0%, #241d18 42%, #c6a067 150%);
+    overflow: hidden;
+  }
+
+  .jld-gift-hero-card--front::before {
+    content: "";
+    position: absolute;
+    inset: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .jld-gift-hero-card__brand,
+  .jld-gift-hero-card__caption {
+    position: relative;
+    z-index: 1;
     font-family: "Cabin", Helvetica, Arial, sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .jld-gift-hero-card__brand {
+    margin-bottom: auto;
+    color: rgba(247, 242, 235, 0.78);
+  }
+
+  .jld-gift-hero-card__title,
+  .jld-gift-hero-card__amount {
+    position: relative;
+    z-index: 1;
+    color: #fbf7f1;
+  }
+
+  .jld-gift-hero-card__title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    line-height: 0.95;
+  }
+
+  .jld-gift-hero-card__amount {
+    margin-top: 12px;
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(247, 242, 235, 0.84);
+  }
+
+  .jld-gift-hero-card__divider {
+    position: relative;
+    z-index: 1;
+    width: 88px;
+    height: 1px;
+    margin: 24px 0 16px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.64), transparent);
+  }
+
+  .jld-gift-hero-card__caption {
+    position: relative;
+    z-index: 1;
+    color: rgba(247, 242, 235, 0.68);
   }
 
   .jld-gift-section--cards {
-    margin-top: -54px;
+    margin-top: -18px;
     padding-top: 0;
   }
 
@@ -910,6 +977,15 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
       padding: 88px 0;
     }
 
+    .jld-gift-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    .jld-gift-hero__visual {
+      justify-content: flex-start;
+    }
+
     .jld-gift-steps,
     .jld-gift-highlights {
       grid-template-columns: minmax(0, 1fr);
@@ -922,9 +998,7 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
     }
 
     .jld-gift-hero {
-      min-height: auto;
-      padding: 126px 0 84px;
-      background-position: 62% center;
+      padding: 112px 0 46px;
     }
 
     .jld-gift-hero::after {
@@ -935,7 +1009,7 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
     }
 
     .jld-gift-section--cards {
-      margin-top: -26px;
+      margin-top: 0;
     }
 
     .jld-gift-card-grid {
@@ -962,8 +1036,8 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
       width: 100%;
     }
 
-    .jld-gift-meta {
-      gap: 10px;
+    .jld-gift-hero-stack {
+      width: min(100%, 360px);
     }
 
     .jld-gift-card__description {
