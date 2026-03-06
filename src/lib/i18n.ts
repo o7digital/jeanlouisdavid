@@ -213,12 +213,48 @@ function dedupeAdjacentCatalogueItems(markup: string, title: string, price: stri
   return markup.replace(new RegExp(`(${itemPattern})(${itemPattern})`, "i"), "$1");
 }
 
+function updateCatalogueItemPrice(
+  markup: string,
+  title: string,
+  currentPrice: string,
+  nextPrice: string,
+): string {
+  const escapedTitle = escapeRegExp(title);
+  const escapedCurrentPrice = escapeRegExp(currentPrice);
+
+  return markup.replace(
+    new RegExp(
+      `(<div class=['"]av-catalogue-title['"]>${escapedTitle}<\\/div><div class=['"]av-catalogue-price['"]>)\\s*${escapedCurrentPrice}(</div>)`,
+      "g",
+    ),
+    (_match, prefix: string, suffix: string) => `${prefix}${nextPrice}${suffix}`,
+  );
+}
+
 function normalizeMirroredPageContent(markup: string, route: string): string {
   if (route !== "/servicios/") {
     return markup;
   }
 
-  return dedupeAdjacentCatalogueItems(markup, "Director Artístico Caballero", "$1,100");
+  let normalizedMarkup = dedupeAdjacentCatalogueItems(markup, "Director Artístico Caballero", "$1,100");
+
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Corte Dama", "$1,155", "$1,200");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Corte Caballero", "$945", "$1,000");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Director Artístico Dama", "$1,365", "$1,400");
+  normalizedMarkup = updateCatalogueItemPrice(
+    normalizedMarkup,
+    "Director Artístico Caballero",
+    "$1,100",
+    "$1,150",
+  );
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Peinado Corto", "$450", "$400");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure Normal", "$340", "$360");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure con Gel", "$610", "$630");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure Spa", "$480", "$500");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Bigote", "$320", "$350");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Media Barba", "$475", "$500");
+
+  return normalizedMarkup;
 }
 
 type Replacement = readonly [string, string];
