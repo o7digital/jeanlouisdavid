@@ -215,7 +215,7 @@ function deferLiteSpeedScripts(route) {
     currentRoute
       .replace(/^\/(?:en|fr)(?=\/)/, "")
       .replace(/\/?$/, "/") || "/";
-  const eagerRoutes = new Set(["/servicios/", "/colecciones/"]);
+  const eagerRoutes = new Set(["/servicios/"]);
   const hasLayoutSensitiveWidgets = Boolean(
     document.querySelector(".av-masonry, .avia-content-slider"),
   );

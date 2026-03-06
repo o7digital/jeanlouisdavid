@@ -141,6 +141,122 @@ function injectMarkupBeforeLastFooter(markup: string, injectedMarkup: string): s
   return `${markup.slice(0, footerCloseIndex)}${injectedMarkup}${markup.slice(footerCloseIndex)}`;
 }
 
+function escapeHtmlAttribute(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function stripHtmlTags(value: string): string {
+  return value.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+}
+
+function findBalancedDivEnd(markup: string, startIndex: number): number {
+  const tagPattern = /<\/?div\b[^>]*>/gi;
+  tagPattern.lastIndex = startIndex;
+  let depth = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = tagPattern.exec(markup))) {
+    if (match[0][1] === "/") {
+      depth -= 1;
+      if (depth === 0) {
+        return tagPattern.lastIndex;
+      }
+    } else {
+      depth += 1;
+    }
+  }
+
+  return -1;
+}
+
+function replaceCollectionSlider(markup: string): string {
+  const sliderClassIndex = markup.indexOf("class='avia-content-slider");
+  if (sliderClassIndex === -1) {
+    return markup;
+  }
+
+  const sliderStartIndex = markup.lastIndexOf("<div", sliderClassIndex);
+  if (sliderStartIndex === -1) {
+    return markup;
+  }
+
+  const sliderEndIndex = findBalancedDivEnd(markup, sliderStartIndex);
+  if (sliderEndIndex === -1) {
+    return markup;
+  }
+
+  const sliderMarkup = markup.slice(sliderStartIndex, sliderEndIndex);
+  const articleMatches = sliderMarkup.match(/<article class='slide-entry[\s\S]*?<\/article>/g);
+
+  if (!articleMatches?.length) {
+    return markup;
+  }
+
+  const cards = articleMatches
+    .map((articleMarkup) => {
+      const href =
+        articleMarkup.match(/<a href='([^']+)'[^>]*class='slide-image'/)?.[1] ??
+        articleMarkup.match(/<a href="([^"]+)"[^>]*class="slide-image"/)?.[1];
+      const imageSrc =
+        articleMarkup.match(/data-src="([^"]+)"/)?.[1] ?? articleMarkup.match(/src="([^"]+)"/)?.[1];
+      const imageWidth = articleMarkup.match(/width="([^"]+)"/)?.[1] ?? "495";
+      const imageHeight = articleMarkup.match(/height="([^"]+)"/)?.[1] ?? "400";
+      const titleHtml =
+        articleMarkup.match(
+          /<h3 class='slide-entry-title entry-title '\s+itemprop="headline"\s*><a [^>]*>([\s\S]*?)<\/a><\/h3>/,
+        )?.[1] ??
+        articleMarkup.match(
+          /<h3 class="slide-entry-title entry-title "\s+itemprop="headline"\s*><a [^>]*>([\s\S]*?)<\/a><\/h3>/,
+        )?.[1];
+
+      if (!href || !imageSrc || !titleHtml) {
+        return null;
+      }
+
+      const titleText = stripHtmlTags(titleHtml);
+
+      return {
+        href,
+        imageSrc,
+        imageWidth,
+        imageHeight,
+        titleHtml,
+        titleText,
+      };
+    })
+    .filter((card): card is NonNullable<typeof card> => card !== null);
+
+  if (!cards.length) {
+    return markup;
+  }
+
+  const replacementMarkup = `<div class="jld-collections-grid" itemscope="itemscope" itemtype="https://schema.org/ItemList">${cards
+    .map(
+      (card, index) => `<article class="jld-collections-card" itemprop="itemListElement" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+  <a href="${escapeHtmlAttribute(card.href)}" class="jld-collections-card__image" title="${escapeHtmlAttribute(card.titleText)}" itemprop="url">
+    <img src="${escapeHtmlAttribute(card.imageSrc)}" alt="${escapeHtmlAttribute(card.titleText)}" width="${escapeHtmlAttribute(card.imageWidth)}" height="${escapeHtmlAttribute(card.imageHeight)}" loading="${index === 0 ? "eager" : "lazy"}" decoding="async" itemprop="image" />
+  </a>
+  <div class="jld-collections-card__content">
+    <header class="entry-content-header">
+      <h3 class="slide-entry-title entry-title" itemprop="headline"><a href="${escapeHtmlAttribute(card.href)}">${card.titleHtml}</a></h3>
+      <span class="av-vertical-delimiter"></span>
+    </header>
+  </div>
+</article>`,
+    )
+    .join("")}</div>`;
+
+  return `${markup.slice(0, sliderStartIndex)}${replacementMarkup}${markup.slice(sliderEndIndex)}`;
+}
+
+if (page.route === "/colecciones/") {
+  localizedBodyHtml = replaceCollectionSlider(localizedBodyHtml);
+}
+
 // Inject footer keywords
 const footerKeywords = getFooterKeywords(locale);
 if (footerKeywords.length > 0) {
@@ -230,47 +346,60 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         opacity: 1;
       }
 
-      /* Keep collection card titles directly under each image across locales. */
-      body.page-id-164 #top .avia-content-slider .slide-entry .slide-content {
-        position: static !important;
-        margin-top: 0 !important;
+      body.page-id-164 .jld-collections-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        column-gap: 90px;
+        row-gap: 36px;
+        margin: 30px 0 40px;
+        align-items: start;
       }
 
-      body.page-id-164 #top .avia-content-slider .slide-entry > .hidden {
-        display: none !important;
+      body.page-id-164 .jld-collections-card {
+        min-width: 0;
       }
 
-      @media (min-width: 990px) {
-        body.page-id-164 #top .avia-content-slider .avia-content-slider-inner {
-          display: grid;
-        }
+      body.page-id-164 .jld-collections-card__image {
+        display: block;
+        overflow: hidden;
+        margin: 0 0 6px;
+        border-radius: 3px;
+      }
 
-        body.page-id-164 #top .avia-content-slider .slide-entry-wrap {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          column-gap: 90px;
-          row-gap: 0;
-          align-items: start;
-        }
+      body.page-id-164 .jld-collections-card__image img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 3px;
+      }
 
-        body.page-id-164 #top .avia-content-slider .slide-entry {
-          float: none !important;
-          clear: none !important;
-          display: flex;
-          flex-direction: column;
-          width: auto !important;
-          margin: 0 !important;
-        }
+      body.page-id-164 .jld-collections-card__content {
+        position: static;
+        margin: 0;
+      }
 
-        body.page-id-164 #top .avia-content-slider .slide-entry .slide-image,
-        body.page-id-164 #top .avia-content-slider .slide-entry .slide-content {
-          width: 100%;
-        }
+      body.page-id-164 .jld-collections-card__content .slide-entry-title {
+        margin: 0;
+        font-size: 1.1em;
+        line-height: 1.4em;
+      }
 
-        body.page-id-164 #top .avia-content-slider .slide-entry .slide-image img {
-          display: block;
-          width: 100%;
-          height: auto;
+      body.page-id-164 .jld-collections-card__content .av-vertical-delimiter {
+        display: none;
+      }
+
+      @media (max-width: 989px) {
+        body.page-id-164 .jld-collections-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          column-gap: 40px;
+          row-gap: 28px;
+        }
+      }
+
+      @media (max-width: 767px) {
+        body.page-id-164 .jld-collections-grid {
+          grid-template-columns: minmax(0, 1fr);
+          margin-bottom: 24px;
         }
       }
 
