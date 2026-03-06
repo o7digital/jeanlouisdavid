@@ -1,5 +1,7 @@
 ---
 import ClientBoot from "./ClientBoot.jsx";
+import LocationsPageSection from "./locations/LocationsPageSection.astro";
+import ServicesPageSection from "./services/ServicesPageSection.astro";
 import type { ParsedMirroredPage } from "../lib/mirror";
 import {
   DEFAULT_LOCALE,
@@ -113,6 +115,20 @@ function splitFooterKeywords(keywords: string[], lineCount = 3): string[][] {
   return lines;
 }
 
+function splitMirroredBodyForNativeSection(markup: string): { prefix: string; suffix: string } | null {
+  const sectionStart = markup.indexOf("<div id='av_section_1'");
+  const footerStart = markup.search(/<footer\b/i);
+
+  if (sectionStart === -1 || footerStart === -1 || sectionStart >= footerStart) {
+    return null;
+  }
+
+  return {
+    prefix: markup.slice(0, sectionStart),
+    suffix: markup.slice(footerStart),
+  };
+}
+
 // Inject footer keywords
 const footerKeywords = getFooterKeywords(locale);
 if (footerKeywords.length > 0) {
@@ -151,6 +167,9 @@ const jsonLd = getJsonLd({
 const hasBodyH1 = /<h1\b/i.test(localizedBodyHtml);
 const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
 const ogImageAlt = pageHeading || "Jean Louis David Mexico";
+const nativeBodyShell = new Set(["/servicios/", "/sucursales/"]).has(page.route)
+  ? splitMirroredBodyForNativeSection(localizedBodyHtml)
+  : null;
 ---
 
 <!doctype html>
@@ -182,15 +201,9 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SFV4K3F3LG"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-SFV4K3F3LG');
-    </script>
-    <script type="application/ld+json" set:html={jsonLd} />
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SFV4K3F3LG"></script>
+    <script is:inline src="/gtag.js"></script>
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
     <style is:global>
       #full_slider_1 .avia-slideshow-inner > li,
       .avia-fullscreen-slider .avia-slideshow-inner > li {
@@ -683,6 +696,18 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
   <body id="top" class={page.bodyClass || undefined}>
     <ClientBoot client:load route={canonicalPathForLocale(page.route, locale)} />
     {!hasBodyH1 && <h1 class="jld-visually-hidden">{pageHeading}</h1>}
-    <Fragment set:html={localizedBodyHtml} />
+    {nativeBodyShell ? (
+      <>
+        <Fragment set:html={nativeBodyShell.prefix} />
+        {page.route === "/servicios/" ? (
+          <ServicesPageSection locale={locale} />
+        ) : page.route === "/sucursales/" ? (
+          <LocationsPageSection locale={locale} />
+        ) : null}
+        <Fragment set:html={nativeBodyShell.suffix} />
+      </>
+    ) : (
+      <Fragment set:html={localizedBodyHtml} />
+    )}
   </body>
 </html>

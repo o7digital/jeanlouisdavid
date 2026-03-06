@@ -1,0 +1,212 @@
+---
+import { getServicesPageContent } from "../../data/services";
+import type { Locale } from "../../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = getServicesPageContent(locale);
+const [haircutsSection, stylingSection, nailsSection, barberingSection] = content.sections;
+
+const firstRow = [
+  {
+    section: haircutsSection,
+    columnClass:
+      "flex_column av-fwel3-4c23583280dee09118474c075c7e3ee5 av_one_half avia-builder-el-5 el_after_av_textblock el_before_av_one_half first flex_column_div column-top-margin",
+    imageClass:
+      "avia-image-container av-m0q15z90-35f9d8f2f88abc84400f13d11b059497 av-styling- avia-align-center avia-builder-el-6 el_before_av_heading avia-builder-el-first",
+    headingClass:
+      "av-special-heading av-m0q19qsy-9266a7f16c0bfc98d40788de37aea4ea av-special-heading-h3 blockquote modern-quote modern-centered avia-builder-el-7 el_after_av_image el_before_av_catalogue",
+    catalogueClass:
+      "av-catalogue-container av-m0q18ugt-101bc582e4bc402a5d77a53daf997243 avia-builder-el-8 el_after_av_heading avia-builder-el-last",
+  },
+  {
+    section: stylingSection,
+    columnClass:
+      "flex_column av-9min3-fe47da9cfd2d1d9fc138166669fbfdbc av_one_half avia-builder-el-9 el_after_av_one_half el_before_av_one_half flex_column_div column-top-margin",
+    imageClass:
+      "avia-image-container av-m0q1bqqv-2db9225b9815a1cef10a6c0470f1e1b7 av-styling- avia-align-center avia-builder-el-10 el_before_av_heading avia-builder-el-first",
+    headingClass:
+      "av-special-heading av-m0q1bhnq-d9ea7b8b67db3272399d94404907e25a av-special-heading-h3 blockquote modern-quote modern-centered avia-builder-el-11 el_after_av_image el_before_av_catalogue",
+    catalogueClass:
+      "av-catalogue-container av-m0q1fp7a-7c6818d6feebebc0fcf7f9deb270fe52 avia-builder-el-12 el_after_av_heading el_before_av_textblock",
+  },
+];
+
+const secondRow = [
+  {
+    section: nailsSection,
+    columnClass:
+      "flex_column av-czm7j-e02ecab2664d66a248fc08f1596a50eb av_one_half avia-builder-el-14 el_after_av_one_half el_before_av_one_half first flex_column_div column-top-margin",
+    imageClass:
+      "avia-image-container av-m0q1rdb1-f661cb8791d419856fe5bd07e7b37608 av-styling- avia-align-center avia-builder-el-15 el_before_av_heading avia-builder-el-first",
+    headingClass:
+      "av-special-heading av-m0q1r0pw-48eff64149b0bdeff702792b58f3aafb av-special-heading-h3 blockquote modern-quote modern-centered avia-builder-el-16 el_after_av_image el_before_av_catalogue",
+    catalogueClass:
+      "av-catalogue-container av-m0q1xggy-690d407cdb259a8b25ff9d22a0f219be avia-builder-el-17 el_after_av_heading avia-builder-el-last",
+  },
+  {
+    section: barberingSection,
+    columnClass:
+      "flex_column av-80bqf-1f182a7a8789058c2764cafb35dcbb54 av_one_half avia-builder-el-18 el_after_av_one_half el_before_av_one_full flex_column_div column-top-margin",
+    imageClass:
+      "avia-image-container av-m0q1xrwx-32f85b8d730ee50dcfc8d4f9821a8f4b av-styling- avia-align-center avia-builder-el-19 el_before_av_heading avia-builder-el-first",
+    headingClass:
+      "av-special-heading av-m0q1xyyw-ce0c521a641d8acc82f4241799029704 av-special-heading-h3 blockquote modern-quote modern-centered avia-builder-el-20 el_after_av_image el_before_av_catalogue",
+    catalogueClass:
+      "av-catalogue-container av-m0q1yxid-84f4c5c9f4a9d3ab9f0b4dd9046c4f34 avia-builder-el-21 el_after_av_heading avia-builder-el-last",
+  },
+];
+---
+
+<div
+  id="av_section_1"
+  class="avia-section av-m0okwvnc-47213e7d7744d539444936e8f42bf0e2 alternate_color avia-section-large avia-no-shadow avia-builder-el-2 el_after_av_slideshow_full avia-builder-el-last avia-bg-style-scroll container_wrap fullsize"
+>
+  <div class="container av-section-cont-open">
+    <div class="template-page content av-content-full alpha units">
+      <div class="post-entry post-entry-type-page post-entry-135">
+        <div class="entry-content-wrapper clearfix">
+          <div class="av-special-heading av-m0okyjw0-caead29b650ecbf528137105f620c05c av-special-heading-h2 blockquote modern-quote modern-centered avia-builder-el-3 el_before_av_textblock avia-builder-el-first">
+            <h2 class="av-special-heading-tag" itemprop="headline">{content.heading}</h2>
+            <div class="special-heading-border">
+              <div class="special-heading-inner-border"></div>
+            </div>
+          </div>
+
+          <section class="av_textblock_section av-m0ol26fh-863b9e58f840357bff157f1da72d0c23" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+            <div class="avia_textblock" itemprop="text">
+              <p style="text-align: center;">{content.intro}</p>
+            </div>
+          </section>
+
+          {firstRow.map(({ section, columnClass, imageClass, headingClass, catalogueClass }) => (
+            <div class={columnClass}>
+              <div class={imageClass} itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject">
+                <div class="avia-image-container-inner">
+                  <div class="avia-image-overlay-wrap">
+                    <img
+                      class="avia_image"
+                      src={section.image.src}
+                      srcset={section.image.srcset}
+                      sizes={section.image.sizes}
+                      alt={section.image.alt}
+                      title={section.image.title}
+                      width={section.image.width}
+                      height={section.image.height}
+                      loading="lazy"
+                      decoding="async"
+                      itemprop="thumbnailUrl"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class={headingClass}>
+                <h3 class="av-special-heading-tag" itemprop="headline">{section.title}</h3>
+                <div class="special-heading-border">
+                  <div class="special-heading-inner-border"></div>
+                </div>
+              </div>
+              <div class={catalogueClass}>
+                <ul class="av-catalogue-list">
+                  {section.items.map((item) => (
+                    <li>
+                      <div class="av-catalogue-item">
+                        <div class="av-catalogue-item-inner">
+                          <div class="av-catalogue-title-container">
+                            <div class="av-catalogue-title">{item.label}</div>
+                            <div class="av-catalogue-price">{item.price}</div>
+                          </div>
+                          <div class="av-catalogue-content">
+                            {item.note}
+                            {item.note && <br />}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {section.note && (
+                <section class="av_textblock_section av-m0q20pai-46d7f9a3b483d5c4fbf93faaf11bdf5b" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+                  <div class="avia_textblock" itemprop="text">
+                    <p style="text-align: center;">{section.note}</p>
+                  </div>
+                </section>
+              )}
+            </div>
+          ))}
+
+          {secondRow.map(({ section, columnClass, imageClass, headingClass, catalogueClass }) => (
+            <div class={columnClass}>
+              <div class={imageClass} itemprop="image" itemscope="itemscope" itemtype="https://schema.org/ImageObject">
+                <div class="avia-image-container-inner">
+                  <div class="avia-image-overlay-wrap">
+                    <img
+                      class="avia_image"
+                      src={section.image.src}
+                      srcset={section.image.srcset}
+                      sizes={section.image.sizes}
+                      alt={section.image.alt}
+                      title={section.image.title}
+                      width={section.image.width}
+                      height={section.image.height}
+                      loading="lazy"
+                      decoding="async"
+                      itemprop="thumbnailUrl"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class={headingClass}>
+                <h3 class="av-special-heading-tag" itemprop="headline">{section.title}</h3>
+                <div class="special-heading-border">
+                  <div class="special-heading-inner-border"></div>
+                </div>
+              </div>
+              <div class={catalogueClass}>
+                <ul class="av-catalogue-list">
+                  {section.items.map((item) => (
+                    <li>
+                      <div class="av-catalogue-item">
+                        <div class="av-catalogue-item-inner">
+                          <div class="av-catalogue-title-container">
+                            <div class="av-catalogue-title">{item.label}</div>
+                            <div class="av-catalogue-price">{item.price}</div>
+                          </div>
+                          <div class="av-catalogue-content"></div>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+
+          <div class="flex_column av-tn7e-20781cbbe552f1cb15591b752d9720cd av_one_full avia-builder-el-22 el_after_av_one_half avia-builder-el-last first flex_column_div column-top-margin">
+            <div class="hr av-86cjz-7888be53395b689be577a333bc72a4e9 hr-default avia-builder-el-23 el_before_av_heading avia-builder-el-first">
+              <span class="hr-inner">
+                <span class="hr-inner-style"></span>
+              </span>
+            </div>
+            <div class="av-special-heading av-m0pou51q-01e9f12929709be6c96eb0327eb5b68d av-special-heading-h2 blockquote modern-quote modern-centered avia-builder-el-24 el_after_av_hr el_before_av_button">
+              <h2 class="av-special-heading-tag" itemprop="headline">{content.ctaTitle}</h2>
+              <div class="special-heading-border">
+                <div class="special-heading-inner-border"></div>
+              </div>
+            </div>
+            <div class="avia-button-wrap av-m0poxjb6-52920109bca6a7f26c08957562782947-wrap avia-button-center avia-builder-el-25 el_after_av_heading avia-builder-el-last">
+              <a
+                href={content.ctaHref}
+                class="avia-button av-m0poxjb6-52920109bca6a7f26c08957562782947 av-link-btn avia-icon_select-yes-right-icon avia-size-x-large avia-position-center av-icon-on-hover avia-color-theme-color"
+                aria-label={content.ctaAriaLabel}
+              >
+                <span class="avia_iconbox_title">{content.ctaLabel}</span>
+                <span class="avia_button_icon avia_button_icon_right" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
