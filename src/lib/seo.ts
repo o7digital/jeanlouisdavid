@@ -464,7 +464,7 @@ export function getJsonLd({
   const sitePath = canonicalPathForLocale("/", locale);
   const articleMetadata = getArticleMetadata(routePath);
 
-  const items = [
+  const items: Array<Record<string, unknown>> = [
     {
       "@context": "https://schema.org",
       "@type": "Organization",

@@ -1,0 +1,132 @@
+---
+import { getLocationsPageContent } from "../../data/locations";
+import type { Locale } from "../../lib/i18n";
+
+const { locale } = Astro.props as { locale: Locale };
+const content = getLocationsPageContent(locale);
+const [santaFe, polanco] = content.locations;
+
+const locationIcon = "";
+---
+
+<div
+  id="av_section_1"
+  class="avia-section av-m0okwvnc-47213e7d7744d539444936e8f42bf0e2 alternate_color avia-section-large avia-no-shadow avia-builder-el-2 el_after_av_slideshow_full avia-builder-el-last avia-bg-style-scroll container_wrap fullsize"
+>
+  <div class="container av-section-cont-open">
+    <div class="template-page content av-content-full alpha units">
+      <div class="post-entry post-entry-type-page post-entry-98">
+        <div class="entry-content-wrapper clearfix">
+          <div class="av-special-heading av-m0okyjw0-1e031bd56974a62b4930b03cd7385c7a av-special-heading-h2 blockquote modern-quote modern-centered avia-builder-el-3 el_before_av_textblock avia-builder-el-first">
+            <h2 class="av-special-heading-tag" itemprop="headline">{content.heading}</h2>
+            <div class="special-heading-border">
+              <div class="special-heading-inner-border"></div>
+            </div>
+          </div>
+
+          <section class="av_textblock_section av-m0ol26fh-863b9e58f840357bff157f1da72d0c23" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+            <div class="avia_textblock" itemprop="text">
+              <p style="text-align: center;">{content.intro}</p>
+            </div>
+          </section>
+
+          <div class="flex_column av-239c2-ff7cc40b8056b6ed4132b5b8f2e5e9cb av_one_fourth avia-builder-el-5 el_after_av_textblock el_before_av_one_fourth first flex_column_div column-top-margin"></div>
+
+          <div class="flex_column av-1c5n2-573b8da166bc083e1c90f17b50db546b av_one_fourth avia-builder-el-6 el_after_av_one_fourth el_before_av_one_fourth flex_column_div column-top-margin">
+            <div class="av-special-heading av-m0pp6wcv-20132fc5727c46f221eeae5115268954 av-special-heading-h3 blockquote elegant-quote elegant-centered avia-builder-el-7 el_before_av_textblock avia-builder-el-first av-icon">
+              <h3 class="av-special-heading-tag" itemprop="headline">
+                <span class="heading-char avia-font-entypo-fontello" aria-hidden="true" data-av_icon={locationIcon} data-av_iconfont="entypo-fontello"></span>
+                <span class="heading-wrap">{santaFe.title}</span>
+              </h3>
+              <div class="special-heading-border">
+                <div class="special-heading-inner-border"></div>
+              </div>
+            </div>
+            <section class="av_textblock_section av-m0po7hgc-21653ad20cfb45ca28dbe5fe7938afba" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+              <div class="avia_textblock" itemprop="text">
+                <p style="text-align: center;">
+                  <strong>{santaFe.venue}</strong>
+                </p>
+                <p style="text-align: center;">
+                  {santaFe.addressLines[0]}
+                  <br />
+                  {santaFe.addressLines[1]}
+                  <br />
+                  {santaFe.addressLines[2]}
+                </p>
+                <p style="text-align: center;">{santaFe.phone}</p>
+              </div>
+            </section>
+          </div>
+
+          <div class="flex_column av-nrsa-78133ebd1076fa465a4956c26980f0a7 av_one_fourth avia-builder-el-9 el_after_av_one_fourth el_before_av_one_fourth flex_column_div column-top-margin">
+            <div class="av-special-heading av-m0pp74xi-d3f0f5e4cb05eef6c9f1785868eb41af av-special-heading-h3 blockquote elegant-quote elegant-centered avia-builder-el-10 el_before_av_textblock avia-builder-el-first av-icon">
+              <h3 class="av-special-heading-tag" itemprop="headline">
+                <span class="heading-char avia-font-entypo-fontello" aria-hidden="true" data-av_icon={locationIcon} data-av_iconfont="entypo-fontello"></span>
+                <span class="heading-wrap">{polanco.title}</span>
+              </h3>
+              <div class="special-heading-border">
+                <div class="special-heading-inner-border"></div>
+              </div>
+            </div>
+            <section class="av_textblock_section av-m0poadaq-88fb2f5e99e5acc01a49017487cd049b" itemscope="itemscope" itemtype="https://schema.org/CreativeWork">
+              <div class="avia_textblock" itemprop="text">
+                <p style="text-align: center;">
+                  <strong>{polanco.venue}</strong>
+                </p>
+                <p style="text-align: center;">
+                  {polanco.addressLines[0]}
+                  <br />
+                  {polanco.addressLines[1]}
+                  <br />
+                  {polanco.addressLines[2]}
+                </p>
+                <p style="text-align: center;">{polanco.phone}</p>
+              </div>
+            </section>
+          </div>
+
+          <div class="flex_column av-5bz2-451979928bfaa83dc4af12d19ff01145 av_one_fourth avia-builder-el-12 el_after_av_one_fourth el_before_av_one_full flex_column_div column-top-margin"></div>
+
+          <div class="flex_column av-tn7e-20781cbbe552f1cb15591b752d9720cd av_one_full avia-builder-el-13 el_after_av_one_fourth el_before_av_one_full first flex_column_div column-top-margin">
+            <div class="av-special-heading av-m0pou51q-01e9f12929709be6c96eb0327eb5b68d av-special-heading-h2 blockquote modern-quote modern-centered avia-builder-el-14 el_before_av_button avia-builder-el-first">
+              <h2 class="av-special-heading-tag" itemprop="headline">{content.ctaTitle}</h2>
+              <div class="special-heading-border">
+                <div class="special-heading-inner-border"></div>
+              </div>
+            </div>
+            <div class="avia-button-wrap av-m0poxjb6-52920109bca6a7f26c08957562782947-wrap avia-button-center avia-builder-el-15 el_after_av_heading avia-builder-el-last">
+              <a
+                href={content.ctaHref}
+                class="avia-button av-m0poxjb6-52920109bca6a7f26c08957562782947 av-link-btn avia-icon_select-yes-right-icon avia-size-x-large avia-position-center av-icon-on-hover avia-color-theme-color"
+                aria-label={content.ctaAriaLabel}
+              >
+                <span class="avia_iconbox_title">{content.ctaLabel}</span>
+                <span class="avia_button_icon avia_button_icon_right" aria-hidden="true" data-av_icon="" data-av_iconfont="entypo-fontello"></span>
+              </a>
+            </div>
+          </div>
+
+          <div class="flex_column av-yrji-0f5f2d39036dc87d31ca3ff37b5d167c av_one_full avia-builder-el-16 el_after_av_one_full avia-builder-el-last first flex_column_div column-top-margin">
+            <div class="av_gmaps_sc_main_wrap av_gmaps_main_wrap">
+              <div
+                id="av_gmap_0"
+                class="avia-google-map-container avia-google-map-sc av_gmaps_show_unconditionally av-no-fallback-img"
+                style="height: 500px;"
+              >
+                <iframe
+                  title={content.mapTitle}
+                  src={content.mapEmbedUrl}
+                  style="width: 100%; height: 100%; border: 0;"
+                  loading="lazy"
+                  allowfullscreen
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

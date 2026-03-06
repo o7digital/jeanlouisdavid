@@ -149,7 +149,7 @@ export function localizeNavigationLabels(markup: string, locale: Locale): string
   if (locale === DEFAULT_LOCALE) return markup;
 
   let localized = markup;
-  const dictionary = NAV_LABELS[locale];
+  const dictionary = NAV_LABELS[locale as Exclude<Locale, "es">];
 
   for (const [source, target] of Object.entries(dictionary)) {
     const escapedSource = escapeRegExp(source);
@@ -822,9 +822,10 @@ export function localizePageContent(markup: string, locale: Locale, route: strin
 
   if (locale === DEFAULT_LOCALE) return normalizedMarkup;
 
-  const commonReplacements = COMMON_TEXT_REPLACEMENTS[locale];
-  const routeReplacements = ROUTE_TEXT_REPLACEMENTS[locale][normalizedRoute] ?? [];
-  const privacyReplacements = ROUTE_TEXT_REPLACEMENTS[locale]["/privacidad/"] ?? [];
+  const translatedLocale = locale as Exclude<Locale, "es">;
+  const commonReplacements = COMMON_TEXT_REPLACEMENTS[translatedLocale];
+  const routeReplacements = ROUTE_TEXT_REPLACEMENTS[translatedLocale][normalizedRoute] ?? [];
+  const privacyReplacements = ROUTE_TEXT_REPLACEMENTS[translatedLocale]["/privacidad/"] ?? [];
   const shouldUsePrivacyFallback =
     routeReplacements.length === 0 && /\/privacidad(?:\.html)?\/?$/i.test(normalizedRoute);
   const effectiveRouteReplacements = shouldUsePrivacyFallback

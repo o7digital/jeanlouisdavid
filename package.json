@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "astro": "astro"
   },
   "dependencies": {
@@ -15,5 +16,9 @@
     "astro": "^5.17.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "typescript": "^5.9.3"
   }
 }
