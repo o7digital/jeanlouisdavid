@@ -248,6 +248,11 @@ function normalizeMirroredPageContent(markup: string, route: string): string {
     "$1,150",
   );
   normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Peinado Corto", "$450", "$400");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure Normal", "$340", "$360");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure con Gel", "$610", "$630");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Manicure Spa", "$480", "$500");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Bigote", "$320", "$350");
+  normalizedMarkup = updateCatalogueItemPrice(normalizedMarkup, "Media Barba", "$475", "$500");
 
   return normalizedMarkup;
 }
