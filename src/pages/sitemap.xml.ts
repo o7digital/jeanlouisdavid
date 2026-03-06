@@ -1,14 +1,16 @@
 import type { APIRoute } from "astro";
 import { SUPPORTED_LOCALES, localizedPath } from "../lib/i18n";
 import { MIRRORED_PAGES } from "../lib/mirror";
+import { ADDITIONAL_STATIC_ROUTES } from "../lib/routes";
 import { absoluteUrl, canonicalPath } from "../lib/seo";
 
 export const GET: APIRoute = () => {
   const updatedAt = new Date().toISOString().split("T")[0];
+  const routes = [...MIRRORED_PAGES.map((page) => page.route), ...ADDITIONAL_STATIC_ROUTES];
   const urlEntries = Array.from(
     new Set(
-      MIRRORED_PAGES.flatMap((page) =>
-        SUPPORTED_LOCALES.map((locale) => localizedPath(canonicalPath(page.route), locale)),
+      routes.flatMap((route) =>
+        SUPPORTED_LOCALES.map((locale) => localizedPath(canonicalPath(route), locale)),
       ),
     ),
   );

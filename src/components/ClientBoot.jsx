@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { GIFT_CARD_ROUTE } from "../lib/routes";
 
 const SUPPORTED_LOCALES = ["es", "en", "fr"];
 const LOCALE_TAGS = {
@@ -123,6 +124,7 @@ function enhanceMobileBurger(route) {
   const activeLocale = getCurrentLocale();
   const currentRoute = normalizeRoutePath(route || window.location.pathname || "/");
   const basePath = stripLocalePrefix(currentRoute);
+  const giftCardsPath = buildLocalizedPath(GIFT_CARD_ROUTE, activeLocale);
 
   const ensureLanguageLinks = () => {
     const burgerMenu = document.querySelector("#av-burger-menu-ul");
@@ -157,6 +159,39 @@ function enhanceMobileBurger(route) {
     burgerMenu.appendChild(languageItem);
   };
 
+  const ensureGiftCardsLink = () => {
+    const burgerMenu = document.querySelector("#av-burger-menu-ul");
+    if (!(burgerMenu instanceof HTMLElement)) return;
+    if (burgerMenu.querySelector(`a[href="${giftCardsPath}"]`)) return;
+
+    const giftCardsItem = document.createElement("li");
+    giftCardsItem.className = "menu-item av-active-burger-items jld-mobile-gift-item";
+    giftCardsItem.setAttribute("role", "menuitem");
+
+    const giftCardsLink = document.createElement("a");
+    giftCardsLink.href = giftCardsPath;
+    if (basePath === GIFT_CARD_ROUTE) {
+      giftCardsLink.setAttribute("aria-current", "page");
+    }
+
+    const giftCardsLabel = document.createElement("span");
+    giftCardsLabel.className = "avia-menu-text";
+    giftCardsLabel.textContent = "GIFT Cards";
+    giftCardsLink.appendChild(giftCardsLabel);
+    giftCardsItem.appendChild(giftCardsLink);
+
+    const contactLink = burgerMenu.querySelector('a[href$="/contacto/"]');
+    const languageItem = burgerMenu.querySelector(".jld-mobile-lang-item");
+    const insertionTarget = contactLink?.closest("li") || languageItem;
+
+    if (insertionTarget instanceof HTMLElement) {
+      burgerMenu.insertBefore(giftCardsItem, insertionTarget);
+      return;
+    }
+
+    burgerMenu.appendChild(giftCardsItem);
+  };
+
   const handleBurgerNavigation = (event) => {
     const target = event.target;
     if (!(target instanceof Element)) return;
@@ -181,12 +216,17 @@ function enhanceMobileBurger(route) {
     window.location.assign(nextPath);
   };
 
+  ensureGiftCardsLink();
   ensureLanguageLinks();
   const refreshTimers = [140, 420, 900].map((delay) =>
-    window.setTimeout(ensureLanguageLinks, delay),
+    window.setTimeout(() => {
+      ensureGiftCardsLink();
+      ensureLanguageLinks();
+    }, delay),
   );
 
   const menuObserver = new MutationObserver(() => {
+    ensureGiftCardsLink();
     ensureLanguageLinks();
   });
   menuObserver.observe(document.body, { childList: true, subtree: true });

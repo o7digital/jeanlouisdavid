@@ -1,0 +1,973 @@
+---
+import type { Locale } from "../../lib/i18n";
+
+type GiftCardItem = {
+  amount: string;
+  description: string;
+  accent: string;
+};
+
+type GiftCardStep = {
+  title: string;
+  description: string;
+};
+
+type GiftCardHighlight = {
+  title: string;
+  description: string;
+};
+
+type GiftCardContent = {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  primaryCta: string;
+  secondaryCta: string;
+  meta: string[];
+  cardsEyebrow: string;
+  cardsTitle: string;
+  cardsDescription: string;
+  cards: GiftCardItem[];
+  buyLabel: string;
+  infoLabel: string;
+  qrLabel: string;
+  howEyebrow: string;
+  howTitle: string;
+  howDescription: string;
+  steps: GiftCardStep[];
+  idealEyebrow: string;
+  idealTitle: string;
+  idealDescription: string;
+  highlights: GiftCardHighlight[];
+  termsLabel: string;
+  termsText: string;
+};
+
+const contentByLocale: Record<Locale, GiftCardContent> = {
+  es: {
+    eyebrow: "Gift Cards Jean Louis David",
+    title: "Tarjetas de Regalo Jean Louis David",
+    subtitle:
+      "Regala estilo, belleza y bienestar con una experiencia exclusiva en Jean Louis David.",
+    primaryCta: "Comprar Gift Card",
+    secondaryCta: "Solicitar por WhatsApp",
+    meta: ["Digital", "Premium", "Lista para compartir"],
+    cardsEyebrow: "Montos disponibles",
+    cardsTitle: "Cuatro formatos, una misma firma de estilo",
+    cardsDescription:
+      "Cada tarjeta propone una experiencia cuidada, elegante y flexible para regalar belleza sin caer en una estética promocional.",
+    cards: [
+      {
+        amount: "500 MXN",
+        description: "Un detalle elegante para consentir con estilo.",
+        accent: "Detalle signature",
+      },
+      {
+        amount: "1,000 MXN",
+        description: "La opción ideal para regalar más libertad y experiencia.",
+        accent: "Elección versátil",
+      },
+      {
+        amount: "2,000 MXN",
+        description: "Una experiencia premium para transformar tu imagen.",
+        accent: "Cambio de look",
+      },
+      {
+        amount: "5,000 MXN",
+        description: "La tarjeta más exclusiva para regalar belleza sin límites.",
+        accent: "Edición exclusiva",
+      },
+    ],
+    buyLabel: "Comprar",
+    infoLabel: "Más información",
+    qrLabel: "Vista previa QR",
+    howEyebrow: "Cómo funciona",
+    howTitle: "Una experiencia sencilla, elegante y digital",
+    howDescription:
+      "La maqueta muestra un flujo premium en tres pasos, pensado para presentar el concepto con claridad sin implementar compra real.",
+    steps: [
+      {
+        title: "Elige",
+        description: "Selecciona el monto ideal para regalar.",
+      },
+      {
+        title: "Compra",
+        description: "Realiza tu compra de forma simple y segura.",
+      },
+      {
+        title: "Recibe",
+        description: "Obtén tu gift card digital y compártela fácilmente.",
+      },
+    ],
+    idealEyebrow: "Ideal para",
+    idealTitle: "Pensada para ocasiones que merecen más intención",
+    idealDescription:
+      "La propuesta se mueve entre regalo personal, detalle corporativo y experiencia aspiracional sin verse como un cupón.",
+    highlights: [
+      {
+        title: "Cumpleaños",
+        description: "Un gesto refinado para sorprender con estilo y cuidado personal.",
+      },
+      {
+        title: "Regalos corporativos",
+        description: "Una presentación sobria para clientes, equipos o colaboraciones especiales.",
+      },
+      {
+        title: "Experiencias premium",
+        description: "Ideal para quienes valoran imagen, bienestar y un servicio de alto nivel.",
+      },
+    ],
+    termsLabel: "Términos",
+    termsText:
+      "Las tarjetas de regalo son válidas en servicios participantes, no son canjeables por efectivo y están sujetas a disponibilidad en sucursal.",
+  },
+  en: {
+    eyebrow: "Jean Louis David Gift Cards",
+    title: "Jean Louis David Gift Cards",
+    subtitle:
+      "Give style, beauty and wellbeing through an exclusive Jean Louis David experience.",
+    primaryCta: "Buy Gift Card",
+    secondaryCta: "Request on WhatsApp",
+    meta: ["Digital", "Premium", "Easy to share"],
+    cardsEyebrow: "Available amounts",
+    cardsTitle: "Four formats with the same signature finish",
+    cardsDescription:
+      "Each card is designed as an elegant, flexible beauty experience rather than an aggressive promotional offer.",
+    cards: [
+      {
+        amount: "500 MXN",
+        description: "An elegant gesture to treat someone with style.",
+        accent: "Signature detail",
+      },
+      {
+        amount: "1,000 MXN",
+        description: "The ideal option to gift more freedom and experience.",
+        accent: "Versatile choice",
+      },
+      {
+        amount: "2,000 MXN",
+        description: "A premium experience to transform your image.",
+        accent: "Image refresh",
+      },
+      {
+        amount: "5,000 MXN",
+        description: "The most exclusive card to gift beauty without limits.",
+        accent: "Exclusive edition",
+      },
+    ],
+    buyLabel: "Buy",
+    infoLabel: "More details",
+    qrLabel: "QR preview",
+    howEyebrow: "How it works",
+    howTitle: "A simple, elegant and digital experience",
+    howDescription:
+      "This mockup presents the concept in three premium steps without implementing real checkout or business logic.",
+    steps: [
+      {
+        title: "Choose",
+        description: "Select the ideal amount to gift.",
+      },
+      {
+        title: "Purchase",
+        description: "Complete your purchase in a simple and secure way.",
+      },
+      {
+        title: "Receive",
+        description: "Get your digital gift card and share it easily.",
+      },
+    ],
+    idealEyebrow: "Ideal for",
+    idealTitle: "Designed for moments that deserve more intention",
+    idealDescription:
+      "The direction balances personal gifting, corporate moments and aspirational beauty experiences without feeling like a coupon.",
+    highlights: [
+      {
+        title: "Birthdays",
+        description: "A refined gesture to surprise someone with style and care.",
+      },
+      {
+        title: "Corporate gifts",
+        description: "A polished presentation for clients, teams and special partnerships.",
+      },
+      {
+        title: "Premium experiences",
+        description: "Perfect for people who value image, wellbeing and elevated service.",
+      },
+    ],
+    termsLabel: "Terms",
+    termsText:
+      "Gift cards are valid on participating services, cannot be redeemed for cash, and remain subject to branch availability.",
+  },
+  fr: {
+    eyebrow: "Gift Cards Jean Louis David",
+    title: "Gift Cards Jean Louis David",
+    subtitle:
+      "Offrez style, beauté et bien-être à travers une expérience exclusive signée Jean Louis David.",
+    primaryCta: "Acheter une gift card",
+    secondaryCta: "Demander sur WhatsApp",
+    meta: ["Digitale", "Premium", "Facile à partager"],
+    cardsEyebrow: "Montants disponibles",
+    cardsTitle: "Quatre formats dans un même esprit premium",
+    cardsDescription:
+      "Chaque carte est pensée comme une expérience beauté élégante et flexible, loin d'un rendu promotionnel agressif.",
+    cards: [
+      {
+        amount: "500 MXN",
+        description: "Une attention élégante pour faire plaisir avec style.",
+        accent: "Détail signature",
+      },
+      {
+        amount: "1,000 MXN",
+        description: "L'option idéale pour offrir plus de liberté et d'expérience.",
+        accent: "Choix polyvalent",
+      },
+      {
+        amount: "2,000 MXN",
+        description: "Une expérience premium pour transformer votre image.",
+        accent: "Changement de look",
+      },
+      {
+        amount: "5,000 MXN",
+        description: "La carte la plus exclusive pour offrir la beauté sans limite.",
+        accent: "Édition exclusive",
+      },
+    ],
+    buyLabel: "Acheter",
+    infoLabel: "Plus d'informations",
+    qrLabel: "Aperçu QR",
+    howEyebrow: "Comment cela fonctionne",
+    howTitle: "Une expérience simple, élégante et digitale",
+    howDescription:
+      "Cette maquette présente un parcours premium en trois étapes, sans paiement réel ni logique métier.",
+    steps: [
+      {
+        title: "Choisissez",
+        description: "Sélectionnez le montant idéal à offrir.",
+      },
+      {
+        title: "Achetez",
+        description: "Réalisez votre achat de façon simple et sécurisée.",
+      },
+      {
+        title: "Recevez",
+        description: "Obtenez votre gift card digitale et partagez-la facilement.",
+      },
+    ],
+    idealEyebrow: "Idéal pour",
+    idealTitle: "Pensée pour des occasions qui demandent plus d'attention",
+    idealDescription:
+      "La direction créative fonctionne aussi bien pour un cadeau personnel que pour un geste corporate ou une expérience haut de gamme.",
+    highlights: [
+      {
+        title: "Anniversaires",
+        description: "Une attention raffinée pour surprendre avec style et soin.",
+      },
+      {
+        title: "Cadeaux corporate",
+        description: "Une présentation sobre pour des clients, équipes ou collaborations spéciales.",
+      },
+      {
+        title: "Expériences premium",
+        description: "Idéal pour celles et ceux qui valorisent image, bien-être et service d'exception.",
+      },
+    ],
+    termsLabel: "Conditions",
+    termsText:
+      "Les gift cards sont valables sur les services participants, ne sont pas échangeables contre des espèces et restent soumises à la disponibilité en salon.",
+  },
+};
+
+const heroImage = "/wp-content/uploads/2024/07/slide_03-1280x630.webp";
+const locale = (Astro.props.locale as Locale | undefined) ?? "es";
+const content = contentByLocale[locale] ?? contentByLocale.es;
+---
+
+<div class="jld-gift-page">
+  <section class="jld-gift-hero" style={`--gift-hero-image: url('${heroImage}')`}>
+    <div class="jld-gift-shell jld-gift-hero__inner" data-gift-reveal style="--reveal-delay: 0ms;">
+      <div class="jld-gift-hero__content">
+        <span class="jld-gift-eyebrow">{content.eyebrow}</span>
+        <h1>{content.title}</h1>
+        <p class="jld-gift-hero__lede">{content.subtitle}</p>
+
+        <div class="jld-gift-hero__actions">
+          <a href="#" class="jld-gift-button jld-gift-button--solid">
+            {content.primaryCta}
+          </a>
+          <a href="#" class="jld-gift-button jld-gift-button--ghost">
+            {content.secondaryCta}
+          </a>
+        </div>
+
+        <ul class="jld-gift-meta" aria-label="Gift card highlights">
+          {content.meta.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="jld-gift-section jld-gift-section--cards">
+    <div class="jld-gift-shell">
+      <div class="jld-gift-section__header" data-gift-reveal style="--reveal-delay: 40ms;">
+        <span class="jld-gift-eyebrow">{content.cardsEyebrow}</span>
+        <h2>{content.cardsTitle}</h2>
+        <p>{content.cardsDescription}</p>
+      </div>
+
+      <div class="jld-gift-card-grid">
+        {content.cards.map((card, index) => (
+          <article
+            class="jld-gift-card"
+            data-gift-reveal
+            style={`--reveal-delay: ${120 + index * 80}ms;`}
+          >
+            <div class="jld-gift-card__topline">
+              <span class="jld-gift-card__brand">Jean Louis David</span>
+              <span class="jld-gift-card__accent">{card.accent}</span>
+            </div>
+
+            <div class="jld-gift-card__amount">{card.amount}</div>
+            <p class="jld-gift-card__description">{card.description}</p>
+
+            <div class="jld-gift-card__qr" aria-hidden="true">
+              <span>{content.qrLabel}</span>
+            </div>
+
+            <div class="jld-gift-card__actions">
+              <a href="#" class="jld-gift-button jld-gift-button--solid jld-gift-button--small">
+                {content.buyLabel}
+              </a>
+              <a href="#" class="jld-gift-button jld-gift-button--ghost jld-gift-button--small">
+                {content.infoLabel}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="jld-gift-section jld-gift-section--how">
+    <div class="jld-gift-shell">
+      <div class="jld-gift-section__header" data-gift-reveal style="--reveal-delay: 40ms;">
+        <span class="jld-gift-eyebrow">{content.howEyebrow}</span>
+        <h2>{content.howTitle}</h2>
+        <p>{content.howDescription}</p>
+      </div>
+
+      <div class="jld-gift-steps">
+        {content.steps.map((step, index) => (
+          <article
+            class="jld-gift-step"
+            data-gift-reveal
+            style={`--reveal-delay: ${100 + index * 80}ms;`}
+          >
+            <span class="jld-gift-step__number">0{index + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="jld-gift-section jld-gift-section--ideal">
+    <div class="jld-gift-shell">
+      <div class="jld-gift-section__header" data-gift-reveal style="--reveal-delay: 40ms;">
+        <span class="jld-gift-eyebrow">{content.idealEyebrow}</span>
+        <h2>{content.idealTitle}</h2>
+        <p>{content.idealDescription}</p>
+      </div>
+
+      <div class="jld-gift-highlights">
+        {content.highlights.map((highlight, index) => (
+          <article
+            class="jld-gift-highlight"
+            data-gift-reveal
+            style={`--reveal-delay: ${100 + index * 80}ms;`}
+          >
+            <h3>{highlight.title}</h3>
+            <p>{highlight.description}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="jld-gift-section jld-gift-section--terms">
+    <div class="jld-gift-shell">
+      <div class="jld-gift-terms" data-gift-reveal style="--reveal-delay: 60ms;">
+        <span class="jld-gift-eyebrow">{content.termsLabel}</span>
+        <p>{content.termsText}</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+  const giftPageRoot = document.querySelector(".jld-gift-page");
+
+  if (giftPageRoot instanceof HTMLElement && "IntersectionObserver" in window) {
+    const revealTargets = Array.from(giftPageRoot.querySelectorAll("[data-gift-reveal]"));
+    giftPageRoot.classList.add("is-reveal-ready");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        threshold: 0.18,
+        rootMargin: "0px 0px -8% 0px",
+      },
+    );
+
+    revealTargets.forEach((target, index) => {
+      if (index < 2) {
+        target.classList.add("is-visible");
+      }
+
+      observer.observe(target);
+    });
+  }
+</script>
+
+<style>
+  .jld-gift-page {
+    --gift-ink: #171311;
+    --gift-ink-soft: rgba(23, 19, 17, 0.72);
+    --gift-paper: #f5f0e8;
+    --gift-paper-strong: #efe5d7;
+    --gift-shell: min(1180px, calc(100vw - 48px));
+    --gift-champagne: #c8a86b;
+    --gift-champagne-soft: rgba(200, 168, 107, 0.22);
+    --gift-shadow: 0 28px 65px rgba(20, 15, 11, 0.12);
+    color: var(--gift-ink);
+    background:
+      radial-gradient(circle at top left, rgba(200, 168, 107, 0.14), transparent 34%),
+      linear-gradient(180deg, #f7f3ed 0%, #fcfbf8 32%, #f3ece2 100%);
+  }
+
+  .jld-gift-shell {
+    width: var(--gift-shell);
+    margin: 0 auto;
+  }
+
+  .jld-gift-section {
+    position: relative;
+    padding: 108px 0;
+  }
+
+  .jld-gift-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    color: rgba(255, 255, 255, 0.78);
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .jld-gift-eyebrow::before {
+    content: "";
+    width: 42px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.65;
+  }
+
+  .jld-gift-section__header {
+    max-width: 760px;
+    margin-bottom: 42px;
+  }
+
+  .jld-gift-section__header .jld-gift-eyebrow,
+  .jld-gift-terms .jld-gift-eyebrow {
+    color: rgba(23, 19, 17, 0.58);
+  }
+
+  .jld-gift-section__header h2,
+  .jld-gift-hero h1 {
+    margin: 0;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2.6rem, 5vw, 4.8rem);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+    color: inherit;
+  }
+
+  .jld-gift-section__header p,
+  .jld-gift-hero__lede,
+  .jld-gift-card__description,
+  .jld-gift-step p,
+  .jld-gift-highlight p,
+  .jld-gift-terms p {
+    margin: 0;
+    color: var(--gift-ink-soft);
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.78;
+  }
+
+  .jld-gift-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: clamp(620px, 78vh, 860px);
+    padding: 148px 0 112px;
+    color: #f7f2eb;
+    background-image:
+      linear-gradient(115deg, rgba(10, 10, 10, 0.86) 0%, rgba(10, 10, 10, 0.58) 48%, rgba(10, 10, 10, 0.42) 100%),
+      var(--gift-hero-image);
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .jld-gift-hero::before {
+    content: "";
+    position: absolute;
+    inset: auto auto -160px -110px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200, 168, 107, 0.38), transparent 70%);
+    filter: blur(8px);
+  }
+
+  .jld-gift-hero::after {
+    content: "";
+    position: absolute;
+    inset: 34px 34px auto auto;
+    width: min(28vw, 320px);
+    height: min(28vw, 320px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 28px;
+    opacity: 0.55;
+  }
+
+  .jld-gift-hero__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .jld-gift-hero__content {
+    max-width: 760px;
+  }
+
+  .jld-gift-hero__lede {
+    max-width: 55ch;
+    margin-top: 22px;
+    color: rgba(247, 242, 235, 0.82);
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    line-height: 1.8;
+  }
+
+  .jld-gift-hero__actions,
+  .jld-gift-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  .jld-gift-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 0 24px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition:
+      transform 0.28s ease,
+      background-color 0.28s ease,
+      border-color 0.28s ease,
+      color 0.28s ease,
+      box-shadow 0.28s ease;
+  }
+
+  .jld-gift-button:hover,
+  .jld-gift-button:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .jld-gift-button--solid {
+    background: linear-gradient(135deg, #d8bc87 0%, #b9975d 100%);
+    border-color: rgba(216, 188, 135, 0.8);
+    color: #171311;
+    box-shadow: 0 18px 36px rgba(185, 151, 93, 0.24);
+  }
+
+  .jld-gift-button--solid:hover,
+  .jld-gift-button--solid:focus-visible {
+    box-shadow: 0 22px 42px rgba(185, 151, 93, 0.32);
+  }
+
+  .jld-gift-button--ghost {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.28);
+    color: #f7f2eb;
+    backdrop-filter: blur(18px);
+  }
+
+  .jld-gift-card .jld-gift-button--ghost {
+    color: var(--gift-ink);
+    border-color: rgba(23, 19, 17, 0.14);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: none;
+  }
+
+  .jld-gift-button--small {
+    min-height: 46px;
+    padding-inline: 20px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .jld-gift-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .jld-gift-meta li {
+    margin: 0;
+    padding: 11px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    color: rgba(247, 242, 235, 0.78);
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .jld-gift-section--cards {
+    margin-top: -54px;
+    padding-top: 0;
+  }
+
+  .jld-gift-card-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .jld-gift-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 28px;
+    border: 1px solid rgba(145, 122, 82, 0.12);
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at top right, rgba(200, 168, 107, 0.15), transparent 32%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(247, 242, 235, 0.96) 100%);
+    box-shadow: var(--gift-shadow);
+    transition:
+      transform 0.35s ease,
+      box-shadow 0.35s ease,
+      border-color 0.35s ease;
+  }
+
+  .jld-gift-card:hover,
+  .jld-gift-card:focus-within {
+    transform: translateY(-10px);
+    border-color: rgba(200, 168, 107, 0.32);
+    box-shadow: 0 30px 70px rgba(20, 15, 11, 0.18);
+  }
+
+  .jld-gift-card__topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .jld-gift-card__brand,
+  .jld-gift-card__accent {
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .jld-gift-card__brand {
+    color: rgba(23, 19, 17, 0.88);
+  }
+
+  .jld-gift-card__accent {
+    color: #9f7c43;
+  }
+
+  .jld-gift-card__amount {
+    margin-bottom: 14px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2.2rem, 2.5vw, 2.9rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    color: var(--gift-ink);
+  }
+
+  .jld-gift-card__description {
+    min-height: 86px;
+  }
+
+  .jld-gift-card__qr {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 156px;
+    margin-top: 28px;
+    border-radius: 22px;
+    border: 1px solid rgba(23, 19, 17, 0.1);
+    background:
+      linear-gradient(90deg, rgba(23, 19, 17, 0.92) 0 10px, transparent 10px 20px),
+      linear-gradient(rgba(23, 19, 17, 0.92) 0 10px, transparent 10px 20px),
+      linear-gradient(135deg, rgba(200, 168, 107, 0.22), rgba(23, 19, 17, 0.08));
+    background-position: center center;
+    background-size: 20px 20px, 20px 20px, auto;
+    overflow: hidden;
+  }
+
+  .jld-gift-card__qr::before,
+  .jld-gift-card__qr::after {
+    content: "";
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border: 4px solid rgba(23, 19, 17, 0.9);
+    background: rgba(255, 248, 239, 0.65);
+  }
+
+  .jld-gift-card__qr::before {
+    top: 18px;
+    left: 18px;
+  }
+
+  .jld-gift-card__qr::after {
+    right: 18px;
+    bottom: 18px;
+  }
+
+  .jld-gift-card__qr span {
+    position: relative;
+    z-index: 1;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 248, 239, 0.82);
+    color: rgba(23, 19, 17, 0.76);
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .jld-gift-card__actions {
+    margin-top: 26px;
+  }
+
+  .jld-gift-section--how {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(245, 240, 232, 0.95) 100%);
+  }
+
+  .jld-gift-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .jld-gift-step,
+  .jld-gift-highlight {
+    padding: 30px;
+    border-radius: 26px;
+    border: 1px solid rgba(145, 122, 82, 0.12);
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 18px 42px rgba(20, 15, 11, 0.08);
+  }
+
+  .jld-gift-step__number {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: rgba(159, 124, 67, 0.9);
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .jld-gift-step h3,
+  .jld-gift-highlight h3 {
+    margin: 0 0 12px;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 1.7rem;
+    line-height: 1.05;
+    color: var(--gift-ink);
+  }
+
+  .jld-gift-section--ideal {
+    color: #f7f2eb;
+    background:
+      radial-gradient(circle at top left, rgba(200, 168, 107, 0.18), transparent 34%),
+      linear-gradient(135deg, #191614 0%, #29231d 54%, #12100f 100%);
+  }
+
+  .jld-gift-section--ideal .jld-gift-section__header p,
+  .jld-gift-section--ideal .jld-gift-highlight p {
+    color: rgba(247, 242, 235, 0.72);
+  }
+
+  .jld-gift-section--ideal .jld-gift-eyebrow {
+    color: rgba(247, 242, 235, 0.58);
+  }
+
+  .jld-gift-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .jld-gift-highlight {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
+  }
+
+  .jld-gift-highlight h3 {
+    color: #f7f2eb;
+  }
+
+  .jld-gift-section--terms {
+    padding-top: 52px;
+  }
+
+  .jld-gift-terms {
+    padding: 28px 32px;
+    border-radius: 24px;
+    border: 1px solid rgba(145, 122, 82, 0.12);
+    background: rgba(255, 255, 255, 0.68);
+    box-shadow: 0 18px 44px rgba(20, 15, 11, 0.06);
+  }
+
+  .jld-gift-terms p {
+    font-size: 0.96rem;
+  }
+
+  .jld-gift-page.is-reveal-ready [data-gift-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .jld-gift-page.is-reveal-ready [data-gift-reveal].is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jld-gift-button,
+    .jld-gift-card,
+    .jld-gift-page.is-reveal-ready [data-gift-reveal] {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 1199px) {
+    .jld-gift-card-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 989px) {
+    .jld-gift-section {
+      padding: 88px 0;
+    }
+
+    .jld-gift-steps,
+    .jld-gift-highlights {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 767px) {
+    .jld-gift-page {
+      --gift-shell: min(100vw - 28px, 100%);
+    }
+
+    .jld-gift-hero {
+      min-height: auto;
+      padding: 126px 0 84px;
+      background-position: 62% center;
+    }
+
+    .jld-gift-hero::after {
+      inset: 20px 20px auto auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 22px;
+    }
+
+    .jld-gift-section--cards {
+      margin-top: -26px;
+    }
+
+    .jld-gift-card-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 18px;
+    }
+
+    .jld-gift-card,
+    .jld-gift-step,
+    .jld-gift-highlight,
+    .jld-gift-terms {
+      padding: 24px;
+      border-radius: 22px;
+    }
+
+    .jld-gift-hero__actions,
+    .jld-gift-card__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .jld-gift-button,
+    .jld-gift-button--small {
+      width: 100%;
+    }
+
+    .jld-gift-meta {
+      gap: 10px;
+    }
+
+    .jld-gift-card__description {
+      min-height: 0;
+    }
+  }
+</style>
