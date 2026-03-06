@@ -44,6 +44,22 @@ localizedBodyHtml = injectGiftCardsNavigation(localizedBodyHtml, page.route, loc
 localizedBodyHtml = localizeNavigationLabels(localizedBodyHtml, locale);
 localizedBodyHtml = localizePageContent(localizedBodyHtml, locale, page.route);
 localizedBodyHtml = injectLanguageSwitch(localizedBodyHtml, page.route, locale);
+if (page.route === GIFT_CARD_ROUTE) {
+  localizedBodyHtml = localizedBodyHtml.replace(
+    /(<li[^>]*id=(["'])menu-item-213\2[^>]*class=(["'])([^"']*)\3)/i,
+    (_match, prefix: string, _quote1: string, _quote2: string, className: string) =>
+      prefix.replace(
+        className,
+        className
+          .replace(/\bcurrent-menu-item\b/gi, "")
+          .replace(/\bcurrent_page_item\b/gi, "")
+          .replace(/\bpage_item\b/gi, "")
+          .replace(/\bpage-item-59\b/gi, "")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+  );
+}
 localizedBodyHtml = localizedBodyHtml.replace(/©\s*Copyright\s*2024/gi, "© Copyright 2026");
 if (!localizedBodyHtml.includes("o7digital.com")) {
   localizedBodyHtml = localizedBodyHtml.replace(
@@ -131,6 +147,25 @@ function splitMirroredBodyForNativeSection(markup: string): { prefix: string; su
   return {
     prefix: markup.slice(0, sectionStart),
     suffix: markup.slice(footerStart),
+  };
+}
+
+function splitMirroredBodyForGiftCards(markup: string): { prefix: string; suffix: string } | null {
+  const mainStart = markup.indexOf("<div id='main'");
+  const footerStart = markup.toLowerCase().lastIndexOf("<footer");
+
+  if (mainStart === -1 || footerStart === -1 || mainStart >= footerStart) {
+    return null;
+  }
+
+  const mainOpenEnd = markup.indexOf(">", mainStart);
+  if (mainOpenEnd === -1) {
+    return null;
+  }
+
+  return {
+    prefix: markup.slice(0, mainOpenEnd + 1),
+    suffix: `</div>${markup.slice(footerStart)}`,
   };
 }
 
@@ -296,11 +331,12 @@ const jsonLd = getJsonLd({
 const hasBodyH1 = /<h1\b/i.test(localizedBodyHtml);
 const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
 const ogImageAlt = pageHeading || "Jean Louis David Mexico";
-const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/", GIFT_CARD_ROUTE]).has(
-  page.route,
-)
-  ? splitMirroredBodyForNativeSection(localizedBodyHtml)
-  : null;
+const nativeBodyShell =
+  page.route === GIFT_CARD_ROUTE
+    ? splitMirroredBodyForGiftCards(localizedBodyHtml)
+    : new Set(["/servicios/", "/sucursales/", "/contacto/"]).has(page.route)
+      ? splitMirroredBodyForNativeSection(localizedBodyHtml)
+      : null;
 ---
 
 <!doctype html>
