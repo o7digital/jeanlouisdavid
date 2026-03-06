@@ -49,16 +49,65 @@ function splitFooterKeywords(keywords: string[], lineCount = 3): string[][] {
   if (keywords.length === 0) return [];
 
   const normalizedLineCount = Math.min(lineCount, keywords.length);
-  const baseSize = Math.floor(keywords.length / normalizedLineCount);
-  let remainder = keywords.length % normalizedLineCount;
-  const lines: string[][] = [];
-  let offset = 0;
+  const separatorLength = " · ".length;
+  const lengths = keywords.map((keyword) => keyword.length);
+  const prefixLengths = [0];
 
-  for (let lineIndex = 0; lineIndex < normalizedLineCount; lineIndex += 1) {
-    const lineSize = baseSize + (remainder > 0 ? 1 : 0);
-    lines.push(keywords.slice(offset, offset + lineSize));
-    offset += lineSize;
-    remainder = Math.max(0, remainder - 1);
+  for (const length of lengths) {
+    prefixLengths.push(prefixLengths[prefixLengths.length - 1] + length);
+  }
+
+  const lineLength = (start: number, end: number): number => {
+    const itemCount = end - start;
+    return prefixLengths[end] - prefixLengths[start] + Math.max(0, itemCount - 1) * separatorLength;
+  };
+
+  const memo = new Map<string, { maxLength: number; cuts: number[] }>();
+
+  const solve = (startIndex: number, groupCount: number): { maxLength: number; cuts: number[] } => {
+    const memoKey = `${startIndex}:${groupCount}`;
+    const cached = memo.get(memoKey);
+    if (cached) return cached;
+
+    if (groupCount === 1) {
+      const result = {
+        maxLength: lineLength(startIndex, keywords.length),
+        cuts: [keywords.length],
+      };
+      memo.set(memoKey, result);
+      return result;
+    }
+
+    let best = { maxLength: Number.POSITIVE_INFINITY, cuts: [] as number[] };
+
+    for (
+      let cutIndex = startIndex + 1;
+      cutIndex <= keywords.length - (groupCount - 1);
+      cutIndex += 1
+    ) {
+      const currentLineLength = lineLength(startIndex, cutIndex);
+      const remaining = solve(cutIndex, groupCount - 1);
+      const candidateMaxLength = Math.max(currentLineLength, remaining.maxLength);
+
+      if (candidateMaxLength < best.maxLength) {
+        best = {
+          maxLength: candidateMaxLength,
+          cuts: [cutIndex, ...remaining.cuts],
+        };
+      }
+    }
+
+    memo.set(memoKey, best);
+    return best;
+  };
+
+  const bestPartition = solve(0, normalizedLineCount);
+  const lines: string[][] = [];
+  let startIndex = 0;
+
+  for (const cutIndex of bestPartition.cuts) {
+    lines.push(keywords.slice(startIndex, cutIndex));
+    startIndex = cutIndex;
   }
 
   return lines;
@@ -263,11 +312,12 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
 
       .footerKeywords {
         margin: 18px auto 0;
-        max-width: 760px;
-        padding: 0 20px 14px;
+        width: min(1600px, calc(100vw - 48px));
+        max-width: none;
+        padding: 0 24px 14px;
         text-align: center;
-        font-size: 12px;
-        line-height: 1.9;
+        font-size: 11px;
+        line-height: 1.85;
         color: rgba(194, 194, 194, 0.72);
         opacity: 0.82;
         white-space: normal;
@@ -280,6 +330,12 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
 
       .footerKeywords__line + .footerKeywords__line {
         margin-top: 4px;
+      }
+
+      @media (min-width: 1024px) {
+        .footerKeywords__line {
+          white-space: nowrap;
+        }
       }
 
       @media (min-width: 768px) {
@@ -316,6 +372,7 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
         }
 
         .footerKeywords {
+          width: auto;
           max-width: 92%;
           padding: 0 16px 14px;
           font-size: 11px;
