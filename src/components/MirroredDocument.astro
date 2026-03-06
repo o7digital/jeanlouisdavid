@@ -1,5 +1,6 @@
 ---
 import ClientBoot from "./ClientBoot.jsx";
+import ContactPageSection from "./contact/ContactPageSection.astro";
 import LocationsPageSection from "./locations/LocationsPageSection.astro";
 import ServicesPageSection from "./services/ServicesPageSection.astro";
 import type { ParsedMirroredPage } from "../lib/mirror";
@@ -117,7 +118,7 @@ function splitFooterKeywords(keywords: string[], lineCount = 3): string[][] {
 
 function splitMirroredBodyForNativeSection(markup: string): { prefix: string; suffix: string } | null {
   const sectionStart = markup.indexOf("<div id='av_section_1'");
-  const footerStart = markup.search(/<footer\b/i);
+  const footerStart = markup.toLowerCase().lastIndexOf("<footer");
 
   if (sectionStart === -1 || footerStart === -1 || sectionStart >= footerStart) {
     return null;
@@ -129,6 +130,17 @@ function splitMirroredBodyForNativeSection(markup: string): { prefix: string; su
   };
 }
 
+function injectMarkupBeforeLastFooter(markup: string, injectedMarkup: string): string {
+  const footerCloseTag = "</footer>";
+  const footerCloseIndex = markup.toLowerCase().lastIndexOf(footerCloseTag);
+
+  if (footerCloseIndex === -1) {
+    return markup;
+  }
+
+  return `${markup.slice(0, footerCloseIndex)}${injectedMarkup}${markup.slice(footerCloseIndex)}`;
+}
+
 // Inject footer keywords
 const footerKeywords = getFooterKeywords(locale);
 if (footerKeywords.length > 0) {
@@ -136,10 +148,7 @@ if (footerKeywords.length > 0) {
   const keywordsHtml = `<div class="footerKeywords" aria-label="SEO keywords">${footerKeywordLines
     .map((line) => `<p class="footerKeywords__line">${line.join(" · ")}</p>`)
     .join("")}</div>`;
-  localizedBodyHtml = localizedBodyHtml.replace(
-    /(<\/footer>)/i,
-    `${keywordsHtml}$1`,
-  );
+  localizedBodyHtml = injectMarkupBeforeLastFooter(localizedBodyHtml, keywordsHtml);
 }
 
 const fallbackTitle = extractTitleFromHead(localizedHeadHtml);
@@ -167,7 +176,7 @@ const jsonLd = getJsonLd({
 const hasBodyH1 = /<h1\b/i.test(localizedBodyHtml);
 const pageHeading = title.replace(/\s*-\s*Jean Louis David\s*$/i, "").trim();
 const ogImageAlt = pageHeading || "Jean Louis David Mexico";
-const nativeBodyShell = new Set(["/servicios/", "/sucursales/"]).has(page.route)
+const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).has(page.route)
   ? splitMirroredBodyForNativeSection(localizedBodyHtml)
   : null;
 ---
@@ -703,6 +712,8 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/"]).has(page.route)
           <ServicesPageSection locale={locale} />
         ) : page.route === "/sucursales/" ? (
           <LocationsPageSection locale={locale} />
+        ) : page.route === "/contacto/" ? (
+          <ContactPageSection locale={locale} />
         ) : null}
         <Fragment set:html={nativeBodyShell.suffix} />
       </>
