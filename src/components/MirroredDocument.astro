@@ -45,10 +45,81 @@ if (!localizedBodyHtml.includes("o7digital.com")) {
   );
 }
 
+function splitFooterKeywords(keywords: string[], lineCount = 3): string[][] {
+  if (keywords.length === 0) return [];
+
+  const normalizedLineCount = Math.min(lineCount, keywords.length);
+  const separatorLength = " · ".length;
+  const lengths = keywords.map((keyword) => keyword.length);
+  const prefixLengths = [0];
+
+  for (const length of lengths) {
+    prefixLengths.push(prefixLengths[prefixLengths.length - 1] + length);
+  }
+
+  const lineLength = (start: number, end: number): number => {
+    const itemCount = end - start;
+    return prefixLengths[end] - prefixLengths[start] + Math.max(0, itemCount - 1) * separatorLength;
+  };
+
+  const memo = new Map<string, { maxLength: number; cuts: number[] }>();
+
+  const solve = (startIndex: number, groupCount: number): { maxLength: number; cuts: number[] } => {
+    const memoKey = `${startIndex}:${groupCount}`;
+    const cached = memo.get(memoKey);
+    if (cached) return cached;
+
+    if (groupCount === 1) {
+      const result = {
+        maxLength: lineLength(startIndex, keywords.length),
+        cuts: [keywords.length],
+      };
+      memo.set(memoKey, result);
+      return result;
+    }
+
+    let best = { maxLength: Number.POSITIVE_INFINITY, cuts: [] as number[] };
+
+    for (
+      let cutIndex = startIndex + 1;
+      cutIndex <= keywords.length - (groupCount - 1);
+      cutIndex += 1
+    ) {
+      const currentLineLength = lineLength(startIndex, cutIndex);
+      const remaining = solve(cutIndex, groupCount - 1);
+      const candidateMaxLength = Math.max(currentLineLength, remaining.maxLength);
+
+      if (candidateMaxLength < best.maxLength) {
+        best = {
+          maxLength: candidateMaxLength,
+          cuts: [cutIndex, ...remaining.cuts],
+        };
+      }
+    }
+
+    memo.set(memoKey, best);
+    return best;
+  };
+
+  const bestPartition = solve(0, normalizedLineCount);
+  const lines: string[][] = [];
+  let startIndex = 0;
+
+  for (const cutIndex of bestPartition.cuts) {
+    lines.push(keywords.slice(startIndex, cutIndex));
+    startIndex = cutIndex;
+  }
+
+  return lines;
+}
+
 // Inject footer keywords
 const footerKeywords = getFooterKeywords(locale);
 if (footerKeywords.length > 0) {
-  const keywordsHtml = `<p class="footerKeywords">${footerKeywords.join(" · ")}</p>`;
+  const footerKeywordLines = splitFooterKeywords(footerKeywords);
+  const keywordsHtml = `<div class="footerKeywords" aria-label="SEO keywords">${footerKeywordLines
+    .map((line) => `<p class="footerKeywords__line">${line.join(" · ")}</p>`)
+    .join("")}</div>`;
   localizedBodyHtml = localizedBodyHtml.replace(
     /(<\/footer>)/i,
     `${keywordsHtml}$1`,
@@ -240,14 +311,31 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
       }
 
       .footerKeywords {
-        margin: 12px auto 0;
-        padding: 0 20px 8px;
+        margin: 18px auto 0;
+        width: min(1600px, calc(100vw - 48px));
+        max-width: none;
+        padding: 0 24px 14px;
         text-align: center;
         font-size: 11px;
-        line-height: 1.7;
+        line-height: 1.85;
         color: rgba(194, 194, 194, 0.72);
-        opacity: 0.72;
-        white-space: nowrap;
+        opacity: 0.82;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .footerKeywords__line {
+        margin: 0;
+      }
+
+      .footerKeywords__line + .footerKeywords__line {
+        margin-top: 4px;
+      }
+
+      @media (min-width: 1024px) {
+        .footerKeywords__line {
+          white-space: nowrap;
+        }
       }
 
       @media (min-width: 768px) {
@@ -284,9 +372,11 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
         }
 
         .footerKeywords {
-          white-space: normal;
-          overflow-wrap: anywhere;
-          word-break: break-word;
+          width: auto;
+          max-width: 92%;
+          padding: 0 16px 14px;
+          font-size: 11px;
+          line-height: 1.8;
         }
       }
 
