@@ -270,6 +270,8 @@ const contentByLocale: Record<Locale, GiftCardContent> = {
 };
 
 const heroImage = "/gift-hero.png";
+const cardArtwork = "/gemini-card.png";
+const heroCardAmount = "1,000.00 MXN";
 const locale = (Astro.props.locale as Locale | undefined) ?? "es";
 const content = contentByLocale[locale] ?? contentByLocale.es;
 ---
@@ -286,6 +288,16 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
           <a href="#" class="jld-gift-button jld-gift-button--solid">
             {content.primaryCta}
           </a>
+        </div>
+      </div>
+
+      <div class="jld-gift-hero__visual" aria-hidden="true">
+        <div class="jld-gift-hero-card">
+          <span class="jld-gift-hero-card__brand">Jean Louis David</span>
+          <div class="jld-gift-hero-card__copy">
+            <span class="jld-gift-hero-card__title">Gift Card</span>
+            <span class="jld-gift-hero-card__amount">{heroCardAmount}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -314,8 +326,15 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
             <div class="jld-gift-card__amount">{card.amount}</div>
             <p class="jld-gift-card__description">{card.description}</p>
 
-            <div class="jld-gift-card__qr" aria-hidden="true">
-              <span>{content.qrLabel}</span>
+            <div class="jld-gift-card__visual" aria-hidden="true">
+              <img
+                src={cardArtwork}
+                alt=""
+                width="1188"
+                height="896"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
 
             <div class="jld-gift-card__actions">
@@ -523,24 +542,65 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
     filter: blur(8px);
   }
 
-  .jld-gift-hero::after {
-    content: "";
-    position: absolute;
-    inset: 24px 24px auto auto;
-    width: min(22vw, 260px);
-    height: calc(min(22vw, 260px) * 0.88);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    opacity: 0.4;
-  }
-
   .jld-gift-hero__inner {
     position: relative;
     z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 640px) minmax(280px, 420px);
+    align-items: center;
+    gap: clamp(32px, 6vw, 84px);
   }
 
   .jld-gift-hero__content {
     max-width: 640px;
+  }
+
+  .jld-gift-hero__visual {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 292px;
+    pointer-events: none;
+  }
+
+  .jld-gift-hero-card {
+    width: min(100%, 404px);
+    aspect-ratio: 1.38;
+    padding: 42px 38px 34px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #f7efe2;
+    text-shadow: 0 10px 28px rgba(14, 10, 8, 0.26);
+  }
+
+  .jld-gift-hero-card__brand,
+  .jld-gift-hero-card__amount {
+    font-family: "Cabin", Helvetica, Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .jld-gift-hero-card__brand {
+    color: rgba(247, 239, 226, 0.9);
+  }
+
+  .jld-gift-hero-card__copy {
+    display: grid;
+    gap: 10px;
+  }
+
+  .jld-gift-hero-card__title {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2.4rem, 3vw, 3.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+
+  .jld-gift-hero-card__amount {
+    color: rgba(247, 239, 226, 0.82);
   }
 
   .jld-gift-hero__lede {
@@ -685,59 +745,33 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
     min-height: 86px;
   }
 
-  .jld-gift-card__qr {
+  .jld-gift-card__visual {
     position: relative;
-    display: grid;
-    place-items: center;
-    min-height: 156px;
     margin-top: 28px;
-    border-radius: 22px;
-    border: 1px solid rgba(23, 19, 17, 0.1);
-    background:
-      linear-gradient(90deg, rgba(23, 19, 17, 0.92) 0 10px, transparent 10px 20px),
-      linear-gradient(rgba(23, 19, 17, 0.92) 0 10px, transparent 10px 20px),
-      linear-gradient(135deg, rgba(200, 168, 107, 0.22), rgba(23, 19, 17, 0.08));
-    background-position: center center;
-    background-size: 20px 20px, 20px 20px, auto;
     overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid rgba(145, 122, 82, 0.14);
+    background: linear-gradient(180deg, rgba(245, 238, 229, 0.96) 0%, rgba(235, 224, 211, 0.92) 100%);
+    box-shadow: 0 18px 34px rgba(20, 15, 11, 0.1);
   }
 
-  .jld-gift-card__qr::before,
-  .jld-gift-card__qr::after {
-    content: "";
-    position: absolute;
-    width: 38px;
-    height: 38px;
-    border: 4px solid rgba(23, 19, 17, 0.9);
-    background: rgba(255, 248, 239, 0.65);
+  .jld-gift-card__visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1188 / 896;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
   }
 
-  .jld-gift-card__qr::before {
-    top: 18px;
-    left: 18px;
-  }
-
-  .jld-gift-card__qr::after {
-    right: 18px;
-    bottom: 18px;
-  }
-
-  .jld-gift-card__qr span {
-    position: relative;
-    z-index: 1;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: rgba(255, 248, 239, 0.82);
-    color: rgba(23, 19, 17, 0.76);
-    font-family: "Cabin", Helvetica, Arial, sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+  .jld-gift-card:hover .jld-gift-card__visual img,
+  .jld-gift-card:focus-within .jld-gift-card__visual img {
+    transform: scale(1.03);
   }
 
   .jld-gift-card__actions {
-    margin-top: 26px;
+    margin-top: 28px;
   }
 
   .jld-gift-section--how {
@@ -861,6 +895,21 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
       padding: 88px 0;
     }
 
+    .jld-gift-hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .jld-gift-hero__visual {
+      justify-content: flex-start;
+      min-height: 0;
+    }
+
+    .jld-gift-hero-card {
+      width: min(100%, 340px);
+      padding: 34px 30px 28px;
+    }
+
     .jld-gift-steps,
     .jld-gift-highlights {
       grid-template-columns: minmax(0, 1fr);
@@ -877,11 +926,8 @@ const content = contentByLocale[locale] ?? contentByLocale.es;
       background-position: 64% center;
     }
 
-    .jld-gift-hero::after {
-      inset: 20px 20px auto auto;
-      width: 140px;
-      height: 140px;
-      border-radius: 22px;
+    .jld-gift-hero__visual {
+      display: none;
     }
 
     .jld-gift-section--cards {
