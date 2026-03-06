@@ -215,9 +215,12 @@ function deferLiteSpeedScripts(route) {
     currentRoute
       .replace(/^\/(?:en|fr)(?=\/)/, "")
       .replace(/\/?$/, "/") || "/";
-  const eagerRoutes = new Set(["/servicios/"]);
+  const eagerRoutes = new Set(["/servicios/", "/colecciones/"]);
+  const hasLayoutSensitiveWidgets = Boolean(
+    document.querySelector(".av-masonry, .avia-content-slider"),
+  );
 
-  if (eagerRoutes.has(currentRoute) || eagerRoutes.has(normalizedRoute)) {
+  if (hasLayoutSensitiveWidgets || eagerRoutes.has(currentRoute) || eagerRoutes.has(normalizedRoute)) {
     const eagerTimerId = window.setTimeout(() => {
       triggerLiteSpeedScripts();
     }, 150);
