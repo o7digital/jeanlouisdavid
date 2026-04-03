@@ -15,15 +15,6 @@
 
 **→ Commencez ici pour comprendre la situation**
 
-#### 1bis. **SEO_SAFE_WORKFLOW.md** ⭐ OPERATIONS
-- Workflow obligatoire `dev -> main`
-- Garde-fous SEO pour ne pas casser les positions
-- Checklist avant push / avant merge
-- Fichiers SEO critiques
-- Version réutilisable pour d'autres sites
-
-**→ A lire avant toute modification sur un site deja bien positionne**
-
 ---
 
 ### 🟡 COMPRENDRE LES PROBLÈMES
