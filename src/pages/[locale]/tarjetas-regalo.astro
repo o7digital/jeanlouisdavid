@@ -1,0 +1,18 @@
+---
+import MirroredDocument from "../../components/MirroredDocument.astro";
+import { getGiftCardsShellPage } from "../../lib/gift-cards";
+import { NON_DEFAULT_LOCALES, normalizeLocale } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+}
+
+const { locale: rawLocale } = Astro.props as { locale: string };
+const locale = normalizeLocale(rawLocale);
+const page = getGiftCardsShellPage();
+---
+
+<MirroredDocument page={page} locale={locale} />

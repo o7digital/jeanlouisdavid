@@ -4,6 +4,7 @@ import {
   localizedPath,
   type Locale,
 } from "./i18n";
+import { GIFT_CARD_ROUTE } from "./routes";
 
 export const DEFAULT_SITE_URL = "https://jeanlouisdavid.com.mx";
 
@@ -65,6 +66,10 @@ const ARTICLE_METADATA_BY_ROUTE = new Map<string, ArticleMetadata>([
   ],
 ]);
 
+const OG_IMAGE_BY_ROUTE = new Map<string, string>([
+  [GIFT_CARD_ROUTE, "/wp-content/uploads/2024/07/slide_03-1280x630.webp"],
+]);
+
 const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
   es: new Map<string, string>([
     [
@@ -90,6 +95,10 @@ const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
     [
       "/contacto/",
       "contacto cita capilar CDMX, WhatsApp peluquería CDMX, cita Santa Fe CDMX Cuajimalpa, cita Polanco CDMX, reservar corte color peinado CDMX",
+    ],
+    [
+      GIFT_CARD_ROUTE,
+      "tarjetas de regalo Jean Louis David, gift cards salon premium CDMX, regalo belleza CDMX, regalo experiencia salon Mexico, gift card Jean Louis David Mexico",
     ],
     [
       "/mixlight-la-tecnica-para-iluminar-el-cabello/",
@@ -122,6 +131,10 @@ const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
       "hair appointment contact CDMX, WhatsApp hair booking CDMX, Santa Fe CDMX Cuajimalpa hair booking, Polanco CDMX hair booking, book haircut color styling CDMX",
     ],
     [
+      GIFT_CARD_ROUTE,
+      "Jean Louis David gift cards, premium salon gift card CDMX, beauty gift Mexico City, salon experience gift card, Jean Louis David Mexico gift card",
+    ],
+    [
       "/mixlight-la-tecnica-para-iluminar-el-cabello/",
       "Mixlight Jean Louis David, illuminate hair with Mixlight, Mixlight hair color CDMX, exclusive Mixlight technique",
     ],
@@ -150,6 +163,10 @@ const KEYWORDS_BY_ROUTE: Record<Locale, Map<string, string>> = {
     [
       "/contacto/",
       "contact rendez-vous coiffure CDMX, rendez-vous WhatsApp salon coiffure CDMX, rendez-vous Santa Fe CDMX Cuajimalpa, rendez-vous Polanco CDMX, reserver coupe couleur coiffage CDMX",
+    ],
+    [
+      GIFT_CARD_ROUTE,
+      "gift cards Jean Louis David, carte cadeau salon premium CDMX, cadeau beauté Mexico, expérience salon haut de gamme, carte cadeau Jean Louis David Mexique",
     ],
     [
       "/mixlight-la-tecnica-para-iluminar-el-cabello/",
@@ -183,6 +200,10 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
     [
       "/contacto/",
       "Contacta a Jean Louis David en CDMX y agenda tu cita de cabello por WhatsApp en Santa Fe CDMX (Cuajimalpa) o Polanco CDMX.",
+    ],
+    [
+      GIFT_CARD_ROUTE,
+      "Descubre las tarjetas de regalo Jean Louis David en México y regala una experiencia premium de estilo, belleza y bienestar.",
     ],
     [
       "/privacidad/",
@@ -231,6 +252,10 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
       "Contact Jean Louis David and book your appointment via WhatsApp for personalized guidance.",
     ],
     [
+      GIFT_CARD_ROUTE,
+      "Discover Jean Louis David gift cards in Mexico and share a premium experience focused on style, beauty and wellbeing.",
+    ],
+    [
       "/privacidad/",
       "Review Jean Louis David Mexico's privacy notice.",
     ],
@@ -277,6 +302,10 @@ const DESCRIPTION_BY_ROUTE: Record<Locale, Map<string, string>> = {
       "Contactez Jean Louis David et prenez rendez-vous via WhatsApp pour un conseil personnalisé.",
     ],
     [
+      GIFT_CARD_ROUTE,
+      "Découvrez les gift cards Jean Louis David au Mexique et offrez une expérience premium autour du style, de la beauté et du bien-être.",
+    ],
+    [
       "/privacidad/",
       "Consultez la politique de confidentialité de Jean Louis David Mexique.",
     ],
@@ -313,6 +342,7 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/nosotros/", "Nosotros - Jean Louis David"],
     ["/colecciones/", "Colecciones - Jean Louis David"],
     ["/contacto/", "Contacto - Jean Louis David"],
+    [GIFT_CARD_ROUTE, "Tarjetas de Regalo - Jean Louis David"],
     ["/privacidad/", "Aviso de Privacidad - Jean Louis David"],
     [
       "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
@@ -338,6 +368,7 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/nosotros/", "About - Jean Louis David"],
     ["/colecciones/", "Collections - Jean Louis David"],
     ["/contacto/", "Contact Us - Jean Louis David"],
+    [GIFT_CARD_ROUTE, "Gift Cards - Jean Louis David"],
     ["/privacidad/", "Privacy Notice - Jean Louis David"],
     [
       "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
@@ -363,6 +394,7 @@ const TITLE_BY_ROUTE: Record<Locale, Map<string, string>> = {
     ["/nosotros/", "À propos - Jean Louis David"],
     ["/colecciones/", "Collections - Jean Louis David"],
     ["/contacto/", "Contact - Jean Louis David"],
+    [GIFT_CARD_ROUTE, "Gift Cards - Jean Louis David"],
     ["/privacidad/", "Politique de confidentialité - Jean Louis David"],
     [
       "/adopta-el-bob-cuadrado-el-corte-de-moda-de-la-temporada/",
@@ -440,7 +472,12 @@ function stripBrandSuffix(value: string): string {
 }
 
 export function getSeoImageUrl(route: string = "/"): string {
-  return absoluteUrl(getArticleMetadata(route)?.ogImagePath ?? DEFAULT_OG_IMAGE);
+  const normalizedRoute = canonicalPath(route);
+  return absoluteUrl(
+    getArticleMetadata(normalizedRoute)?.ogImagePath ??
+      OG_IMAGE_BY_ROUTE.get(normalizedRoute) ??
+      DEFAULT_OG_IMAGE,
+  );
 }
 
 export type JsonLdParams = {

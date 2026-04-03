@@ -1,0 +1,975 @@
+---
+import SystemIcon from "./SystemIcon.astro";
+import {
+  adminNavigation,
+  alertRows,
+  architectureCards,
+  collaboratorRows,
+  focusCards,
+  metrics,
+  roadmap,
+  workspaces,
+} from "../../data/central-system";
+
+function alertClass(level: "critical" | "warning" | "info"): string {
+  if (level === "critical") return "is-critical";
+  if (level === "warning") return "is-warning";
+  return "is-info";
+}
+---
+
+<div class="central-shell">
+  <aside class="sidebar">
+    <div class="brand-block">
+      <div class="brand-mark" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </div>
+      <div>
+        <p class="eyebrow">Jean Louis David MX</p>
+        <h1>Sistema Central 2.0</h1>
+      </div>
+    </div>
+
+    <p class="sidebar-copy">
+      Capa nueva para modernizar el back-office actual sin interrumpir la operacion del legacy.
+    </p>
+
+    <nav class="nav-groups" aria-label="Modulos del sistema">
+      {
+        adminNavigation.map((group) => (
+          <section class="nav-group">
+            <p class="group-title">{group.title}</p>
+            <div class="nav-list">
+              {
+                group.items.map((item) => (
+                  <article class="nav-item">
+                    <div class="nav-icon">
+                      <SystemIcon name={item.icon} />
+                    </div>
+                    <div>
+                      <div class="nav-headline">
+                        <span>{item.label}</span>
+                        {item.badge && <span class="nav-badge">{item.badge}</span>}
+                      </div>
+                      <p>{item.description}</p>
+                    </div>
+                  </article>
+                ))
+              }
+            </div>
+          </section>
+        ))
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <div>
+        <p class="eyebrow">Estado del rollout</p>
+        <strong>Migracion progresiva</strong>
+      </div>
+      <p>Shell nuevo + modulos prioritarios encima del backend actual.</p>
+    </div>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Redesign complementario</p>
+        <h2>Nuevo command center para catalogos, clientes, productividad e inventario</h2>
+      </div>
+
+      <div class="topbar-tools">
+        <div class="search-pill">
+          <SystemIcon name="search" />
+          <span>Buscar cliente, ticket, servicio o SKU...</span>
+        </div>
+        <div class="user-pill">
+          <span class="user-avatar">OS</span>
+          <div>
+            <strong>Direccion operativa</strong>
+            <p>Santa Fe, Polanco, Bodega</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero-panel">
+      <div class="hero-copy">
+        <p class="eyebrow">Vision</p>
+        <h3>
+          Pasar de tablas aisladas y pantallas vacias a una interfaz orientada por prioridades,
+          contexto y acciones.
+        </h3>
+        <p>
+          Las capturas del sistema actual muestran modulos utiles pero fragmentados. Esta propuesta
+          unifica la lectura del negocio, reduce clics y prepara una migracion por dominios sin
+          reescribir todo el backend de golpe.
+        </p>
+        <div class="chip-row">
+          <span>legacy compatible</span>
+          <span>roles y permisos</span>
+          <span>multi sucursal</span>
+          <span>tablas ricas</span>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <p class="eyebrow">Prioridad de lanzamiento</p>
+        <ol>
+          <li>Command center y busqueda global</li>
+          <li>Productividad individual y concentrada</li>
+          <li>Clientes 360 y cancelaciones</li>
+          <li>Catalogos e inventario operativo</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="metric-grid" aria-label="Metricas clave">
+      {
+        metrics.map((metric) => (
+          <article class={`metric-card tone-${metric.tone}`}>
+            <p>{metric.label}</p>
+            <strong>{metric.value}</strong>
+            <span>{metric.delta}</span>
+          </article>
+        ))
+      }
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Espacios de trabajo</p>
+          <h3>Modulos base del nuevo sistema</h3>
+        </div>
+        <p>
+          Cada modulo mezcla lectura, accion y contexto, en lugar de separar consultas, reportes y
+          mantenimiento en pantallas desconectadas.
+        </p>
+      </div>
+
+      <div class="workspace-grid">
+        {
+          workspaces.map((space) => (
+            <article class="workspace-card">
+              <div class="workspace-icon">
+                <SystemIcon name={space.icon} />
+              </div>
+              <h4>{space.title}</h4>
+              <p>{space.description}</p>
+              <div class="pill-row">
+                {space.pills.map((pill) => <span>{pill}</span>)}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section-block two-col">
+      <article class="panel-card">
+        <div class="section-header compact">
+          <div>
+            <p class="eyebrow">Arquitectura</p>
+            <h3>Estructura recomendada</h3>
+          </div>
+        </div>
+
+        <div class="architecture-grid">
+          {
+            architectureCards.map((card) => (
+              <article class="architecture-card">
+                <div class="workspace-icon small">
+                  <SystemIcon name={card.icon} />
+                </div>
+                <h4>{card.title}</h4>
+                <p>{card.description}</p>
+              </article>
+            ))
+          }
+        </div>
+      </article>
+
+      <article class="panel-card">
+        <div class="section-header compact">
+          <div>
+            <p class="eyebrow">Antes y despues</p>
+            <h3>Que corrige esta propuesta</h3>
+          </div>
+        </div>
+
+        <div class="focus-stack">
+          {
+            focusCards.map((card) => (
+              <article class="focus-card">
+                <div class="focus-head">
+                  <div class="workspace-icon small">
+                    <SystemIcon name={card.icon} />
+                  </div>
+                  <div>
+                    <h4>{card.title}</h4>
+                    <p>{card.description}</p>
+                  </div>
+                </div>
+
+                <ul>
+                  {card.bullets.map((bullet) => <li>{bullet}</li>)}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </article>
+    </section>
+
+    <section class="section-block two-col data-zone">
+      <article class="panel-card">
+        <div class="section-header compact">
+          <div>
+            <p class="eyebrow">Vista operativa</p>
+            <h3>Productividad con contexto real</h3>
+          </div>
+          <span class="panel-tag">tabla priorizada</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Colaborador</th>
+                <th>Sucursal</th>
+                <th>Productividad</th>
+                <th>Ticket</th>
+                <th>Ocupacion</th>
+                <th>Accion sugerida</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                collaboratorRows.map((row) => (
+                  <tr>
+                    <td>{row.name}</td>
+                    <td>{row.branch}</td>
+                    <td>{row.productivity}</td>
+                    <td>{row.ticket}</td>
+                    <td>{row.occupancy}</td>
+                    <td>{row.focus}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel-card">
+        <div class="section-header compact">
+          <div>
+            <p class="eyebrow">Centro de alertas</p>
+            <h3>Prioridades del dia</h3>
+          </div>
+          <span class="panel-tag">triage</span>
+        </div>
+
+        <div class="alert-stack">
+          {
+            alertRows.map((alert) => (
+              <article class={`alert-card ${alertClass(alert.level)}`}>
+                <div class="alert-bar"></div>
+                <div class="alert-body">
+                  <div class="alert-top">
+                    <strong>{alert.title}</strong>
+                    <span>{alert.owner}</span>
+                  </div>
+                  <p>{alert.description}</p>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="mini-panel">
+          <p class="eyebrow">Principio clave</p>
+          <h4>El usuario debe saber que revisar y que hacer al entrar.</h4>
+          <p>
+            No mas pantallas en blanco con una tabla al centro. Cada vista debe arrancar con
+            estado, urgencia y acciones disponibles.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Roadmap</p>
+          <h3>Plan de migracion recomendado</h3>
+        </div>
+        <p>
+          El objetivo no es reemplazar todo de una vez, sino envolver el sistema actual con una
+          capa moderna y mover los modulos de mayor impacto primero.
+        </p>
+      </div>
+
+      <div class="roadmap-grid">
+        {
+          roadmap.map((step) => (
+            <article class="roadmap-card">
+              <span class="roadmap-phase">{step.phase}</span>
+              <h4>{step.title}</h4>
+              <p>{step.description}</p>
+              <div class="pill-row">
+                {step.deliverables.map((deliverable) => <span>{deliverable}</span>)}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</div>
+
+<style>
+  :global(body) {
+    margin: 0;
+    background:
+      radial-gradient(circle at top left, rgba(196, 147, 114, 0.18), transparent 30%),
+      radial-gradient(circle at 85% 10%, rgba(150, 164, 201, 0.14), transparent 25%),
+      linear-gradient(180deg, #0f1219 0%, #161d28 35%, #f3efe8 35%, #f6f1ea 100%);
+    color: #11131a;
+    font-family: "DM Sans", "Avenir Next", "Segoe UI", sans-serif;
+    min-height: 100vh;
+  }
+
+  .central-shell {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    min-height: 100vh;
+    padding: 32px 22px;
+    background: rgba(10, 12, 18, 0.92);
+    color: #f8f4ed;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(18px);
+  }
+
+  .brand-block {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .brand-block h1,
+  .topbar h2,
+  .hero-copy h3,
+  .section-header h3,
+  .hero-card h4,
+  .workspace-card h4,
+  .focus-card h4,
+  .architecture-card h4,
+  .mini-panel h4,
+  .roadmap-card h4 {
+    margin: 0;
+    font-family: "Space Grotesk", "Avenir Next", sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  .brand-block h1 {
+    font-size: 1.45rem;
+  }
+
+  .brand-mark {
+    position: relative;
+    width: 54px;
+    height: 54px;
+  }
+
+  .brand-mark span {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #f4e8d8 0%, #cb9d79 100%);
+  }
+
+  .brand-mark span:last-child {
+    inset: 10px;
+    background: #0f1219;
+    clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+  }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(215, 197, 178, 0.72);
+  }
+
+  .sidebar-copy,
+  .nav-item p,
+  .hero-copy p,
+  .hero-card li,
+  .workspace-card p,
+  .focus-card p,
+  .focus-card li,
+  .architecture-card p,
+  .alert-body p,
+  .mini-panel p,
+  .roadmap-card p,
+  .section-header > p,
+  .topbar-tools p,
+  .sidebar-footer p {
+    margin: 0;
+    line-height: 1.55;
+  }
+
+  .sidebar-copy {
+    color: rgba(248, 244, 237, 0.72);
+    margin-bottom: 24px;
+  }
+
+  .nav-groups {
+    display: grid;
+    gap: 22px;
+  }
+
+  .group-title {
+    margin: 0 0 12px;
+    color: rgba(248, 244, 237, 0.54);
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .nav-list {
+    display: grid;
+    gap: 10px;
+  }
+
+  .nav-item {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-icon,
+  .workspace-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12), rgba(196, 147, 114, 0.12));
+    color: #f8f4ed;
+  }
+
+  .workspace-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    color: #11131a;
+    background: linear-gradient(160deg, rgba(196, 147, 114, 0.2), rgba(151, 173, 204, 0.16));
+  }
+
+  .workspace-icon.small {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+
+  .nav-icon :global(svg),
+  .workspace-icon :global(svg),
+  .search-pill :global(svg) {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .nav-headline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+
+  .nav-badge,
+  .panel-tag,
+  .roadmap-phase {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 5px 9px;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-badge {
+    background: rgba(206, 160, 122, 0.2);
+    color: #f5d6bd;
+  }
+
+  .sidebar-footer {
+    margin-top: 28px;
+    padding: 16px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(196, 147, 114, 0.18), rgba(255, 255, 255, 0.04));
+  }
+
+  .sidebar-footer strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+  }
+
+  .workspace {
+    padding: 28px;
+    display: grid;
+    gap: 22px;
+  }
+
+  .topbar,
+  .hero-panel,
+  .panel-card,
+  .section-block,
+  .metric-card,
+  .workspace-card,
+  .roadmap-card {
+    border: 1px solid rgba(17, 19, 26, 0.08);
+    box-shadow: 0 20px 80px rgba(21, 27, 38, 0.09);
+  }
+
+  .topbar,
+  .hero-panel,
+  .panel-card,
+  .section-block {
+    background: rgba(249, 246, 240, 0.78);
+    backdrop-filter: blur(18px);
+    border-radius: 28px;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 24px 26px;
+  }
+
+  .topbar h2 {
+    max-width: 720px;
+    font-size: clamp(1.8rem, 2.8vw, 3rem);
+    color: #10131b;
+  }
+
+  .topbar-tools {
+    display: grid;
+    gap: 12px;
+    min-width: min(100%, 360px);
+  }
+
+  .search-pill,
+  .user-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(17, 19, 26, 0.04);
+    color: #2d3340;
+  }
+
+  .search-pill span:last-child {
+    opacity: 0.72;
+  }
+
+  .user-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(160deg, #11131a, #7d4e2e);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.75fr);
+    gap: 18px;
+    padding: 26px;
+  }
+
+  .hero-copy h3 {
+    margin-bottom: 14px;
+    font-size: clamp(1.45rem, 2vw, 2.15rem);
+  }
+
+  .hero-copy > p:last-of-type {
+    max-width: 66ch;
+  }
+
+  .chip-row,
+  .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .chip-row span,
+  .pill-row span,
+  .panel-tag {
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(17, 19, 26, 0.06);
+    color: #2f3644;
+    font-size: 0.82rem;
+  }
+
+  .hero-card {
+    padding: 22px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #11131a 0%, #1e2632 100%);
+    color: #f8f4ed;
+  }
+
+  .hero-card ol {
+    margin: 14px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .metric-grid,
+  .workspace-grid,
+  .roadmap-grid,
+  .architecture-grid {
+    display: grid;
+    gap: 16px;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .metric-card {
+    padding: 20px;
+    border-radius: 22px;
+    background: rgba(249, 246, 240, 0.85);
+  }
+
+  .metric-card p {
+    margin: 0 0 14px;
+    color: #4e5665;
+  }
+
+  .metric-card strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: clamp(1.7rem, 2vw, 2.4rem);
+    letter-spacing: -0.04em;
+  }
+
+  .metric-card span {
+    color: #3d4552;
+    font-size: 0.92rem;
+  }
+
+  .tone-warm {
+    background: linear-gradient(180deg, rgba(237, 221, 205, 0.9), rgba(249, 246, 240, 0.9));
+  }
+
+  .tone-cool {
+    background: linear-gradient(180deg, rgba(216, 226, 241, 0.9), rgba(249, 246, 240, 0.9));
+  }
+
+  .tone-neutral {
+    background: linear-gradient(180deg, rgba(228, 229, 231, 0.9), rgba(249, 246, 240, 0.9));
+  }
+
+  .section-block {
+    padding: 24px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .section-header > p {
+    max-width: 520px;
+    color: #4f5663;
+  }
+
+  .section-header.compact {
+    margin-bottom: 16px;
+  }
+
+  .workspace-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .workspace-card,
+  .roadmap-card,
+  .architecture-card {
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.55);
+    padding: 20px;
+  }
+
+  .workspace-card h4,
+  .roadmap-card h4,
+  .architecture-card h4 {
+    margin: 16px 0 10px;
+    font-size: 1.15rem;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .panel-card {
+    padding: 24px;
+  }
+
+  .architecture-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .focus-stack,
+  .alert-stack {
+    display: grid;
+    gap: 14px;
+  }
+
+  .focus-card {
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(17, 19, 26, 0.04);
+  }
+
+  .focus-head {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .focus-card ul {
+    margin: 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
+  }
+
+  .data-zone {
+    align-items: start;
+  }
+
+  .table-wrap {
+    overflow: auto;
+    border-radius: 20px;
+    border: 1px solid rgba(17, 19, 26, 0.08);
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 760px;
+  }
+
+  th,
+  td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(17, 19, 26, 0.08);
+    text-align: left;
+    font-size: 0.95rem;
+  }
+
+  th {
+    font-size: 0.77rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #58606c;
+    background: rgba(17, 19, 26, 0.04);
+  }
+
+  tbody tr:hover {
+    background: rgba(196, 147, 114, 0.08);
+  }
+
+  .alert-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 6px minmax(0, 1fr);
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(17, 19, 26, 0.06);
+  }
+
+  .alert-bar {
+    background: #8ea3bf;
+  }
+
+  .is-critical .alert-bar {
+    background: #7b311f;
+  }
+
+  .is-warning .alert-bar {
+    background: #b9862f;
+  }
+
+  .is-info .alert-bar {
+    background: #5372a3;
+  }
+
+  .alert-body {
+    padding: 16px;
+  }
+
+  .alert-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .alert-top span {
+    font-size: 0.8rem;
+    color: #6a7280;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .mini-panel {
+    margin-top: 14px;
+    padding: 18px;
+    border-radius: 20px;
+    background: linear-gradient(140deg, rgba(17, 19, 26, 0.92), rgba(35, 41, 52, 0.94));
+    color: #f5efe7;
+  }
+
+  .mini-panel h4 {
+    margin: 6px 0 10px;
+    font-size: 1.15rem;
+  }
+
+  .roadmap-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .roadmap-phase {
+    background: rgba(17, 19, 26, 0.06);
+    color: #313948;
+  }
+
+  @media (max-width: 1240px) {
+    .central-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+      position: relative;
+      min-height: auto;
+    }
+
+    .metric-grid,
+    .roadmap-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .workspace-grid,
+    .two-col {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sidebar {
+      padding: 16px;
+    }
+
+    .brand-block {
+      margin-bottom: 12px;
+    }
+
+    .sidebar-copy,
+    .sidebar-footer,
+    .nav-item p {
+      display: none;
+    }
+
+    .nav-groups {
+      gap: 12px;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .nav-item {
+      grid-template-columns: 36px minmax(0, 1fr);
+      padding: 10px;
+    }
+
+    .nav-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+    }
+
+    .workspace {
+      padding: 18px;
+    }
+
+    .topbar,
+    .hero-panel,
+    .section-header {
+      grid-template-columns: 1fr;
+      display: grid;
+    }
+
+    .hero-panel,
+    .architecture-grid,
+    .metric-grid,
+    .roadmap-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .topbar {
+      padding: 20px;
+    }
+
+    .topbar-tools {
+      min-width: 0;
+    }
+  }
+</style>

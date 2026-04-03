@@ -1,0 +1,9 @@
+---
+import MirroredDocument from "../components/MirroredDocument.astro";
+import { getGiftCardsShellPage } from "../lib/gift-cards";
+import { DEFAULT_LOCALE } from "../lib/i18n";
+
+const page = getGiftCardsShellPage();
+---
+
+<MirroredDocument page={page} locale={DEFAULT_LOCALE} />
