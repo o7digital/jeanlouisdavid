@@ -1,5 +1,3 @@
-import { GIFT_CARD_ROUTE } from "./routes";
-
 export const SUPPORTED_LOCALES = ["es", "en", "fr"] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -168,46 +166,6 @@ export function localizeNavigationLabels(markup: string, locale: Locale): string
   }
 
   return localized;
-}
-
-function buildGiftCardsMenuMarkup(route: string, locale: Locale): string {
-  const href = localizedPath(GIFT_CARD_ROUTE, locale);
-  const isCurrentPage = normalizeRoutePath(route) === GIFT_CARD_ROUTE;
-  const currentClasses = isCurrentPage ? " current-menu-item current_page_item" : "";
-  const currentAttribute = isCurrentPage ? ' aria-current="page"' : "";
-
-  return `<li role="menuitem" id="menu-item-gift-cards" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-top-level menu-item-top-level-gift-cards${currentClasses}"><a href="${href}" itemprop="url" tabindex="0"${currentAttribute}><span class="avia-bullet"></span><span class="avia-menu-text">GIFT Cards</span><span class="avia-menu-fx"><span class="avia-arrow-wrap"><span class="avia-arrow"></span></span></span></a></li>`;
-}
-
-export function injectGiftCardsNavigation(markup: string, route: string, locale: Locale): string {
-  if (!markup || markup.includes('id="menu-item-gift-cards"')) {
-    return markup;
-  }
-
-  const giftCardsMenuMarkup = buildGiftCardsMenuMarkup(route, locale);
-
-  const withContactInsertion = markup.replace(
-    /(<li[^>]*id=(["'])menu-item-210\2[\s\S]*?<\/li>)/i,
-    `${giftCardsMenuMarkup}$1`,
-  );
-
-  if (withContactInsertion !== markup) {
-    return withContactInsertion;
-  }
-
-  const withSearchInsertion = markup.replace(
-    /(<li[^>]*id=(["'])menu-item-search\2[\s\S]*?<\/li>)/i,
-    `${giftCardsMenuMarkup}$1`,
-  );
-
-  if (withSearchInsertion !== markup) {
-    return withSearchInsertion;
-  }
-
-  return markup.replace(
-    /(<ul[^>]*id=(["'])avia-menu\2[^>]*>)([\s\S]*?)(<\/ul>)/i,
-    `$1$3${giftCardsMenuMarkup}$4`,
-  );
 }
 
 function buildLanguageSwitchMarkup(route: string, locale: Locale): string {
