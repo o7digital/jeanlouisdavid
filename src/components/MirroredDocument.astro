@@ -295,6 +295,7 @@ const ogImageAlt = pageHeading || "Jean Louis David Mexico";
 const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).has(page.route)
   ? splitMirroredBodyForNativeSection(localizedBodyHtml)
   : null;
+const shouldLoadTidioChat = process.env.VERCEL_GIT_COMMIT_REF === "main";
 ---
 
 <!doctype html>
@@ -328,7 +329,9 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
     <!-- Google tag (gtag.js) -->
     <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-SFV4K3F3LG"></script>
     <script is:inline src="/gtag.js"></script>
-    <script is:inline async src="//code.tidio.co/fgdjqevuqqeq96gmgkg9hyoqfxrkflgr.js"></script>
+    {shouldLoadTidioChat && (
+      <script is:inline async src="//code.tidio.co/fgdjqevuqqeq96gmgkg9hyoqfxrkflgr.js"></script>
+    )}
     <script is:inline type="application/ld+json" set:html={jsonLd} />
     <style is:global>
       #full_slider_1 .avia-slideshow-inner > li,
