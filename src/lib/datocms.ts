@@ -15,18 +15,25 @@ export function hasDatoCmsToken(): boolean {
 
 export async function datoRequest<T>(query: string, variables: Record<string, unknown> = {}): Promise<T | null> {
   const token = import.meta.env.DATOCMS_API_TOKEN;
+  const environment = import.meta.env.DATOCMS_ENVIRONMENT;
 
   if (!token) {
     return null;
   }
 
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
+  if (environment) {
+    headers["X-Environment"] = environment;
+  }
+
   try {
     const response = await fetch(DATOCMS_ENDPOINT, {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({ query, variables }),
     });
 
@@ -48,4 +55,3 @@ export async function datoRequest<T>(query: string, variables: Record<string, un
     return null;
   }
 }
-
