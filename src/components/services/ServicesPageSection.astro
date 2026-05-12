@@ -3,7 +3,7 @@ import { getServicesPageContent } from "../../data/services";
 import type { Locale } from "../../lib/i18n";
 
 const { locale } = Astro.props as { locale: Locale };
-const content = getServicesPageContent(locale);
+const content = await getServicesPageContent(locale);
 const [haircutsSection, stylingSection, nailsSection, barberingSection] = content.sections;
 
 const firstRow = [

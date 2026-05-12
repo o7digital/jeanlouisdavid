@@ -1,4 +1,5 @@
 import type { Locale } from "../lib/i18n";
+import { datoRequest } from "../lib/datocms";
 
 export type LocationCard = {
   title: string;
@@ -124,6 +125,94 @@ const LOCATIONS_PAGE_BY_LOCALE: Record<Locale, LocationsPageContent> = {
   },
 };
 
-export function getLocationsPageContent(locale: Locale): LocationsPageContent {
-  return LOCATIONS_PAGE_BY_LOCALE[locale];
+type DatoSalon = {
+  name?: string | null;
+  slug?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  googleMapUrl?: string | null;
+  order?: number | null;
+};
+
+type DatoSalonsResponse = {
+  allSalons?: DatoSalon[];
+};
+
+const SALONS_QUERY = `
+  query Salons {
+    allSalons(orderBy: order_ASC) {
+      name
+      slug
+      address
+      phone
+      googleMapUrl
+      order
+    }
+  }
+`;
+
+function splitAddressLines(address: string | null | undefined, fallback: [string, string, string]): [string, string, string] {
+  const normalized = address?.trim();
+
+  if (!normalized) {
+    return fallback;
+  }
+
+  const parts = normalized
+    .split(/\n|,\s*/)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+  return [
+    parts[0] ?? fallback[0],
+    parts.slice(1, -1).join(", ") || fallback[1],
+    parts.at(-1) ?? fallback[2],
+  ];
+}
+
+function mergeDatoSalons(fallback: LocationsPageContent, salons: DatoSalon[]): LocationsPageContent {
+  const fallbackBySlug = new Map([
+    ["santa-fe", fallback.locations[0]],
+    ["polanco", fallback.locations[1]],
+  ]);
+  const mergedLocations: LocationCard[] = [];
+
+  for (const salon of salons) {
+    const slug = salon.slug?.trim();
+    if (!slug) continue;
+
+    const fallbackLocation = fallbackBySlug.get(slug);
+    if (!fallbackLocation) continue;
+
+    mergedLocations.push({
+      ...fallbackLocation,
+      title: salon.name?.replace(/^Jean Louis David\s*/i, "").trim() || fallbackLocation.title,
+      addressLines: splitAddressLines(salon.address, fallbackLocation.addressLines),
+      phone: salon.phone?.trim() || fallbackLocation.phone,
+    });
+  }
+
+  if (mergedLocations.length < 2) {
+    return fallback;
+  }
+
+  const santaFeMapUrl = salons.find((salon) => salon.slug === "santa-fe")?.googleMapUrl?.trim();
+
+  return {
+    ...fallback,
+    locations: mergedLocations.slice(0, 2) as [LocationCard, LocationCard],
+    mapEmbedUrl: santaFeMapUrl || fallback.mapEmbedUrl,
+  };
+}
+
+export async function getLocationsPageContent(locale: Locale): Promise<LocationsPageContent> {
+  const fallback = LOCATIONS_PAGE_BY_LOCALE[locale];
+  const data = await datoRequest<DatoSalonsResponse>(SALONS_QUERY);
+  const salons = data?.allSalons ?? [];
+
+  if (!salons.length) {
+    return fallback;
+  }
+
+  return mergeDatoSalons(fallback, salons);
 }

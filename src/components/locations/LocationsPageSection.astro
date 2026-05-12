@@ -3,7 +3,7 @@ import { getLocationsPageContent } from "../../data/locations";
 import type { Locale } from "../../lib/i18n";
 
 const { locale } = Astro.props as { locale: Locale };
-const content = getLocationsPageContent(locale);
+const content = await getLocationsPageContent(locale);
 const [santaFe, polanco] = content.locations;
 
 const locationIcon = "";

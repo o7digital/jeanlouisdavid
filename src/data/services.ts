@@ -1,4 +1,5 @@
 import type { Locale } from "../lib/i18n";
+import { datoRequest } from "../lib/datocms";
 
 export type ServiceItem = {
   label: string;
@@ -297,6 +298,101 @@ const SERVICES_PAGE_BY_LOCALE: Record<Locale, ServicesPageContent> = {
   },
 };
 
-export function getServicesPageContent(locale: Locale): ServicesPageContent {
-  return SERVICES_PAGE_BY_LOCALE[locale];
+type DatoStructuredText = {
+  value?: {
+    document?: {
+      children?: Array<{
+        children?: Array<{
+          value?: string;
+        }>;
+      }>;
+    };
+  };
+};
+
+type DatoService = {
+  title?: string | null;
+  slug?: string | null;
+  shortDescription?: DatoStructuredText | string | null;
+  order?: number | null;
+  locale?: string | null;
+};
+
+type DatoServicesResponse = {
+  allServices?: DatoService[];
+};
+
+const SERVICES_QUERY = `
+  query Services($locale: String!) {
+    allServices(filter: { locale: { eq: $locale } }, orderBy: order_ASC) {
+      title
+      slug
+      shortDescription {
+        value
+      }
+      order
+      locale
+    }
+  }
+`;
+
+function structuredTextToPlainText(value: DatoStructuredText | string | null | undefined): string | undefined {
+  if (!value) return undefined;
+  if (typeof value === "string") return value.trim() || undefined;
+
+  const paragraphs = value.value?.document?.children ?? [];
+  const text = paragraphs
+    .map((paragraph) => paragraph.children?.map((child) => child.value ?? "").join("") ?? "")
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return text || undefined;
+}
+
+function mergeDatoServices(fallback: ServicesPageContent, services: DatoService[]): ServicesPageContent {
+  const fallbackBySlug = new Map([
+    ["cortes", fallback.sections[0]],
+    ["peinados", fallback.sections[1]],
+    ["manicure-pedicure", fallback.sections[2]],
+    ["barberia", fallback.sections[3]],
+  ]);
+  const seen = new Set<string>();
+  const mergedSections: ServiceSection[] = [];
+
+  for (const service of services) {
+    const slug = service.slug?.trim();
+    if (!slug || seen.has(slug)) continue;
+
+    const fallbackSection = fallbackBySlug.get(slug);
+    if (!fallbackSection) continue;
+
+    seen.add(slug);
+    mergedSections.push({
+      ...fallbackSection,
+      title: service.title?.trim() || fallbackSection.title,
+      note: structuredTextToPlainText(service.shortDescription) ?? fallbackSection.note,
+    });
+  }
+
+  if (mergedSections.length < 4) {
+    return fallback;
+  }
+
+  return {
+    ...fallback,
+    sections: mergedSections.slice(0, 4) as [ServiceSection, ServiceSection, ServiceSection, ServiceSection],
+  };
+}
+
+export async function getServicesPageContent(locale: Locale): Promise<ServicesPageContent> {
+  const fallback = SERVICES_PAGE_BY_LOCALE[locale];
+  const data = await datoRequest<DatoServicesResponse>(SERVICES_QUERY, { locale });
+  const services = data?.allServices ?? [];
+
+  if (!services.length) {
+    return fallback;
+  }
+
+  return mergeDatoServices(fallback, services);
 }
