@@ -323,8 +323,8 @@ type DatoServicesResponse = {
 };
 
 const SERVICES_QUERY = `
-  query Services($locale: String!) {
-    allServices(filter: { locale: { eq: $locale } }, orderBy: order_ASC) {
+  query Services {
+    allServices {
       title
       slug
       shortDescription {
@@ -351,44 +351,55 @@ function structuredTextToPlainText(value: DatoStructuredText | string | null | u
 }
 
 function mergeDatoServices(fallback: ServicesPageContent, services: DatoService[]): ServicesPageContent {
-  const fallbackBySlug = new Map([
+  const slugAliases = new Map([
+    ["manicure-y-pedicure", "manicure-pedicure"],
+    ["manicure-pedicure", "manicure-pedicure"],
+  ]);
+  const fallbackBySlug = new Map<string, ServiceSection>([
     ["cortes", fallback.sections[0]],
     ["peinados", fallback.sections[1]],
     ["manicure-pedicure", fallback.sections[2]],
     ["barberia", fallback.sections[3]],
   ]);
+  const fallbackOrder = ["cortes", "peinados", "manicure-pedicure", "barberia"];
   const seen = new Set<string>();
-  const mergedSections: ServiceSection[] = [];
+  const mergedBySlug = new Map<string, ServiceSection>();
 
   for (const service of services) {
-    const slug = service.slug?.trim();
+    const rawSlug = service.slug?.trim();
+    const slug = rawSlug ? (slugAliases.get(rawSlug) ?? rawSlug) : undefined;
     if (!slug || seen.has(slug)) continue;
 
     const fallbackSection = fallbackBySlug.get(slug);
     if (!fallbackSection) continue;
 
     seen.add(slug);
-    mergedSections.push({
+    mergedBySlug.set(slug, {
       ...fallbackSection,
       title: service.title?.trim() || fallbackSection.title,
       note: structuredTextToPlainText(service.shortDescription) ?? fallbackSection.note,
     });
   }
 
-  if (mergedSections.length < 4) {
+  if (mergedBySlug.size < 4) {
     return fallback;
   }
 
+  const mergedSections = fallbackOrder.map((slug) => mergedBySlug.get(slug) ?? fallbackBySlug.get(slug));
+
   return {
     ...fallback,
-    sections: mergedSections.slice(0, 4) as [ServiceSection, ServiceSection, ServiceSection, ServiceSection],
+    sections: mergedSections as [ServiceSection, ServiceSection, ServiceSection, ServiceSection],
   };
 }
 
 export async function getServicesPageContent(locale: Locale): Promise<ServicesPageContent> {
   const fallback = SERVICES_PAGE_BY_LOCALE[locale];
-  const data = await datoRequest<DatoServicesResponse>(SERVICES_QUERY, { locale });
-  const services = data?.allServices ?? [];
+  const data = await datoRequest<DatoServicesResponse>(SERVICES_QUERY);
+  const services = (data?.allServices ?? []).filter((service) => {
+    const serviceLocale = service.locale?.trim();
+    return !serviceLocale || serviceLocale === locale;
+  });
 
   if (!services.length) {
     return fallback;
