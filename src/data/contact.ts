@@ -1,4 +1,5 @@
 import type { Locale } from "../lib/i18n";
+import { getDatoPageByRoute } from "./pages";
 
 type ContactFormField = {
   id: string;
@@ -295,6 +296,17 @@ const CONTACT_PAGE_BY_LOCALE: Record<Locale, ContactPageContent> = {
   },
 };
 
-export function getContactPageContent(locale: Locale): ContactPageContent {
-  return CONTACT_PAGE_BY_LOCALE[locale];
+export async function getContactPageContent(locale: Locale): Promise<ContactPageContent> {
+  const fallback = CONTACT_PAGE_BY_LOCALE[locale];
+  const page = await getDatoPageByRoute("/contacto/", locale);
+
+  if (!page) {
+    return fallback;
+  }
+
+  return {
+    ...fallback,
+    heading: page.title?.trim() || page.heroTitle?.trim() || fallback.heading,
+    intro: page.seoDescription?.trim() || fallback.intro,
+  };
 }

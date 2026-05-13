@@ -3,7 +3,7 @@ import { getContactPageContent } from "../../data/contact";
 import type { Locale } from "../../lib/i18n";
 
 const { locale } = Astro.props as { locale: Locale };
-const content = getContactPageContent(locale);
+const content = await getContactPageContent(locale);
 const locationIcon = "";
 ---
 
