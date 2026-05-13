@@ -1,5 +1,5 @@
 import type { Locale } from "../lib/i18n";
-import { datoRequest } from "../lib/datocms";
+import { datoRequest, logDatoCmsDebug } from "../lib/datocms";
 
 export type LocationCard = {
   title: string;
@@ -193,6 +193,14 @@ function mergeDatoSalons(fallback: LocationsPageContent, salons: DatoSalon[]): L
   }
 
   if (mergedLocations.length < 2) {
+    logDatoCmsDebug("salons fallback: not enough matching records", {
+      matched: mergedLocations.map((location) => location.title),
+      received: salons.map((salon) => ({
+        name: salon.name,
+        slug: salon.slug,
+        order: salon.order,
+      })),
+    });
     return fallback;
   }
 
@@ -210,7 +218,18 @@ export async function getLocationsPageContent(locale: Locale): Promise<Locations
   const data = await datoRequest<DatoSalonsResponse>(SALONS_QUERY);
   const salons = data?.allSalons ?? [];
 
+  logDatoCmsDebug("salon records", {
+    locale,
+    total: salons.length,
+    records: salons.map((salon) => ({
+      name: salon.name,
+      slug: salon.slug,
+      order: salon.order,
+    })),
+  });
+
   if (!salons.length) {
+    logDatoCmsDebug("salons fallback: no records returned", { locale });
     return fallback;
   }
 

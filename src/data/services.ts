@@ -1,5 +1,5 @@
 import type { Locale } from "../lib/i18n";
-import { datoRequest } from "../lib/datocms";
+import { datoRequest, logDatoCmsDebug } from "../lib/datocms";
 
 export type ServiceItem = {
   label: string;
@@ -382,6 +382,16 @@ function mergeDatoServices(fallback: ServicesPageContent, services: DatoService[
   }
 
   if (mergedBySlug.size < 4) {
+    logDatoCmsDebug("services fallback: not enough matching records", {
+      matched: Array.from(mergedBySlug.keys()),
+      required: fallbackOrder,
+      received: services.map((service) => ({
+        title: service.title,
+        slug: service.slug,
+        locale: service.locale,
+        order: service.order,
+      })),
+    });
     return fallback;
   }
 
@@ -401,7 +411,20 @@ export async function getServicesPageContent(locale: Locale): Promise<ServicesPa
     return !serviceLocale || serviceLocale === locale;
   });
 
+  logDatoCmsDebug("services records", {
+    locale,
+    total: data?.allServices?.length ?? 0,
+    selected: services.length,
+    records: services.map((service) => ({
+      title: service.title,
+      slug: service.slug,
+      locale: service.locale,
+      order: service.order,
+    })),
+  });
+
   if (!services.length) {
+    logDatoCmsDebug("services fallback: no records selected", { locale });
     return fallback;
   }
 
