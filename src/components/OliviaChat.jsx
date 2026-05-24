@@ -71,6 +71,20 @@ function getLanguage() {
   return "es";
 }
 
+function detectMessageLanguage(message, fallbackLanguage) {
+  const value = (message || "").toLowerCase();
+  if (!value) return fallbackLanguage;
+
+  const spanishHints = /\b(hola|gracias|quiero|precio|precios|tarifa|tarifas|cita|citas|informacion|contacto|correo|telefono|cabello|servicio|servicios)\b/;
+  const frenchHints = /\b(bonjour|merci|prix|tarif|devis|rendez-vous|contact|telephone|cheveux|service|services)\b/;
+  const englishHints = /\b(hello|thanks|price|prices|quote|appointment|appointments|contact|phone|hair|service|services)\b/;
+
+  if (spanishHints.test(value)) return "es";
+  if (frenchHints.test(value)) return "fr";
+  if (englishHints.test(value)) return "en";
+  return fallbackLanguage;
+}
+
 export default function OliviaChat() {
   const language = typeof document === "undefined" ? "es" : getLanguage();
   const copy = COPY[language];
@@ -125,6 +139,7 @@ export default function OliviaChat() {
   const sendMessage = async () => {
     const message = input.trim();
     if (!message || isLoading || !leadSent) return;
+    const messageLanguage = detectMessageLanguage(message, language);
 
     setInput("");
     setMessages((current) => [...current, { role: "user", content: message }]);
@@ -134,7 +149,7 @@ export default function OliviaChat() {
       const response = await fetch(CHAT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, language, siteCode: SITE_CODE }),
+        body: JSON.stringify({ message, language: messageLanguage, siteCode: SITE_CODE }),
       });
       const data = await response.json();
       setMessages((current) => [...current, { role: "assistant", content: data.reply || copy.error }]);
