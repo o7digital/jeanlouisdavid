@@ -6,13 +6,13 @@ const CHAT_ENDPOINT = "https://www.o7digital.com/api/o7-chat";
 
 const COPY = {
   es: {
-    title: "Sofia",
+    title: "Olivia",
     subtitle: "Asistente Jean Louis David",
     status: "En linea",
     teaser: "Necesitas ayuda?",
     open: "Abrir chat",
     close: "Cerrar chat",
-    welcome: "Hola, soy Sofia. En que puedo ayudarte?",
+    welcome: "Hola, soy Olivia. En que puedo ayudarte?",
     leadIntro: "Deja tus datos para que un asesor Jean Louis David pueda contactarte.",
     firstName: "Nombre",
     lastName: "Apellido",
@@ -25,13 +25,13 @@ const COPY = {
     error: "No pude enviar el mensaje. Intenta de nuevo o contacta directamente al salon.",
   },
   en: {
-    title: "Sofia",
+    title: "Olivia",
     subtitle: "Jean Louis David Assistant",
     status: "Online",
     teaser: "Need help?",
     open: "Open chat",
     close: "Close chat",
-    welcome: "Hello, I am Sofia. How can I help you?",
+    welcome: "Hello, I am Olivia. How can I help you?",
     leadIntro: "Leave your details so a Jean Louis David advisor can contact you.",
     firstName: "First name",
     lastName: "Last name",
@@ -44,13 +44,13 @@ const COPY = {
     error: "I could not send the message. Please try again or contact the salon directly.",
   },
   fr: {
-    title: "Sofia",
+    title: "Olivia",
     subtitle: "Assistante Jean Louis David",
     status: "En ligne",
     teaser: "Besoin d'aide ?",
     open: "Ouvrir le chat",
     close: "Fermer le chat",
-    welcome: "Bonjour, je suis Sofia. Comment puis-je vous aider ?",
+    welcome: "Bonjour, je suis Olivia. Comment puis-je vous aider ?",
     leadIntro: "Laissez vos coordonnees pour qu'un conseiller Jean Louis David puisse vous contacter.",
     firstName: "Prenom",
     lastName: "Nom",
@@ -109,10 +109,10 @@ export default function OliviaChat() {
       lastName: lead.lastName.trim(),
       email: lead.email.trim(),
       phone: lead.phone.trim(),
-      source: "Chat Sofia JLD",
+      source: "Chat Olivia JLD",
       language,
       siteCode: SITE_CODE,
-      message: `Lead Chat Sofia JLD (${language}, ${SITE_CODE})\n\n${transcript}`,
+      message: `Lead Chat Olivia JLD (${language}, ${SITE_CODE})\n\n${transcript}`,
     };
 
     if (!payload.firstName || !payload.lastName || !payload.email || !payload.phone) return;
@@ -220,7 +220,7 @@ export default function OliviaChat() {
       )}
 
       <button type="button" className="olivia-chat__toggle" onClick={() => setIsOpen((current) => !current)} aria-label={isOpen ? copy.close : copy.open}>
-        {isOpen ? "x" : "Sofia"}
+        {isOpen ? "x" : "Olivia"}
       </button>
     </div>
   );
