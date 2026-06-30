@@ -214,7 +214,7 @@ export default function OliviaChat() {
 
       {!isOpen && (
         <button type="button" className="olivia-chat__teaser" onClick={() => setIsOpen(true)}>
-          <span className="olivia-chat__avatar">S</span>
+          <span className="olivia-chat__avatar">O</span>
           <span>{copy.teaser}</span>
         </button>
       )}
