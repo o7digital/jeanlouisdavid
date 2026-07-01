@@ -14,6 +14,11 @@ const COPY = {
     close: "Cerrar chat",
     welcome: "Hola, soy Olivia. En que puedo ayudarte?",
     leadIntro: "Deja tus datos para que un asesor Jean Louis David pueda contactarte.",
+    consent: "He leído y acepto el Aviso de Privacidad para recibir atención de Jean Louis David.",
+    privacy: "Aviso de Privacidad",
+    privacyTitle: "Aviso de Privacidad - Olivia AI",
+    privacyBody: "Al usar este chat autorizas a Jean Louis David México a tratar los datos personales que compartas, incluyendo nombre, apellidos, email, teléfono, mensajes, idioma y página visitada, con la finalidad de atender tu solicitud, dar seguimiento a servicios de salón y contactarte por medios electrónicos. Tus datos serán tratados conforme al Aviso de Privacidad del sitio y a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares. Puedes ejercer derechos ARCO, revocar tu consentimiento o limitar el uso de tus datos conforme al Aviso de Privacidad.",
+    privacyAccept: "He leído y acepto",
     firstName: "Nombre",
     lastName: "Apellido",
     email: "Email",
@@ -33,6 +38,11 @@ const COPY = {
     close: "Close chat",
     welcome: "Hello, I am Olivia. How can I help you?",
     leadIntro: "Leave your details so a Jean Louis David advisor can contact you.",
+    consent: "I have read and accept the Privacy Notice to receive assistance from Jean Louis David.",
+    privacy: "Privacy Notice",
+    privacyTitle: "Privacy Notice - Olivia AI",
+    privacyBody: "By using this chat, you authorize Jean Louis David Mexico to process the personal data you provide, including first name, last name, email, phone, messages, language and visited page, to answer your request, follow up on salon services and contact you by electronic means. Your data will be processed under the site Privacy Notice and Mexico’s Federal Law on Protection of Personal Data Held by Private Parties. You may exercise ARCO rights, revoke consent or limit data use as described in the Privacy Notice.",
+    privacyAccept: "I have read and accept",
     firstName: "First name",
     lastName: "Last name",
     email: "Email",
@@ -52,6 +62,11 @@ const COPY = {
     close: "Fermer le chat",
     welcome: "Bonjour, je suis Olivia. Comment puis-je vous aider ?",
     leadIntro: "Laissez vos coordonnees pour qu'un conseiller Jean Louis David puisse vous contacter.",
+    consent: "J’ai lu et j’accepte l’avis de confidentialité pour recevoir l’assistance de Jean Louis David.",
+    privacy: "Avis de confidentialité",
+    privacyTitle: "Avis de confidentialité - Olivia AI",
+    privacyBody: "En utilisant ce chat, vous autorisez Jean Louis David Mexique à traiter les données personnelles que vous partagez, notamment prénom, nom, email, téléphone, messages, langue et page visitée, afin de répondre à votre demande, assurer le suivi des services de salon et vous contacter par voie électronique. Vos données seront traitées conformément à l’avis de confidentialité du site et à la loi mexicaine applicable. Vous pouvez exercer vos droits ARCO, révoquer votre consentement ou limiter l’utilisation de vos données selon l’avis de confidentialité.",
+    privacyAccept: "J’ai lu et j’accepte",
     firstName: "Prenom",
     lastName: "Nom",
     email: "Email",
@@ -92,6 +107,8 @@ export default function OliviaChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
+  const [consent, setConsent] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
   const [lead, setLead] = useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [messages, setMessages] = useState([{ role: "assistant", content: copy.welcome }]);
 
@@ -112,10 +129,12 @@ export default function OliviaChat() {
       source: "Chat Olivia JLD",
       language,
       siteCode: SITE_CODE,
+      consent: true,
+      consentVersion: "jld-privacy-chat-2026-07-01",
       message: `Lead Chat Olivia JLD (${language}, ${SITE_CODE})\n\n${transcript}`,
     };
 
-    if (!payload.firstName || !payload.lastName || !payload.email || !payload.phone) return;
+    if (!payload.firstName || !payload.lastName || !payload.email || !payload.phone || !consent) return;
 
     setIsLoading(true);
     try {
@@ -191,7 +210,11 @@ export default function OliviaChat() {
               <input required placeholder={copy.lastName} value={lead.lastName} onChange={(event) => setLead((current) => ({ ...current, lastName: event.target.value }))} />
               <input required type="email" placeholder={copy.email} value={lead.email} onChange={(event) => setLead((current) => ({ ...current, email: event.target.value }))} />
               <input required type="tel" placeholder={copy.phone} value={lead.phone} onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))} />
-              <button type="submit" disabled={isLoading}>{copy.submitLead}</button>
+              <label className="olivia-chat__consent">
+                <input required type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+                <span>{copy.consent} <button type="button" onClick={() => setPrivacyOpen(true)}>{copy.privacy}</button></span>
+              </label>
+              <button type="submit" disabled={isLoading || !consent}>{copy.submitLead}</button>
             </form>
           )}
 
@@ -222,6 +245,18 @@ export default function OliviaChat() {
       <button type="button" className="olivia-chat__toggle" onClick={() => setIsOpen((current) => !current)} aria-label={isOpen ? copy.close : copy.open}>
         {isOpen ? "x" : "Olivia"}
       </button>
+
+      {privacyOpen && (
+        <div className="olivia-chat__privacy" role="dialog" aria-modal="true" aria-label={copy.privacyTitle}>
+          <div>
+            <button type="button" className="olivia-chat__privacy-close" onClick={() => setPrivacyOpen(false)} aria-label={copy.close}>x</button>
+            <h3>{copy.privacyTitle}</h3>
+            <p>{copy.privacyBody}</p>
+            <a href="/privacidad/" target="_blank" rel="noreferrer">{copy.privacy}</a>
+            <button type="button" onClick={() => { setConsent(true); setPrivacyOpen(false); }}>{copy.privacyAccept}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
