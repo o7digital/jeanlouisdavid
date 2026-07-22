@@ -2,7 +2,8 @@ import { useMemo, useState } from "react";
 
 const SITE_CODE = "jeanlouisdavid";
 const LEAD_ENDPOINT = "https://www.o7digital.com/api/o7-lead";
-const CHAT_ENDPOINT = "https://www.o7digital.com/api/o7-chat";
+const CHAT_ENDPOINT = "https://olivia-ai.o7digital.com/api/olivia/chat";
+const CHANNEL_ENDPOINT = "https://olivia-ai.o7digital.com/api/widget/conversations";
 
 const COPY = {
   es: {
@@ -103,6 +104,13 @@ function detectMessageLanguage(message, fallbackLanguage) {
 export default function OliviaChat() {
   const language = typeof document === "undefined" ? "es" : getLanguage();
   const copy = COPY[language];
+  const visitorId = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    const key = `oliviaVisitorId:${SITE_CODE}`;
+    const current = window.localStorage.getItem(key) || window.crypto.randomUUID();
+    window.localStorage.setItem(key, current);
+    return current;
+  }, []);
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -116,6 +124,46 @@ export default function OliviaChat() {
     () => messages.map((message) => `${message.role}: ${message.content}`).join("\n"),
     [messages],
   );
+
+  const channelMetadata = (extra = {}) => ({
+    pageUrl: typeof window !== "undefined" ? window.location.href : "",
+    pageTitle: typeof document !== "undefined" ? document.title : "",
+    source: "Chat Olivia JLD",
+    consent,
+    consentVersion: "jld-privacy-chat-2026-07-01",
+    lead,
+    ...extra,
+  });
+
+  const storeChannelMessage = async (content, metadata = {}) => {
+    if (!visitorId) return null;
+    const response = await fetch(CHANNEL_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        clientCode: SITE_CODE,
+        visitorId,
+        content,
+        visitorName: `${lead.firstName} ${lead.lastName}`.trim(),
+        email: lead.email,
+        phone: lead.phone,
+        source: "website-chat",
+        language,
+        metadata: channelMetadata(metadata),
+      }),
+    });
+    if (!response.ok) throw new Error("Channel Manager delivery failed");
+    return response.json();
+  };
+
+  const storeAssistantMessage = async (content, model) => {
+    if (!visitorId) return;
+    await fetch(CHANNEL_ENDPOINT, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ clientCode: SITE_CODE, visitorId, content, model }),
+    });
+  };
 
   const submitLead = async (event) => {
     event.preventDefault();
@@ -138,14 +186,18 @@ export default function OliviaChat() {
 
     setIsLoading(true);
     try {
+      await storeChannelMessage(
+        `${payload.firstName} ${payload.lastName} · ${payload.email} · ${payload.phone}`,
+        { type: "lead", importedFrom: "jld-chat-form", transcript },
+      );
+
       const response = await fetch(LEAD_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
-      if (!response.ok) throw new Error("Lead delivery failed");
-
+      if (!response.ok) console.warn("Lead delivery failed");
+      await storeAssistantMessage(copy.leadThanks);
       setLeadSent(true);
       setMessages((current) => [...current, { role: "assistant", content: copy.leadThanks }]);
     } catch {
@@ -165,13 +217,26 @@ export default function OliviaChat() {
     setIsLoading(true);
 
     try {
+      const stored = await storeChannelMessage(message, { type: "message" });
+      if (stored?.conversation?.status === "manual") return;
+
       const response = await fetch(CHAT_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, language: messageLanguage, siteCode: SITE_CODE }),
+        body: JSON.stringify({
+          message,
+          language: messageLanguage,
+          clientCode: SITE_CODE,
+          clientId: SITE_CODE,
+          siteCode: SITE_CODE,
+          visitorId,
+          metadata: channelMetadata({ transcript }),
+        }),
       });
       const data = await response.json();
-      setMessages((current) => [...current, { role: "assistant", content: data.reply || copy.error }]);
+      const assistantContent = data.reply || copy.error;
+      setMessages((current) => [...current, { role: "assistant", content: assistantContent }]);
+      await storeAssistantMessage(assistantContent, data.model);
     } catch {
       setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
     } finally {
