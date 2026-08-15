@@ -115,6 +115,7 @@ export default function OliviaChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
+  const [showLeadForm, setShowLeadForm] = useState(false);
   const [consent, setConsent] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [lead, setLead] = useState({ firstName: "", lastName: "", email: "", phone: "" });
@@ -209,7 +210,7 @@ export default function OliviaChat() {
 
   const sendMessage = async () => {
     const message = input.trim();
-    if (!message || isLoading || !leadSent) return;
+    if (!message || isLoading || !consent) return;
     const messageLanguage = detectMessageLanguage(message, language);
 
     setInput("");
@@ -231,11 +232,13 @@ export default function OliviaChat() {
           siteCode: SITE_CODE,
           visitorId,
           metadata: channelMetadata({ transcript }),
+          history: messages.slice(-12).map(({ role, content }) => ({ role, content })),
         }),
       });
       const data = await response.json();
       const assistantContent = data.reply || copy.error;
       setMessages((current) => [...current, { role: "assistant", content: assistantContent }]);
+      if (data.action === "show_lead_form" || data.leadForm) setShowLeadForm(true);
       await storeAssistantMessage(assistantContent, data.model);
     } catch {
       setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
@@ -268,7 +271,7 @@ export default function OliviaChat() {
             {isLoading && <div className="olivia-chat__message olivia-chat__message--assistant">...</div>}
           </div>
 
-          {!leadSent && (
+          {showLeadForm && !leadSent && (
             <form className="olivia-chat__lead" onSubmit={submitLead}>
               <p>{copy.leadIntro}</p>
               <input required placeholder={copy.firstName} value={lead.firstName} onChange={(event) => setLead((current) => ({ ...current, firstName: event.target.value }))} />
@@ -283,17 +286,24 @@ export default function OliviaChat() {
             </form>
           )}
 
+          {!consent && (
+            <label className="olivia-chat__consent">
+              <input required type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+              <span>{copy.consent} <button type="button" onClick={() => setPrivacyOpen(true)}>{copy.privacy}</button></span>
+            </label>
+          )}
+
           <div className="olivia-chat__composer">
             <input
               value={input}
-              disabled={!leadSent || isLoading}
+              disabled={!consent || isLoading}
               placeholder={copy.placeholder}
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === "Enter") sendMessage();
               }}
             />
-            <button type="button" onClick={sendMessage} disabled={!leadSent || isLoading} aria-label={copy.send}>
+            <button type="button" onClick={sendMessage} disabled={!consent || isLoading} aria-label={copy.send}>
               &gt;
             </button>
           </div>
