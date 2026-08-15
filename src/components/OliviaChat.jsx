@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const SITE_CODE = "jeanlouisdavid";
 const LEAD_ENDPOINT = "https://www.o7digital.com/api/o7-lead";
@@ -10,6 +10,7 @@ const COPY = {
     title: "Olivia",
     subtitle: "Asistente Jean Louis David",
     status: "En linea",
+    inactive: "Inactiva",
     teaser: "Necesitas ayuda?",
     open: "Abrir chat",
     close: "Cerrar chat",
@@ -34,6 +35,7 @@ const COPY = {
     title: "Olivia",
     subtitle: "Jean Louis David Assistant",
     status: "Online",
+    inactive: "Inactive",
     teaser: "Need help?",
     open: "Open chat",
     close: "Close chat",
@@ -58,6 +60,7 @@ const COPY = {
     title: "Olivia",
     subtitle: "Assistante Jean Louis David",
     status: "En ligne",
+    inactive: "Inactive",
     teaser: "Besoin d'aide ?",
     open: "Ouvrir le chat",
     close: "Fermer le chat",
@@ -118,8 +121,25 @@ export default function OliviaChat() {
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [consent, setConsent] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const [lead, setLead] = useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [messages, setMessages] = useState([{ role: "assistant", content: copy.welcome }]);
+
+  useEffect(() => {
+    let timer;
+    const markActive = () => {
+      setIsActive(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setIsActive(false), 45000);
+    };
+    const events = ["pointerdown", "keydown", "scroll", "touchstart"];
+    events.forEach((event) => window.addEventListener(event, markActive, { passive: true }));
+    markActive();
+    return () => {
+      window.clearTimeout(timer);
+      events.forEach((event) => window.removeEventListener(event, markActive));
+    };
+  }, []);
 
   const transcript = useMemo(
     () => messages.map((message) => `${message.role}: ${message.content}`).join("\n"),
@@ -256,7 +276,9 @@ export default function OliviaChat() {
               <p className="olivia-chat__title">{copy.title}</p>
               <p className="olivia-chat__subtitle">{copy.subtitle}</p>
             </div>
-            <span className="olivia-chat__status">{copy.status}</span>
+            <span className={`olivia-chat__status ${isActive ? "is-online" : "is-inactive"}`}>
+              <span aria-hidden="true" />{isActive ? copy.status : copy.inactive}
+            </span>
             <button type="button" className="olivia-chat__close" onClick={() => setIsOpen(false)} aria-label={copy.close}>
               x
             </button>

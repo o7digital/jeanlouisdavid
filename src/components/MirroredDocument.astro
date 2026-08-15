@@ -873,10 +873,13 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        border: 1px solid rgba(206, 178, 122, 0.42);
-        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 26px;
+        background: linear-gradient(145deg, rgba(31, 28, 25, 0.98), rgba(8, 8, 8, 0.98));
         color: #fff;
-        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.35);
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.48), 0 12px 26px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        transform: perspective(1200px) rotateX(0.6deg) rotateY(-0.8deg);
+        backdrop-filter: blur(18px);
       }
 
       .olivia-chat__header {
@@ -885,7 +888,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         align-items: center;
         gap: 10px;
         padding: 16px;
-        background: linear-gradient(135deg, #050505, #27211a);
+        background: linear-gradient(135deg, rgba(8, 8, 8, 0.98), rgba(57, 45, 28, 0.94));
         border-bottom: 1px solid rgba(206, 178, 122, 0.35);
       }
 
@@ -911,8 +914,27 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
       }
 
       .olivia-chat__status {
-        border: 1px solid rgba(206, 178, 122, 0.35);
-        padding: 5px 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: rgba(255, 255, 255, 0.07);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .olivia-chat__status > span {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14), 0 0 14px rgba(34, 197, 94, 0.8);
+      }
+
+      .olivia-chat__status.is-inactive > span {
+        background: #f59e0b;
+        box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.14), 0 0 14px rgba(245, 158, 11, 0.75);
       }
 
       .olivia-chat__close,
@@ -931,6 +953,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         background: #ceb27a;
         color: #111;
         font-weight: 800;
+        border-radius: 999px;
       }
 
       .olivia-chat__messages {
@@ -948,6 +971,8 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         padding: 10px 12px;
         font-size: 14px;
         line-height: 1.45;
+        border-radius: 18px 18px 18px 6px;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
       }
 
       .olivia-chat__message--assistant {
@@ -959,6 +984,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         margin-left: auto;
         background: #ceb27a;
         color: #111;
+        border-radius: 18px 18px 6px 18px;
       }
 
       .olivia-chat__lead {
@@ -992,6 +1018,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         font: inherit;
         font-size: 14px;
         outline: none;
+        border-radius: 14px;
       }
 
       .olivia-chat__lead input {
@@ -1027,6 +1054,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         color: #111;
         font-weight: 800;
         text-transform: uppercase;
+        border-radius: 14px;
       }
 
       .olivia-chat__composer {
@@ -1047,6 +1075,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         background: #ceb27a;
         color: #111;
         font-weight: 900;
+        border-radius: 999px;
       }
 
       .olivia-chat__composer button:disabled,
@@ -1074,6 +1103,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         color: #fff;
         border: 1px solid rgba(206, 178, 122, 0.55);
         box-shadow: 0 14px 38px rgba(0, 0, 0, 0.2);
+        border-radius: 999px;
       }
 
       .olivia-chat__avatar {
