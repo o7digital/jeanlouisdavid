@@ -857,8 +857,8 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
 
       .olivia-chat {
         position: fixed;
-        right: 22px;
-        bottom: 22px;
+        right: 34px;
+        bottom: 32px;
         z-index: 99999;
         font-family: HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
@@ -877,9 +877,20 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         border-radius: 26px;
         background: linear-gradient(145deg, rgba(31, 28, 25, 0.98), rgba(8, 8, 8, 0.98));
         color: #fff;
-        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.48), 0 12px 26px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        box-shadow: 0 42px 72px -24px rgba(0, 0, 0, 0.68), 0 22px 34px -22px rgba(0, 0, 0, 0.58), 0 8px 18px -14px rgba(206, 178, 122, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         transform: perspective(1200px) rotateX(0.6deg) rotateY(-0.8deg);
         backdrop-filter: blur(18px);
+        animation: olivia-panel-float 5.5s ease-in-out infinite;
+        will-change: transform;
+      }
+
+      @keyframes olivia-panel-float {
+        0%, 100% { transform: perspective(1200px) translateY(-5px) rotateX(0.6deg) rotateY(-0.8deg); }
+        50% { transform: perspective(1200px) translateY(-11px) rotateX(0.8deg) rotateY(-0.6deg); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .olivia-chat__panel { animation: none; }
       }
 
       .olivia-chat__header {
@@ -1090,7 +1101,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         margin-top: 10px;
         float: right;
         border-radius: 999px;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+        box-shadow: 0 22px 38px -16px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       }
 
       .olivia-chat__teaser {
@@ -1102,7 +1113,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         background: #111;
         color: #fff;
         border: 1px solid rgba(206, 178, 122, 0.55);
-        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 24px 42px -18px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         border-radius: 999px;
       }
 
@@ -1115,6 +1126,10 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         background: #ceb27a;
         color: #111;
         font-weight: 900;
+      }
+
+      @media (max-width: 600px) {
+        .olivia-chat { right: 14px; bottom: 18px; }
       }
 
       .olivia-chat__privacy {
