@@ -81,13 +81,6 @@ const COPY = {
   },
 };
 
-function getLanguage() {
-  const lang = (document.documentElement.lang || "").toLowerCase();
-  if (lang.startsWith("fr")) return "fr";
-  if (lang.startsWith("en")) return "en";
-  return "es";
-}
-
 function detectMessageLanguage(message, fallbackLanguage) {
   const value = (message || "").toLowerCase();
   if (!value) return fallbackLanguage;
@@ -102,8 +95,7 @@ function detectMessageLanguage(message, fallbackLanguage) {
   return fallbackLanguage;
 }
 
-export default function OliviaChat() {
-  const language = typeof document === "undefined" ? "es" : getLanguage();
+export default function OliviaChat({ language = "es" }) {
   const copy = COPY[language];
   const visitorId = useMemo(() => {
     if (typeof window === "undefined") return "";

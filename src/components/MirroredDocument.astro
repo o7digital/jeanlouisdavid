@@ -1200,7 +1200,7 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
   </head>
   <body id="top" class={page.bodyClass || undefined}>
     <ClientBoot client:load route={canonicalPathForLocale(page.route, locale)} />
-    <OliviaChat client:load />
+    <OliviaChat client:load language={locale} />
     {!hasBodyH1 && <h1 class="jld-visually-hidden">{pageHeading}</h1>}
     {nativeBodyShell ? (
       <>
