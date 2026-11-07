@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
+import { requestOlivia, SITE_CODE } from "../lib/olivia-client.mjs";
 
-const SITE_CODE = "jeanlouisdavid";
 const LEAD_ENDPOINT = "https://www.o7digital.com/api/o7-lead";
-const CHAT_ENDPOINT = "https://olivia-ai.o7digital.com/api/olivia/chat";
-const CHANNEL_ENDPOINT = "https://olivia-ai.o7digital.com/api/widget/conversations";
 
 const COPY = {
   es: {
@@ -158,32 +156,22 @@ export default function OliviaChat() {
 
   const storeChannelMessage = async (content, metadata = {}) => {
     if (!visitorId) return null;
-    const response = await fetch(CHANNEL_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        clientCode: SITE_CODE,
-        visitorId,
-        content,
-        visitorName: `${lead.firstName} ${lead.lastName}`.trim(),
-        email: lead.email,
-        phone: lead.phone,
-        source: "website-chat",
-        language,
-        metadata: channelMetadata(metadata),
-      }),
+    return requestOlivia("widget/conversations", "POST", {
+      clientCode: SITE_CODE,
+      visitorId,
+      content,
+      visitorName: `${lead.firstName} ${lead.lastName}`.trim(),
+      email: lead.email,
+      phone: lead.phone,
+      source: "website-chat",
+      language,
+      metadata: channelMetadata(metadata),
     });
-    if (!response.ok) throw new Error("Channel Manager delivery failed");
-    return response.json();
   };
 
   const storeAssistantMessage = async (content, model) => {
     if (!visitorId) return;
-    await fetch(CHANNEL_ENDPOINT, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ clientCode: SITE_CODE, visitorId, content, model }),
-    });
+    await requestOlivia("widget/conversations", "PATCH", { clientCode: SITE_CODE, visitorId, content, model });
   };
 
   const submitLead = async (event) => {
@@ -216,11 +204,14 @@ export default function OliviaChat() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(30000),
       });
-      if (!response.ok) console.warn("Lead delivery failed");
-      await storeAssistantMessage(copy.leadThanks);
+      if (!response.ok) throw new Error("Lead delivery failed");
+      const result = await response.json();
+      if (result.ok !== true) throw new Error("Lead delivery failed");
       setLeadSent(true);
       setMessages((current) => [...current, { role: "assistant", content: copy.leadThanks }]);
+      void storeAssistantMessage(copy.leadThanks).catch(() => {});
     } catch {
       setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
     } finally {
@@ -241,25 +232,21 @@ export default function OliviaChat() {
       const stored = await storeChannelMessage(message, { type: "message" });
       if (stored?.conversation?.status === "manual") return;
 
-      const response = await fetch(CHAT_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message,
-          language: messageLanguage,
-          clientCode: SITE_CODE,
-          clientId: SITE_CODE,
-          siteCode: SITE_CODE,
-          visitorId,
-          metadata: channelMetadata({ transcript }),
-          history: messages.slice(-12).map(({ role, content }) => ({ role, content })),
-        }),
+      const data = await requestOlivia("olivia/chat", "POST", {
+        message,
+        language: messageLanguage,
+        clientCode: SITE_CODE,
+        clientId: SITE_CODE,
+        siteCode: SITE_CODE,
+        visitorId,
+        metadata: channelMetadata({ transcript }),
+        history: messages.slice(-12).map(({ role, content }) => ({ role, content })),
       });
-      const data = await response.json();
-      const assistantContent = data.reply || copy.error;
+      if (typeof data.reply !== "string" || !data.reply.trim()) throw new Error("Empty Olivia reply");
+      const assistantContent = data.reply;
       setMessages((current) => [...current, { role: "assistant", content: assistantContent }]);
       if (data.action === "show_lead_form" || data.leadForm) setShowLeadForm(true);
-      await storeAssistantMessage(assistantContent, data.model);
+      void storeAssistantMessage(assistantContent, data.model).catch(() => {});
     } catch {
       setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
     } finally {
