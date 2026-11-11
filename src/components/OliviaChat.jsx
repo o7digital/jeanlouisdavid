@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { requestOlivia, SITE_CODE } from "../lib/olivia-client.mjs";
-
-const LEAD_ENDPOINT = "https://www.o7digital.com/api/o7-lead";
+import { isBookingRequest, submitBookingLead } from "../lib/olivia-booking.mjs";
 
 const COPY = {
   es: {
@@ -13,7 +12,6 @@ const COPY = {
     open: "Abrir chat",
     close: "Cerrar chat",
     welcome: "Hola, soy Olivia. En que puedo ayudarte?",
-    leadIntro: "Deja tus datos para que un asesor Jean Louis David pueda contactarte.",
     consent: "He leído y acepto el Aviso de Privacidad para recibir atención de Jean Louis David.",
     privacy: "Aviso de Privacidad",
     privacyTitle: "Aviso de Privacidad - Olivia AI",
@@ -25,9 +23,11 @@ const COPY = {
     phone: "Telefono",
     submitLead: "Enviar datos",
     leadThanks: "Gracias. Tus datos fueron enviados y un asesor te contactara pronto.",
+    bookingIntro: "Deja tus datos para que el equipo pueda dar seguimiento a tu solicitud de cita y confirmar la disponibilidad.",
+    leadError: "No pudimos enviar tu solicitud. Intenta de nuevo con el formulario o contacta directamente al salón.",
     placeholder: "Escribe tu pregunta...",
     send: "Enviar",
-    error: "No pude enviar el mensaje. Intenta de nuevo o contacta directamente al salon.",
+    error: "No puedo responder por el momento. Intenta de nuevo o contacta directamente al salón.",
   },
   en: {
     title: "Olivia",
@@ -38,7 +38,6 @@ const COPY = {
     open: "Open chat",
     close: "Close chat",
     welcome: "Hello, I am Olivia. How can I help you?",
-    leadIntro: "Leave your details so a Jean Louis David advisor can contact you.",
     consent: "I have read and accept the Privacy Notice to receive assistance from Jean Louis David.",
     privacy: "Privacy Notice",
     privacyTitle: "Privacy Notice - Olivia AI",
@@ -50,9 +49,11 @@ const COPY = {
     phone: "Phone",
     submitLead: "Send details",
     leadThanks: "Thanks. Your details were sent and an advisor will contact you soon.",
+    bookingIntro: "Leave your details so the team can follow up on your appointment request and confirm availability.",
+    leadError: "We could not send your request. Please try again using the form or contact the salon directly.",
     placeholder: "Write your question...",
     send: "Send",
-    error: "I could not send the message. Please try again or contact the salon directly.",
+    error: "I cannot reply at the moment. Please try again or contact the salon directly.",
   },
   fr: {
     title: "Olivia",
@@ -63,7 +64,6 @@ const COPY = {
     open: "Ouvrir le chat",
     close: "Fermer le chat",
     welcome: "Bonjour, je suis Olivia. Comment puis-je vous aider ?",
-    leadIntro: "Laissez vos coordonnees pour qu'un conseiller Jean Louis David puisse vous contacter.",
     consent: "J’ai lu et j’accepte l’avis de confidentialité pour recevoir l’assistance de Jean Louis David.",
     privacy: "Avis de confidentialité",
     privacyTitle: "Avis de confidentialité - Olivia AI",
@@ -75,9 +75,11 @@ const COPY = {
     phone: "Telephone",
     submitLead: "Envoyer",
     leadThanks: "Merci. Vos coordonnees ont ete envoyees et un conseiller vous contactera rapidement.",
+    bookingIntro: "Laissez vos coordonnées pour que l’équipe puisse suivre votre demande de rendez-vous et confirmer les disponibilités.",
+    leadError: "Votre demande n’a pas pu être envoyée. Réessayez avec le formulaire ou contactez directement le salon.",
     placeholder: "Ecrivez votre question...",
     send: "Envoyer",
-    error: "Je n'ai pas pu envoyer le message. Reessayez ou contactez directement le salon.",
+    error: "Je ne peux pas répondre pour le moment. Réessayez ou contactez directement le salon.",
   },
 };
 
@@ -109,11 +111,17 @@ export default function OliviaChat({ language = "es" }) {
   const [isLoading, setIsLoading] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
+  const [bookingDeliveryFailed, setBookingDeliveryFailed] = useState(false);
   const [consent, setConsent] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [isActive, setIsActive] = useState(true);
   const [lead, setLead] = useState({ firstName: "", lastName: "", email: "", phone: "" });
   const [messages, setMessages] = useState([{ role: "assistant", content: copy.welcome }]);
+  const chatBody = useRef(null);
+
+  useEffect(() => {
+    if (chatBody.current) chatBody.current.scrollTop = chatBody.current.scrollHeight;
+  }, [isOpen, messages, showLeadForm, leadSent, bookingDeliveryFailed]);
 
   useEffect(() => {
     let timer;
@@ -178,6 +186,8 @@ export default function OliviaChat({ language = "es" }) {
       source: "Chat Olivia JLD",
       language,
       siteCode: SITE_CODE,
+      pageUrl: typeof window !== "undefined" ? window.location.href : "",
+      visitorId,
       consent: true,
       consentVersion: "jld-privacy-chat-2026-07-01",
       message: `Lead Chat Olivia JLD (${language}, ${SITE_CODE})\n\n${transcript}`,
@@ -187,25 +197,18 @@ export default function OliviaChat({ language = "es" }) {
 
     setIsLoading(true);
     try {
-      await storeChannelMessage(
+      void storeChannelMessage(
         `${payload.firstName} ${payload.lastName} · ${payload.email} · ${payload.phone}`,
         { type: "lead", importedFrom: "jld-chat-form", transcript },
-      );
+      ).catch(() => {});
 
-      const response = await fetch(LEAD_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(30000),
-      });
-      if (!response.ok) throw new Error("Lead delivery failed");
-      const result = await response.json();
-      if (result.ok !== true) throw new Error("Lead delivery failed");
+      await submitBookingLead(payload);
+      setBookingDeliveryFailed(false);
       setLeadSent(true);
       setMessages((current) => [...current, { role: "assistant", content: copy.leadThanks }]);
       void storeAssistantMessage(copy.leadThanks).catch(() => {});
     } catch {
-      setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
+      setMessages((current) => [...current, { role: "assistant", content: copy.leadError }]);
     } finally {
       setIsLoading(false);
     }
@@ -215,9 +218,37 @@ export default function OliviaChat({ language = "es" }) {
     const message = input.trim();
     if (!message || isLoading || !consent) return;
     const messageLanguage = detectMessageLanguage(message, language);
+    const wantsBooking = isBookingRequest(message);
+    if (wantsBooking) {
+      setShowLeadForm(true);
+      setLeadSent(false);
+    }
+
+    const nextMessages = [...messages, { role: "user", content: message }];
+    const notifyBooking = async () => {
+      try {
+        await submitBookingLead({
+          ...Object.fromEntries(Object.entries(lead).filter(([, value]) => value.trim())),
+          source: "Chat Olivia JLD",
+          siteCode: SITE_CODE,
+          visitorId,
+          language: messageLanguage,
+          pageUrl: window.location.href,
+          consent,
+          consentVersion: "jld-privacy-chat-2026-07-01",
+          message: nextMessages.map(({ role, content }) => `${role}: ${content}`).join("\n"),
+        });
+        setBookingDeliveryFailed(false);
+      } catch {
+        setBookingDeliveryFailed(true);
+      }
+    };
+    // Start email delivery independently of Olivia's availability.
+    const shouldNotify = wantsBooking || showLeadForm;
+    const notification = shouldNotify ? notifyBooking() : Promise.resolve();
 
     setInput("");
-    setMessages((current) => [...current, { role: "user", content: message }]);
+    setMessages(nextMessages);
     setIsLoading(true);
 
     try {
@@ -237,11 +268,15 @@ export default function OliviaChat({ language = "es" }) {
       if (typeof data.reply !== "string" || !data.reply.trim()) throw new Error("Empty Olivia reply");
       const assistantContent = data.reply;
       setMessages((current) => [...current, { role: "assistant", content: assistantContent }]);
-      if (data.action === "show_lead_form" || data.leadForm) setShowLeadForm(true);
+      if (data.action === "show_lead_form" || data.leadForm) {
+        setShowLeadForm(true);
+        if (!shouldNotify) await notifyBooking();
+      }
       void storeAssistantMessage(assistantContent, data.model).catch(() => {});
     } catch {
-      setMessages((current) => [...current, { role: "assistant", content: copy.error }]);
+      setMessages((current) => [...current, { role: "assistant", content: wantsBooking ? copy.bookingIntro : copy.error }]);
     } finally {
+      await notification;
       setIsLoading(false);
     }
   };
@@ -263,36 +298,41 @@ export default function OliviaChat({ language = "es" }) {
             </button>
           </header>
 
-          <div className="olivia-chat__messages">
-            {messages.map((message, index) => (
-              <div key={`${message.role}-${index}`} className={`olivia-chat__message olivia-chat__message--${message.role}`}>
-                {message.content}
-              </div>
-            ))}
-            {isLoading && <div className="olivia-chat__message olivia-chat__message--assistant">...</div>}
-          </div>
+          <div className="olivia-chat__body" ref={chatBody}>
+            <div className="olivia-chat__messages" aria-live="polite">
+              {messages.map((message, index) => (
+                <div key={`${message.role}-${index}`} className={`olivia-chat__message olivia-chat__message--${message.role}`}>
+                  {message.content}
+                </div>
+              ))}
+              {isLoading && <div className="olivia-chat__message olivia-chat__message--assistant">...</div>}
+            </div>
 
-          {showLeadForm && !leadSent && (
-            <form className="olivia-chat__lead" onSubmit={submitLead}>
-              <p>{copy.leadIntro}</p>
-              <input required placeholder={copy.firstName} value={lead.firstName} onChange={(event) => setLead((current) => ({ ...current, firstName: event.target.value }))} />
-              <input required placeholder={copy.lastName} value={lead.lastName} onChange={(event) => setLead((current) => ({ ...current, lastName: event.target.value }))} />
-              <input required type="email" placeholder={copy.email} value={lead.email} onChange={(event) => setLead((current) => ({ ...current, email: event.target.value }))} />
-              <input required type="tel" placeholder={copy.phone} value={lead.phone} onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))} />
+            {bookingDeliveryFailed && leadSent && <p role="alert">{copy.leadError}</p>}
+
+            {showLeadForm && !leadSent && (
+              <form className="olivia-chat__lead" onSubmit={submitLead}>
+                <p>{copy.bookingIntro}</p>
+                {bookingDeliveryFailed && <p role="alert">{copy.leadError}</p>}
+                <input required placeholder={copy.firstName} value={lead.firstName} onChange={(event) => setLead((current) => ({ ...current, firstName: event.target.value }))} />
+                <input required placeholder={copy.lastName} value={lead.lastName} onChange={(event) => setLead((current) => ({ ...current, lastName: event.target.value }))} />
+                <input required type="email" placeholder={copy.email} value={lead.email} onChange={(event) => setLead((current) => ({ ...current, email: event.target.value }))} />
+                <input required type="tel" placeholder={copy.phone} value={lead.phone} onChange={(event) => setLead((current) => ({ ...current, phone: event.target.value }))} />
+                <label className="olivia-chat__consent">
+                  <input required type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+                  <span>{copy.consent} <button type="button" onClick={() => setPrivacyOpen(true)}>{copy.privacy}</button></span>
+                </label>
+                <button type="submit" disabled={isLoading || !consent}>{copy.submitLead}</button>
+              </form>
+            )}
+
+            {!consent && (
               <label className="olivia-chat__consent">
                 <input required type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
                 <span>{copy.consent} <button type="button" onClick={() => setPrivacyOpen(true)}>{copy.privacy}</button></span>
               </label>
-              <button type="submit" disabled={isLoading || !consent}>{copy.submitLead}</button>
-            </form>
-          )}
-
-          {!consent && (
-            <label className="olivia-chat__consent">
-              <input required type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} />
-              <span>{copy.consent} <button type="button" onClick={() => setPrivacyOpen(true)}>{copy.privacy}</button></span>
-            </label>
-          )}
+            )}
+          </div>
 
           <div className="olivia-chat__composer">
             <input

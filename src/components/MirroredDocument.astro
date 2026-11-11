@@ -967,10 +967,14 @@ const nativeBodyShell = new Set(["/servicios/", "/sucursales/", "/contacto/"]).h
         border-radius: 999px;
       }
 
+      .olivia-chat__body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+      }
+
       .olivia-chat__messages {
         min-height: 170px;
-        flex: 1;
-        overflow-y: auto;
         padding: 16px;
         background: #171717;
       }
